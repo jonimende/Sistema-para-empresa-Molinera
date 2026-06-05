@@ -76,9 +76,9 @@ import { environment } from '../../../environments/environment';
               </button>
             </div>
 
-            <div class="flex gap-6 h-[calc(100vh-12rem)]">
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Lista Izquierda -->
-              <div class="w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex flex-col">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
                 <div *ngFor="let v of viajes" (click)="verDetalleViaje(v)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedViaje?.id === v.id">
                   <div>
                     <p class="font-bold text-slate-800">{{ v.Destino?.nombre_lugar || v.lugar_llegada }}</p>
@@ -99,7 +99,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
                 <!-- Modo Placeholder -->
                 <div *ngIf="!isViewingViaje && !isCreatingViaje && !selectedViajeId" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -108,7 +108,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Lectura -->
-                <div *ngIf="isViewingViaje && selectedViaje" class="p-8">
+                <div *ngIf="isViewingViaje && selectedViaje" class="p-4 md:p-8">
+                  <button (click)="isViewingViaje=false; selectedViaje=null" class="md:hidden mb-4 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-start border-b border-slate-100 pb-6 mb-6">
                     <div>
                       <h4 class="text-2xl font-black text-slate-800">Detalle del Despacho</h4>
@@ -152,7 +153,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Formulario -->
-                <form *ngIf="isCreatingViaje || selectedViajeId" [formGroup]="viajeForm" class="p-6 space-y-6">
+                <form *ngIf="isCreatingViaje || selectedViajeId" [formGroup]="viajeForm" class="p-4 md:p-6 space-y-6">
+                  <button (click)="isCreatingViaje=false; selectedViajeId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
                     <h4 class="font-black text-xl text-slate-800">{{ selectedViajeId ? 'Editar Despacho' : 'Nuevo Despacho' }}</h4>
                   </div>
@@ -230,7 +232,7 @@ import { environment } from '../../../environments/environment';
                   </div>
 
                   <div class="flex justify-end pt-4">
-                    <button type="button" (click)="$event.preventDefault(); submitViaje()"  [disabled]="isLoading || viajeForm.invalid" class="px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all disabled:opacity-50">
+                    <button type="button" (click)="$event.preventDefault(); submitViaje()"  [disabled]="isLoading || viajeForm.invalid" class="w-full md:w-auto px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all disabled:opacity-50">
                       {{ isLoading ? 'Guardando...' : (selectedViajeId ? 'Guardar Cambios' : 'Sellar y Registrar Viaje') }}
                     </button>
                   </div>
@@ -248,10 +250,10 @@ import { environment } from '../../../environments/environment';
               </button>
             </div>
 
-            <div class="flex gap-6 h-[calc(100vh-12rem)]">
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Lista Izquierda -->
-              <div class="w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex flex-col">
-                <div *ngFor="let c of cargas" (click)="verDetalleCombustible(c)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedCombustible?.id === c.id">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+                <div *ngFor="let c of cargas" (click)="verDetalleCombustible(c); isViewingCombustible=true" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedCombustible?.id === c.id">
                   <div>
                     <p class="font-bold text-slate-800">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
                     <p class="text-xs text-slate-500 font-medium">{{ c.fecha | date:'shortDate' }} | <span class="text-indigo-600 font-bold">{{ c.litros_gasoil }} L</span></p>
@@ -271,7 +273,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
                 <!-- Modo Placeholder -->
                 <div *ngIf="!isViewingCombustible && !isCreatingCombustible && !selectedCombustibleId" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -280,7 +282,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Lectura -->
-                <div *ngIf="isViewingCombustible && selectedCombustible" class="p-8">
+                <div *ngIf="isViewingCombustible && selectedCombustible" class="p-4 md:p-8">
+                  <button (click)="isViewingCombustible=false; selectedCombustible=null" class="md:hidden mb-4 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-start border-b border-slate-100 pb-6 mb-6">
                     <div>
                       <h4 class="text-2xl font-black text-slate-800">Detalle de Carga</h4>
@@ -320,7 +323,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Formulario -->
-                <form *ngIf="isCreatingCombustible || selectedCombustibleId" [formGroup]="combustibleForm" class="p-6 space-y-6">
+                <form *ngIf="isCreatingCombustible || selectedCombustibleId" [formGroup]="combustibleForm" class="p-4 md:p-6 space-y-6">
+                  <button (click)="isCreatingCombustible=false; selectedCombustibleId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
                     <h4 class="font-black text-xl text-slate-800">{{ selectedCombustibleId ? 'Editar Carga' : 'Nueva Carga' }}</h4>
                   </div>
@@ -356,7 +360,7 @@ import { environment } from '../../../environments/environment';
                   </div>
                   
                   <div class="flex justify-end pt-4">
-                    <button type="button" (click)="$event.preventDefault(); submitCombustible()"  [disabled]="combustibleForm.invalid || isLoading" class="px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 transition disabled:opacity-50">Guardar Carga</button>
+                    <button type="button" (click)="$event.preventDefault(); submitCombustible()"  [disabled]="combustibleForm.invalid || isLoading" class="w-full md:w-auto px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 transition disabled:opacity-50">Guardar Carga</button>
                   </div>
                 </form>
               </div>
@@ -371,10 +375,10 @@ import { environment } from '../../../environments/environment';
               </button>
             </div>
 
-            <div class="flex gap-6 h-[calc(100vh-12rem)]">
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Lista Izquierda -->
-              <div class="w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex flex-col">
-                <div *ngFor="let s of services" (click)="verDetalleService(s)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedService?.id === s.id">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+                <div *ngFor="let s of services" (click)="verDetalleService(s); selectedService=s" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedService?.id === s.id">
                   <div>
                     <p class="font-bold text-slate-800">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
                     <p class="text-xs text-slate-500 font-medium">{{ s.fecha | date:'shortDate' }} | <span class="text-indigo-600 font-bold">{{ s.km }} KM</span></p>
@@ -394,7 +398,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
                 <!-- Modo Placeholder -->
                 <div *ngIf="!selectedService && !isCreatingService && !selectedServiceId" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -403,7 +407,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Lectura -->
-                <div *ngIf="selectedService && !isCreatingService && !selectedServiceId" class="p-8">
+                <div *ngIf="selectedService && !isCreatingService && !selectedServiceId" class="p-4 md:p-8">
+                  <button (click)="selectedService=null" class="md:hidden mb-4 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-start border-b border-slate-100 pb-6 mb-6">
                     <div>
                       <h4 class="text-2xl font-black text-slate-800">Detalle del Service</h4>
@@ -480,7 +485,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Formulario -->
-                <form *ngIf="isCreatingService || selectedServiceId" [formGroup]="serviceForm" class="p-6 space-y-6">
+                <form *ngIf="isCreatingService || selectedServiceId" [formGroup]="serviceForm" class="p-4 md:p-6 space-y-6">
+                  <button (click)="isCreatingService=false; selectedServiceId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
                     <h4 class="font-black text-xl text-slate-800">{{ selectedServiceId ? 'Editar Service' : 'Nuevo Service' }}</h4>
                   </div>
@@ -547,7 +553,7 @@ import { environment } from '../../../environments/environment';
                   </div>
                   
                   <div class="flex justify-end pt-4">
-                    <button type="button" (click)="$event.preventDefault(); submitService()"  [disabled]="serviceForm.invalid || isLoading" class="px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 transition disabled:opacity-50">Guardar Service</button>
+                    <button type="button" (click)="$event.preventDefault(); submitService()"  [disabled]="serviceForm.invalid || isLoading" class="w-full md:w-auto px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 transition disabled:opacity-50">Guardar Service</button>
                   </div>
                 </form>
               </div>
@@ -562,10 +568,10 @@ import { environment } from '../../../environments/environment';
               </button>
             </div>
 
-            <div class="flex gap-6 h-[calc(100vh-12rem)]">
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Panel Izquierdo -->
-              <div class="w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex flex-col">
-                <div *ngFor="let cam of camiones" (click)="verDetalleCamion(cam)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedCamion?.id === cam.id">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+                <div *ngFor="let cam of camiones" (click)="verDetalleCamion(cam); isViewingCamion=true" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedCamion?.id === cam.id">
                   <div>
                     <p class="font-bold text-slate-800 text-lg">{{ cam.patente_chasis }}</p>
                     <p class="text-xs text-slate-500 font-medium">Chofer: <span class="text-indigo-600 font-bold">{{ cam.chofer_asignado || 'Sin Asignar' }}</span></p>
@@ -585,7 +591,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
                 <!-- Modo Placeholder -->
                 <div *ngIf="!isViewingCamion && !isCreatingCamion && !selectedCamionId" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
@@ -594,7 +600,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Visor -->
-                <div *ngIf="isViewingCamion && selectedCamion" class="p-8">
+                <div *ngIf="isViewingCamion && selectedCamion" class="p-4 md:p-8">
+                  <button (click)="isViewingCamion=false; selectedCamion=null" class="md:hidden mb-4 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-start border-b border-slate-100 pb-6 mb-6">
                     <div>
                       <h4 class="text-2xl font-black text-slate-800">Detalle del Vehículo</h4>
@@ -617,7 +624,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Formulario -->
-                <form *ngIf="isCreatingCamion || selectedCamionId" [formGroup]="camionForm" class="p-6 space-y-6">
+                <form *ngIf="isCreatingCamion || selectedCamionId" [formGroup]="camionForm" class="p-4 md:p-6 space-y-6">
+                  <button (click)="isCreatingCamion=false; selectedCamionId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
                     <h4 class="font-black text-xl text-slate-800">{{ selectedCamionId ? 'Editar Vehículo' : 'Alta de Vehículo' }}</h4>
                   </div>
@@ -638,7 +646,7 @@ import { environment } from '../../../environments/environment';
                   </div>
 
                   <div class="flex justify-end pt-4">
-                    <button type="button" (click)="$event.preventDefault(); submitCamion()" [disabled]="camionForm.invalid || isLoading" class="px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 transition disabled:opacity-50">Guardar Vehículo</button>
+                    <button type="button" (click)="$event.preventDefault(); submitCamion()" [disabled]="camionForm.invalid || isLoading" class="w-full md:w-auto px-8 py-3.5 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-md hover:bg-indigo-700 transition disabled:opacity-50">Guardar Vehículo</button>
                   </div>
                 </form>
               </div>
@@ -652,10 +660,10 @@ import { environment } from '../../../environments/environment';
               Supervisor: Control Maestro de Viajes
             </h3>
             
-            <div class="flex gap-6 h-[calc(100vh-12rem)]">
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Panel Izquierdo -->
-              <div class="w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex flex-col">
-                <div *ngFor="let v of viajes" (click)="verDetalleAdminViaje(v)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition" [class.bg-indigo-50]="selectedAdminViaje?.id === v.id">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+                <div *ngFor="let v of viajes" (click)="verDetalleAdminViaje(v); isViewingAdminViaje=true" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition" [class.bg-indigo-50]="selectedAdminViaje?.id === v.id">
                   <p class="font-bold text-slate-800 text-lg">{{ v.chofer_email || 'Sin Asignar' }}</p>
                   <p class="text-sm font-medium text-slate-600 mt-1">{{ v.Origen?.nombre_lugar || v.lugar_salida }} <span class="text-indigo-400 font-bold">&rarr;</span> {{ v.Destino?.nombre_lugar || v.lugar_llegada }}</p>
                   <p class="text-xs text-slate-400 mt-1">{{ v.fecha_salida | date:'shortDate' }} - {{ v.fecha_llegada | date:'shortDate' }}</p>
@@ -666,7 +674,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
                 <!-- Estado Vacío -->
                 <div *ngIf="!isViewingAdminViaje" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -674,7 +682,8 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Visor -->
-                <div *ngIf="isViewingAdminViaje && selectedAdminViaje" class="p-8">
+                <div *ngIf="isViewingAdminViaje && selectedAdminViaje" class="p-4 md:p-8">
+                  <button (click)="isViewingAdminViaje=false; selectedAdminViaje=null" class="md:hidden mb-4 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="border-b border-slate-100 pb-6 mb-6">
                     <h4 class="text-2xl font-black text-indigo-900 flex items-center">
                       <svg class="w-6 h-6 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>

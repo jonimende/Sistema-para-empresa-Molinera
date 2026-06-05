@@ -8,7 +8,7 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="flex h-screen bg-slate-50 font-sans text-slate-800 relative overflow-hidden">
+    <div class="flex h-screen bg-slate-50 font-sans text-slate-800 relative overflow-x-hidden w-full max-w-[100vw] overflow-y-auto md:overflow-hidden">
       <!-- Mobile backdrop -->
       <div *ngIf="isMobileMenuOpen" class="fixed inset-0 bg-slate-900/50 z-40 md:hidden backdrop-blur-sm transition-opacity" (click)="toggleMobileMenu()"></div>
 
