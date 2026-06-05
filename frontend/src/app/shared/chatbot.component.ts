@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-chatbot',
@@ -62,7 +63,7 @@ export class ChatbotComponent implements OnInit {
       .filter(m => m.text !== 'Escribiendo...')
       .map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.text }));
 
-    this.http.post('http://localhost:3000/api/ai/chat', { 
+    this.http.post(`${environment.apiUrl}/api/ai/chat`, { 
       history: historialMapeado, 
       contextModule: 'dashboard' 
     }).subscribe({

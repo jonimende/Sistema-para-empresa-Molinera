@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angula
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -79,7 +80,7 @@ export class LoginComponent {
       this.isLoading = true;
       this.errorMessage = '';
 
-      this.http.post('http://localhost:3000/api/auth/login', this.loginForm.value).subscribe({
+      this.http.post(`${environment.apiUrl}/api/auth/login`, this.loginForm.value).subscribe({
         next: (res: any) => {
           // Persistencia fuerte en el navegador
           localStorage.setItem('token', res.token);

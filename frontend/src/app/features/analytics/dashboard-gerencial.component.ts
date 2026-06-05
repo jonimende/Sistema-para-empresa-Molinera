@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, registerables, ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 // Registramos todos los elementos de Chart.js globalmente (necesario en v3+)
 Chart.register(...registerables);
@@ -139,7 +140,7 @@ export class DashboardGerencialComponent implements OnInit {
   }
 
   cargarKpis() {
-    this.http.get<any>('http://localhost:3000/api/analytics/kpis').subscribe({
+    this.http.get<any>(`${environment.apiUrl}/api/analytics/kpis`).subscribe({
       next: (data) => {
         this.kpis = data;
 
@@ -175,7 +176,7 @@ export class DashboardGerencialComponent implements OnInit {
 
   generarReporteIA() {
     this.generandoIA = true;
-    this.http.post('http://localhost:3000/api/analytics/reporte-ia', { kpis: this.kpis }).subscribe({
+    this.http.post(`${environment.apiUrl}/api/analytics/reporte-ia`, { kpis: this.kpis }).subscribe({
       next: (res: any) => {
         Swal.fire('Procesado', res.message + ' Revisa la consola del backend para ver el link seguro de Ethereal Mail.', 'success');
         this.generandoIA = false;

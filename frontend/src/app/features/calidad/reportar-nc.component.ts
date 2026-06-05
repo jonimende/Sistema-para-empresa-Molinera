@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angula
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-reportar-nc',
@@ -105,7 +106,7 @@ export class ReportarNcComponent {
         formData.append('foto', this.selectedFile);
       }
 
-      this.http.post('http://localhost:3000/api/calidad/no-conformidades', formData).subscribe({
+      this.http.post(`${environment.apiUrl}/api/calidad/no-conformidades`, formData).subscribe({
         next: () => {
           Swal.fire('¡Éxito!', 'No Conformidad generada y notificada con éxito.', 'success');
           this.isSubmitting = false;

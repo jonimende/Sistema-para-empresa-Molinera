@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-recorrida',
@@ -222,7 +223,7 @@ export class RecorridaComponent implements OnInit {
 
   fetchRecorridas() {
     this.recorridas = [];
-    this.http.get<any[]>('http://localhost:3000/api/auditoria/recorridas').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/auditoria/recorridas`).subscribe({
       next: (data) => {
         if (data && data.length > 0) {
           this.recorridas = data;
@@ -273,8 +274,8 @@ export class RecorridaComponent implements OnInit {
     });
 
     const endpoint = this.selectedRecord 
-      ? `http://localhost:3000/api/auditoria/recorridas/${this.selectedRecord.id}` 
-      : 'http://localhost:3000/api/auditoria/recorridas';
+      ? `${environment.apiUrl}/api/auditoria/recorridas/${this.selectedRecord.id}` 
+      : `${environment.apiUrl}/api/auditoria/recorridas`;
     
     const method = this.selectedRecord ? this.http.put(endpoint, formData) : this.http.post(endpoint, formData);
 
@@ -307,7 +308,7 @@ export class RecorridaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/auditoria/recorridas/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/api/auditoria/recorridas/${id}`).subscribe({
           next: () => {
             Swal.fire('Eliminada', 'Recorrida eliminada con éxito.', 'success');
             this.recorridas = this.recorridas.filter(r => r.id !== id);

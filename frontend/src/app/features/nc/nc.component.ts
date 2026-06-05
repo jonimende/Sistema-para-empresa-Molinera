@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-nc',
@@ -215,7 +216,7 @@ export class NcComponent implements OnInit {
 
   fetchNCs() {
     this.ncs = [];
-    this.http.get<any[]>('http://localhost:3000/api/calidad/nc').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/calidad/nc`).subscribe({
       next: (data: any) => {
         const records = data?.data || data || [];
         if (records && records.length > 0) {
@@ -279,8 +280,8 @@ export class NcComponent implements OnInit {
     }
 
     const endpoint = this.selectedId 
-      ? `http://localhost:3000/api/calidad/nc/${this.selectedId}` 
-      : 'http://localhost:3000/api/calidad/nc';
+      ? `${environment.apiUrl}/api/calidad/nc/${this.selectedId}` 
+      : `${environment.apiUrl}/api/calidad/nc`;
     
     const method = this.selectedId ? this.http.put(endpoint, formData) : this.http.post(endpoint, formData);
 
@@ -325,7 +326,7 @@ export class NcComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/calidad/nc/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/api/calidad/nc/${id}`).subscribe({
           next: () => {
             Swal.fire('Eliminada', 'No Conformidad eliminada con éxito.', 'success');
             this.ncs = this.ncs.filter(r => r.id !== id);
@@ -352,7 +353,7 @@ export class NcComponent implements OnInit {
       return '';
     }
     if (ruta.startsWith('http')) return ruta;
-    const baseUrl = 'http://localhost:3000';
+    const baseUrl = `${environment.apiUrl}`;
     return ruta.startsWith('/') ? baseUrl + ruta : baseUrl + '/' + ruta;
   }
 

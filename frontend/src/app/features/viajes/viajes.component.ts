@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-viajes',
@@ -855,7 +856,7 @@ export class ViajesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get<any[]>('http://localhost:3000/api/logistica/choferes').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/logistica/choferes`).subscribe({
       next: (data) => this.listadoChoferes = data,
       error: () => console.error('Error cargando choferes')
     });
@@ -870,7 +871,7 @@ export class ViajesComponent implements OnInit {
   }
 
   fetchAll() {
-      this.http.get<any[]>('http://localhost:3000/api/logistica/viajes').subscribe({
+      this.http.get<any[]>(`${environment.apiUrl}/api/logistica/viajes`).subscribe({
         next: (data: any) => {
           this.viajes = data?.data || data || [];
           if (this.viajes && this.viajes.length > 0) {
@@ -879,15 +880,15 @@ export class ViajesComponent implements OnInit {
         },
         error: (e) => console.error(e)
       });
-    this.http.get<any[]>('http://localhost:3000/api/logistica/combustible').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/logistica/combustible`).subscribe({
       next: (data: any) => this.cargas = data?.data || data || [],
       error: (e) => console.error(e)
     });
-    this.http.get<any[]>('http://localhost:3000/api/logistica/service').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/logistica/service`).subscribe({
       next: (data: any) => this.services = data?.data || data || [],
       error: (e) => console.error(e)
     });
-    this.http.get<any[]>('http://localhost:3000/api/logistica/camiones').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/logistica/camiones`).subscribe({
       next: (data: any) => this.camiones = data?.data || data || [],
       error: (e) => console.error(e)
     });
@@ -926,7 +927,7 @@ export class ViajesComponent implements OnInit {
       comentarios: ''
     };
 
-    const method = this.selectedViajeId ? this.http.put(`http://localhost:3000/api/logistica/viajes/${this.selectedViajeId}`, payload) : this.http.post('http://localhost:3000/api/logistica/viajes', payload);
+    const method = this.selectedViajeId ? this.http.put(`${environment.apiUrl}/api/logistica/viajes/${this.selectedViajeId}`, payload) : this.http.post(`${environment.apiUrl}/api/logistica/viajes`, payload);
     
     method.subscribe({
       next: (res: any) => {
@@ -974,7 +975,7 @@ export class ViajesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/logistica/viajes/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/api/logistica/viajes/${id}`).subscribe({
           next: () => {
             this.viajes = this.viajes.filter(x => x.id !== id);
             Swal.fire('Eliminado', 'Viaje eliminado.', 'success');
@@ -1017,7 +1018,7 @@ export class ViajesComponent implements OnInit {
       formData.append('foto_tablero', this.selectedFile);
     }
     
-    const method = this.selectedCombustibleId ? this.http.put(`http://localhost:3000/api/logistica/combustible/${this.selectedCombustibleId}`, formData) : this.http.post('http://localhost:3000/api/logistica/combustible', formData);
+    const method = this.selectedCombustibleId ? this.http.put(`${environment.apiUrl}/api/logistica/combustible/${this.selectedCombustibleId}`, formData) : this.http.post(`${environment.apiUrl}/api/logistica/combustible`, formData);
     
     method.subscribe({
       next: (res: any) => {
@@ -1056,7 +1057,7 @@ export class ViajesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/logistica/combustible/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/api/logistica/combustible/${id}`).subscribe({
           next: () => { this.cargas = this.cargas.filter(c => c.id !== id); Swal.fire('Eliminada', 'Carga eliminada.', 'success'); },
           error: () => Swal.fire('Error', 'Error eliminando.', 'error')
         });
@@ -1083,7 +1084,7 @@ export class ViajesComponent implements OnInit {
     if (this.serviceForm.invalid) return;
     this.isLoading = true;
     
-    const method = this.selectedServiceId ? this.http.put(`http://localhost:3000/api/logistica/service/${this.selectedServiceId}`, this.serviceForm.value) : this.http.post('http://localhost:3000/api/logistica/service', this.serviceForm.value);
+    const method = this.selectedServiceId ? this.http.put(`${environment.apiUrl}/api/logistica/service/${this.selectedServiceId}`, this.serviceForm.value) : this.http.post(`${environment.apiUrl}/api/logistica/service`, this.serviceForm.value);
     
     method.subscribe({
       next: (res: any) => {
@@ -1121,7 +1122,7 @@ export class ViajesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/logistica/service/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/api/logistica/service/${id}`).subscribe({
           next: () => { this.services = this.services.filter(s => s.id !== id); Swal.fire('Eliminado', 'Service eliminado.', 'success'); },
           error: () => Swal.fire('Error', 'Error eliminando.', 'error')
         });
@@ -1147,7 +1148,7 @@ export class ViajesComponent implements OnInit {
         showCancelButton: true
       }).then((result) => {
         if (result.isConfirmed && result.value) {
-          this.http.post('http://localhost:3000/api/logistica/choferes', { nombre: result.value }).subscribe({
+          this.http.post(`${environment.apiUrl}/api/logistica/choferes`, { nombre: result.value }).subscribe({
             next: (res: any) => {
               const nuevoChofer = res.data || res;
               this.listadoChoferes.push(nuevoChofer);
@@ -1166,7 +1167,7 @@ export class ViajesComponent implements OnInit {
   submitCamion() {
     if (this.camionForm.invalid) return;
     this.isLoading = true;
-    const method = this.selectedCamionId ? this.http.put(`http://localhost:3000/api/logistica/camiones/${this.selectedCamionId}`, this.camionForm.value) : this.http.post('http://localhost:3000/api/logistica/camiones', this.camionForm.value);
+    const method = this.selectedCamionId ? this.http.put(`${environment.apiUrl}/api/logistica/camiones/${this.selectedCamionId}`, this.camionForm.value) : this.http.post(`${environment.apiUrl}/api/logistica/camiones`, this.camionForm.value);
     
     method.subscribe({
       next: (res: any) => {
@@ -1204,7 +1205,7 @@ export class ViajesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/logistica/camiones/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/api/logistica/camiones/${id}`).subscribe({
           next: () => { this.camiones = this.camiones.filter(c => c.id !== id); Swal.fire('Eliminado', 'Camión eliminado.', 'success'); },
           error: () => Swal.fire('Error', 'Error eliminando.', 'error')
         });
@@ -1249,6 +1250,6 @@ export class ViajesComponent implements OnInit {
   getImageUrl(path: string): string {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    return `http://localhost:3000${path.startsWith('/') ? '' : '/'}${path}`;
+    return `${environment.apiUrl}${path.startsWith(`/') ? '' : '/'}${path}`;
   }
 }

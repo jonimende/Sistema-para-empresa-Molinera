@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-higiene',
@@ -380,7 +381,7 @@ export class HigieneComponent implements AfterViewInit {
 
   loadHistorial() {
     this.historial = [];
-    this.http.get<any[]>('http://localhost:3000/api/calidad/higiene-carga').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/calidad/higiene-carga`).subscribe({
       next: (res) => {
         if (res && res.length > 0) this.historial = res;
       },
@@ -434,7 +435,7 @@ export class HigieneComponent implements AfterViewInit {
       confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/calidad/higiene-carga/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/api/calidad/higiene-carga/${id}`).subscribe({
           next: () => {
             this.historial = this.historial.filter(h => h.id !== id);
             if (this.selectedRecord?.id === id) {
@@ -557,8 +558,8 @@ export class HigieneComponent implements AfterViewInit {
     }
 
     const request = this.isEditing 
-      ? this.http.put(`http://localhost:3000/api/calidad/higiene-carga/${this.selectedId}`, payload)
-      : this.http.post('http://localhost:3000/api/calidad/higiene-carga', payload);
+      ? this.http.put(`${environment.apiUrl}/api/calidad/higiene-carga/${this.selectedId}`, payload)
+      : this.http.post(`${environment.apiUrl}/api/calidad/higiene-carga`, payload);
 
     request.subscribe({
       next: (res: any) => {
@@ -580,7 +581,7 @@ export class HigieneComponent implements AfterViewInit {
 
   getImageUrl(path: string): string {
     if (!path) return '';
-    return path.startsWith('http') ? path : 'http://localhost:3000' + (path.startsWith('/') ? path : '/' + path);
+    return path.startsWith('http') ? path : `${environment.apiUrl}` + (path.startsWith('/') ? path : '/' + path);
   }
 
 }
