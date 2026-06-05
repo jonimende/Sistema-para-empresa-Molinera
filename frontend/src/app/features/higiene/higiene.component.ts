@@ -381,7 +381,7 @@ export class HigieneComponent implements AfterViewInit {
 
   loadHistorial() {
     this.historial = [];
-    this.http.get<any[]>(`${environment.apiUrl}/api/calidad/higiene-carga`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/calidad/higiene-carga`).subscribe({
       next: (res) => {
         if (res && res.length > 0) this.historial = res;
       },
@@ -435,7 +435,7 @@ export class HigieneComponent implements AfterViewInit {
       confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`${environment.apiUrl}/api/calidad/higiene-carga/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/calidad/higiene-carga/${id}`).subscribe({
           next: () => {
             this.historial = this.historial.filter(h => h.id !== id);
             if (this.selectedRecord?.id === id) {
@@ -558,8 +558,8 @@ export class HigieneComponent implements AfterViewInit {
     }
 
     const request = this.isEditing 
-      ? this.http.put(`${environment.apiUrl}/api/calidad/higiene-carga/${this.selectedId}`, payload)
-      : this.http.post(`${environment.apiUrl}/api/calidad/higiene-carga`, payload);
+      ? this.http.put(`${environment.apiUrl}/calidad/higiene-carga/${this.selectedId}`, payload)
+      : this.http.post(`${environment.apiUrl}/calidad/higiene-carga`, payload);
 
     request.subscribe({
       next: (res: any) => {

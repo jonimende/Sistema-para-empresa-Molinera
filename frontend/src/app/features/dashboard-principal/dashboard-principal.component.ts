@@ -38,7 +38,7 @@ export class DashboardPrincipalComponent implements OnInit {
   }
 
   cargarDashboard() {
-    this.http.get<any>(`${environment.apiUrl}/api/dashboard`).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/dashboard`).subscribe({
       next: (res) => {
         this.stats = res.stats;
         this.notificaciones = res.actividadReciente;
@@ -48,7 +48,7 @@ export class DashboardPrincipalComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    this.http.get<any[]>(`${environment.apiUrl}/api/usuarios`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/usuarios`).subscribe({
       next: (res) => this.usuarios = res,
       error: () => console.error('Error cargando usuarios')
     });
@@ -70,7 +70,7 @@ export class DashboardPrincipalComponent implements OnInit {
     const payload = this.usuarioForm.value;
     
     if (this.modoEdicion && this.usuarioEditId) {
-      this.http.put(`${environment.apiUrl}/api/usuarios/${this.usuarioEditId}`, payload).subscribe({
+      this.http.put(`${environment.apiUrl}/usuarios/${this.usuarioEditId}`, payload).subscribe({
         next: () => {
           Swal.fire('Éxito', 'Usuario actualizado correctamente.', 'success');
           this.resetForm();
@@ -83,7 +83,7 @@ export class DashboardPrincipalComponent implements OnInit {
         Swal.fire('Atención', 'La contraseña es obligatoria para nuevos usuarios.', 'warning');
         return;
       }
-      this.http.post(`${environment.apiUrl}/api/usuarios`, payload).subscribe({
+      this.http.post(`${environment.apiUrl}/usuarios`, payload).subscribe({
         next: () => {
           Swal.fire('Éxito', 'Usuario creado correctamente.', 'success');
           this.resetForm();
@@ -107,7 +107,7 @@ export class DashboardPrincipalComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`${environment.apiUrl}/api/usuarios/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/usuarios/${id}`).subscribe({
           next: () => {
             Swal.fire('Eliminado', 'Usuario eliminado exitosamente.', 'success');
             this.cargarUsuarios();

@@ -401,15 +401,15 @@ export class ElaboracionComponent implements OnInit {
   }
 
   loadPartes() {
-    this.http.get<any[]>(`${environment.apiUrl}/api/produccion/partes`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/produccion/partes`).subscribe({
       next: (data) => this.partes = data,
       error: (err) => console.error(err)
     });
   }
 
   loadSelects() {
-    this.http.get<any>(`${environment.apiUrl}/api/produccion/productos`).subscribe(res => this.listadoProductos = res.data ? res.data : res);
-    this.http.get<any>(`${environment.apiUrl}/api/produccion/turnos`).subscribe(res => this.listadoTurnos = res.data ? res.data : res);
+    this.http.get<any>(`${environment.apiUrl}/produccion/productos`).subscribe(res => this.listadoProductos = res.data ? res.data : res);
+    this.http.get<any>(`${environment.apiUrl}/produccion/turnos`).subscribe(res => this.listadoTurnos = res.data ? res.data : res);
   }
 
   async onProductoChange(event: any) {
@@ -421,7 +421,7 @@ export class ElaboracionComponent implements OnInit {
         showCancelButton: true
       });
       if (nuevo) {
-        this.http.post(`${environment.apiUrl}/api/produccion/productos`, { nombre: nuevo }).subscribe((res: any) => {
+        this.http.post(`${environment.apiUrl}/produccion/productos`, { nombre: nuevo }).subscribe((res: any) => {
           this.listadoProductos.push({ nombre: nuevo });
           this.elaboracionForm.get('producto_elaborado')?.setValue(nuevo);
         });
@@ -440,7 +440,7 @@ export class ElaboracionComponent implements OnInit {
         showCancelButton: true
       });
       if (nuevo) {
-        this.http.post(`${environment.apiUrl}/api/produccion/turnos`, { nombre: nuevo }).subscribe((res: any) => {
+        this.http.post(`${environment.apiUrl}/produccion/turnos`, { nombre: nuevo }).subscribe((res: any) => {
           this.listadoTurnos.push({ nombre: nuevo });
           this.elaboracionForm.get('horario_turno')?.setValue(nuevo);
         });
@@ -476,7 +476,7 @@ export class ElaboracionComponent implements OnInit {
 
   submitForm() {
     this.isLoading = true;
-    this.http.post(`${environment.apiUrl}/api/produccion/partes`, this.elaboracionForm.getRawValue()).subscribe({
+    this.http.post(`${environment.apiUrl}/produccion/partes`, this.elaboracionForm.getRawValue()).subscribe({
       next: (res: any) => {
         Swal.fire('¡Éxito!', 'Parte guardado.', 'success');
         this.isLoading = false;

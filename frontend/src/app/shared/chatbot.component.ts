@@ -63,7 +63,7 @@ export class ChatbotComponent implements OnInit {
       .filter(m => m.text !== 'Escribiendo...')
       .map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.text }));
 
-    this.http.post(`${environment.apiUrl}/api/ai/chat`, { 
+    this.http.post(`${environment.apiUrl}/ai/chat`, { 
       history: historialMapeado, 
       contextModule: 'dashboard' 
     }).subscribe({

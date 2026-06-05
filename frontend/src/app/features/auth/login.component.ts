@@ -80,7 +80,7 @@ export class LoginComponent {
       this.isLoading = true;
       this.errorMessage = '';
 
-      this.http.post(`${environment.apiUrl}/api/auth/login`, this.loginForm.value).subscribe({
+      this.http.post(`${environment.apiUrl}/auth/login`, this.loginForm.value).subscribe({
         next: (res: any) => {
           // Persistencia fuerte en el navegador
           localStorage.setItem('token', res.token);

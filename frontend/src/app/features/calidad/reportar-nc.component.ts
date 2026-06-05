@@ -106,7 +106,7 @@ export class ReportarNcComponent {
         formData.append('foto', this.selectedFile);
       }
 
-      this.http.post(`${environment.apiUrl}/api/calidad/no-conformidades`, formData).subscribe({
+      this.http.post(`${environment.apiUrl}/calidad/no-conformidades`, formData).subscribe({
         next: () => {
           Swal.fire('¡Éxito!', 'No Conformidad generada y notificada con éxito.', 'success');
           this.isSubmitting = false;

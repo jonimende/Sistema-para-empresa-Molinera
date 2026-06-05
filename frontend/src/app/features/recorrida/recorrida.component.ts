@@ -223,7 +223,7 @@ export class RecorridaComponent implements OnInit {
 
   fetchRecorridas() {
     this.recorridas = [];
-    this.http.get<any[]>(`${environment.apiUrl}/api/auditoria/recorridas`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/auditoria/recorridas`).subscribe({
       next: (data) => {
         if (data && data.length > 0) {
           this.recorridas = data;
@@ -274,8 +274,8 @@ export class RecorridaComponent implements OnInit {
     });
 
     const endpoint = this.selectedRecord 
-      ? `${environment.apiUrl}/api/auditoria/recorridas/${this.selectedRecord.id}` 
-      : `${environment.apiUrl}/api/auditoria/recorridas`;
+      ? `${environment.apiUrl}/auditoria/recorridas/${this.selectedRecord.id}` 
+      : `${environment.apiUrl}/auditoria/recorridas`;
     
     const method = this.selectedRecord ? this.http.put(endpoint, formData) : this.http.post(endpoint, formData);
 
@@ -308,7 +308,7 @@ export class RecorridaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`${environment.apiUrl}/api/auditoria/recorridas/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/auditoria/recorridas/${id}`).subscribe({
           next: () => {
             Swal.fire('Eliminada', 'Recorrida eliminada con éxito.', 'success');
             this.recorridas = this.recorridas.filter(r => r.id !== id);

@@ -216,7 +216,7 @@ export class NcComponent implements OnInit {
 
   fetchNCs() {
     this.ncs = [];
-    this.http.get<any[]>(`${environment.apiUrl}/api/calidad/nc`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/calidad/nc`).subscribe({
       next: (data: any) => {
         const records = data?.data || data || [];
         if (records && records.length > 0) {
@@ -280,8 +280,8 @@ export class NcComponent implements OnInit {
     }
 
     const endpoint = this.selectedId 
-      ? `${environment.apiUrl}/api/calidad/nc/${this.selectedId}` 
-      : `${environment.apiUrl}/api/calidad/nc`;
+      ? `${environment.apiUrl}/calidad/nc/${this.selectedId}` 
+      : `${environment.apiUrl}/calidad/nc`;
     
     const method = this.selectedId ? this.http.put(endpoint, formData) : this.http.post(endpoint, formData);
 
@@ -326,7 +326,7 @@ export class NcComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.http.delete(`${environment.apiUrl}/api/calidad/nc/${id}`).subscribe({
+        this.http.delete(`${environment.apiUrl}/calidad/nc/${id}`).subscribe({
           next: () => {
             Swal.fire('Eliminada', 'No Conformidad eliminada con éxito.', 'success');
             this.ncs = this.ncs.filter(r => r.id !== id);

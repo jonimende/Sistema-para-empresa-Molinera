@@ -140,7 +140,7 @@ export class DashboardGerencialComponent implements OnInit {
   }
 
   cargarKpis() {
-    this.http.get<any>(`${environment.apiUrl}/api/analytics/kpis`).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/analytics/kpis`).subscribe({
       next: (data) => {
         this.kpis = data;
 
@@ -176,7 +176,7 @@ export class DashboardGerencialComponent implements OnInit {
 
   generarReporteIA() {
     this.generandoIA = true;
-    this.http.post(`${environment.apiUrl}/api/analytics/reporte-ia`, { kpis: this.kpis }).subscribe({
+    this.http.post(`${environment.apiUrl}/analytics/reporte-ia`, { kpis: this.kpis }).subscribe({
       next: (res: any) => {
         Swal.fire('Procesado', res.message + ' Revisa la consola del backend para ver el link seguro de Ethereal Mail.', 'success');
         this.generandoIA = false;
