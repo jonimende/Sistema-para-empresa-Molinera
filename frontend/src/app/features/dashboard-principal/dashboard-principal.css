@@ -1,0 +1,51 @@
+/* Media Queries Responsive Mobile First - Dashboard Principal */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+form {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  /* Forzamos a que el grid sea 1 columna en pantallas chicas */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Asegurar que las tarjetas y form usen width 100% o porcentajes (vw) */
+  .bg-white {
+    width: 100%;
+    max-width: 100vw;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  /* Márgenes y Paddings reducidos en mobile para aprovechar el espacio */
+  .p-6 {
+    padding: 1rem !important; /* 16px en lugar de 24px */
+  }
+  
+  .gap-6 {
+    gap: 1rem !important;
+  }
+  
+  /* Accesibilidad táctil forzada: Touch Targets mínimos de 44px */
+  button, select, input {
+    min-height: 44px !important;
+  }
+  
+  /* Letra de buen tamaño en inputs para evitar auto-zoom molesto en iOS/Android */
+  input, select {
+    font-size: 16px !important;
+  }
+
+  /* Evitar desbordes horizontales en tablas y forzar scroll lateral */
+  .overflow-x-auto {
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+  }
+}
