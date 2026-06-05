@@ -1250,6 +1250,6 @@ export class ViajesComponent implements OnInit {
   getImageUrl(path: string): string {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    return `${environment.apiUrl}${path.startsWith(`/') ? '' : '/'}${path}`;
+    return `${environment.apiUrl}${path.startsWith('/') ? '' : '/'}${path}`;
   }
 }
