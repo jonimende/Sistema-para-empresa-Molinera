@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit , NgZone} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -764,6 +764,7 @@ import { environment } from '../../../environments/environment';
   `]
 })
 export class ViajesComponent implements OnInit {
+  private ngZone = inject(NgZone);
   activeTab = 'mis_viajes';
   
   private fb = inject(FormBuilder);
@@ -866,7 +867,7 @@ export class ViajesComponent implements OnInit {
 
   ngOnInit() {
     this.http.get<any[]>(`${environment.apiUrl}/logistica/choferes`).subscribe({
-      next: (data) => this.listadoChoferes = data,
+      next: (data) => this.ngZone.run(() => this.listadoChoferes = data),
       error: () => console.error('Error cargando choferes')
     });
     const user = this.authService.currentUser();
@@ -882,23 +883,25 @@ export class ViajesComponent implements OnInit {
   fetchAll() {
       this.http.get<any[]>(`${environment.apiUrl}/logistica/viajes`).subscribe({
         next: (data: any) => {
-          this.viajes = data?.data || data || [];
-          if (this.viajes && this.viajes.length > 0) {
-            console.log('AUDITORIA VIAJE 0:', this.viajes[0]);
-          }
+          this.ngZone.run(() => {
+            this.viajes = data?.data || data || [];
+            if (this.viajes && this.viajes.length > 0) {
+              console.log('AUDITORIA VIAJE 0:', this.viajes[0]);
+            }
+          });
         },
         error: (e) => console.error(e)
       });
     this.http.get<any[]>(`${environment.apiUrl}/logistica/combustible`).subscribe({
-      next: (data: any) => this.cargas = data?.data || data || [],
+      next: (data: any) => this.ngZone.run(() => this.cargas = data?.data || data || []),
       error: (e) => console.error(e)
     });
     this.http.get<any[]>(`${environment.apiUrl}/logistica/service`).subscribe({
-      next: (data: any) => this.services = data?.data || data || [],
+      next: (data: any) => this.ngZone.run(() => this.services = data?.data || data || []),
       error: (e) => console.error(e)
     });
     this.http.get<any[]>(`${environment.apiUrl}/logistica/camiones`).subscribe({
-      next: (data: any) => this.camiones = data?.data || data || [],
+      next: (data: any) => this.ngZone.run(() => this.camiones = data?.data || data || []),
       error: (e) => console.error(e)
     });
   }

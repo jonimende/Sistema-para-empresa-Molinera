@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject , NgZone} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -21,6 +21,7 @@ export class DashboardPrincipalComponent implements OnInit {
   usuarioEditId: number | null = null;
   
   private http = inject(HttpClient);
+  private ngZone = inject(NgZone);
   private fb = inject(FormBuilder);
 
   constructor() {
@@ -39,8 +40,10 @@ export class DashboardPrincipalComponent implements OnInit {
   cargarDashboard() {
     this.http.get<any>(`${environment.apiUrl}/dashboard`).subscribe({
       next: (res) => {
-        this.stats = res.stats;
-        this.notificaciones = res.actividadReciente;
+        this.ngZone.run(() => {
+          this.stats = res.stats;
+          this.notificaciones = res.actividadReciente;
+        });
       },
       error: () => console.error('Error cargando dashboard')
     });
@@ -48,7 +51,7 @@ export class DashboardPrincipalComponent implements OnInit {
 
   cargarUsuarios() {
     this.http.get<any[]>(`${environment.apiUrl}/usuarios`).subscribe({
-      next: (res) => this.usuarios = res,
+      next: (res) => this.ngZone.run(() => this.usuarios = res),
       error: () => console.error('Error cargando usuarios')
     });
   }
