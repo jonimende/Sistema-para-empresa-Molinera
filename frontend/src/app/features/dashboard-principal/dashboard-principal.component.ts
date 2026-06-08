@@ -4,13 +4,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 
-import { ChatbotComponent } from '../../shared/chatbot.component';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard-principal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ChatbotComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './dashboard-principal.component.html'
 })
 export class DashboardPrincipalComponent implements OnInit {

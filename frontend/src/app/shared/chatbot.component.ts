@@ -14,7 +14,7 @@ import { environment } from '../../environments/environment';
       <div *ngIf="isChatOpen" class="w-80 h-96 flex flex-col bg-white rounded-xl shadow-2xl border border-slate-200 mb-4 overflow-hidden fade-in">
         <div class="bg-indigo-600 text-white p-4 flex justify-between items-center font-bold">
           <span>Asistente IA</span>
-          <button (click)="isChatOpen = false" class="text-white hover:text-indigo-200">
+          <button (click)="cerrarChat()" class="text-white hover:text-indigo-200">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
@@ -53,6 +53,11 @@ export class ChatbotComponent implements OnInit {
   private http = inject(HttpClient);
 
   ngOnInit() {}
+
+  cerrarChat() {
+    this.isChatOpen = false;
+    this.chatMessages = [{role: 'bot', text: '¡Hola! Soy tu asistente. ¿En qué te puedo ayudar?'}];
+  }
 
   sendChatMessage(userText: string) {
     if (!userText.trim()) return;

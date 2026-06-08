@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ChatbotComponent } from '../../shared/chatbot.component';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ChatbotComponent],
   template: `
     <div class="flex h-screen bg-slate-50 font-sans text-slate-800 relative overflow-x-hidden w-full max-w-[100vw] overflow-y-auto md:overflow-hidden">
       <!-- Mobile backdrop -->
@@ -107,6 +108,9 @@ import { AuthService } from '../../core/services/auth.service';
           </div>
         </div>
       </main>
+      
+      <!-- Global Chatbot -->
+      <app-chatbot *ngIf="authService.hasRole('Admin')"></app-chatbot>
     </div>
   `,
   styles: [`
