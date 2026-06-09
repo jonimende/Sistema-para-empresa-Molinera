@@ -32,7 +32,7 @@ import { environment } from '../../../environments/environment';
             <div>
               <p class="font-bold text-slate-800 text-lg">Lote: {{ p.nro_lote || 'N/A' }}</p>
               <p class="text-sm font-medium text-slate-600 mt-1">{{ p.producto_elaborado }}</p>
-              <p class="text-xs text-slate-400 mt-1">{{ p.fecha | date:'shortDate' }} - Turno: {{ p.horario_turno }}</p>
+              <p class="text-base md:text-sm text-slate-400 mt-1">{{ p.fecha | date:'shortDate' }} - Turno: {{ p.horario_turno }}</p>
             </div>
           </div>
           <div *ngIf="partes.length === 0" class="p-6 text-center text-slate-400">
@@ -57,13 +57,13 @@ import { environment } from '../../../environments/environment';
           <form *ngIf="isCreatingParte" [formGroup]="elaboracionForm" class="p-8 space-y-6 pb-24">
             
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase">Datos Generales</h4>
-            <div class="grid grid-cols-3 gap-4">
-              <div><label class="block text-xs font-bold text-slate-500">Fecha</label><input type="date" formControlName="fecha" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Nro Lote</label><input type="text" formControlName="nro_lote" class="w-full border-slate-200 rounded p-2"></div>
+            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Fecha</label><input type="date" formControlName="fecha" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Nro Lote</label><input type="text" formControlName="nro_lote" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
               
               <div>
-                <label class="block text-xs font-bold text-slate-500">Producto Elaborado</label>
-                <select formControlName="producto_elaborado" (change)="onProductoChange($event)" class="w-full border-slate-200 rounded p-2">
+                <label class="block text-base md:text-sm font-bold text-slate-500">Producto Elaborado</label>
+                <select formControlName="producto_elaborado" (change)="onProductoChange($event)" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base">
                   <option value="" disabled selected>Seleccionar...</option>
                   <option *ngFor="let p of listadoProductos" [value]="p.nombre || p">{{ p.nombre || p }}</option>
                   <option value="NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo...</option>
@@ -71,85 +71,85 @@ import { environment } from '../../../environments/environment';
               </div>
               
               <div>
-                <label class="block text-xs font-bold text-slate-500">Horario Turno</label>
-                <select formControlName="horario_turno" (change)="onTurnoChange($event)" class="w-full border-slate-200 rounded p-2">
+                <label class="block text-base md:text-sm font-bold text-slate-500">Horario Turno</label>
+                <select formControlName="horario_turno" (change)="onTurnoChange($event)" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base">
                   <option value="" disabled selected>Seleccionar...</option>
                   <option *ngFor="let t of listadoTurnos" [value]="t.nombre || t">{{ t.nombre || t }}</option>
                   <option value="NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo...</option>
                 </select>
               </div>
 
-              <div><label class="block text-xs font-bold text-slate-500">Variedad</label><input type="text" formControlName="variedad" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">% Quebrado Esp.</label><input type="number" formControlName="porcentaje_quebrado_esperado" class="w-full border-slate-200 rounded p-2"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Variedad</label><input type="text" formControlName="variedad" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">% Quebrado Esp.</label><input type="number" formControlName="porcentaje_quebrado_esperado" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
               <div>
-                <label class="block text-xs font-bold text-slate-500">Envase</label>
-                <select formControlName="envase" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-2.5 px-3 bg-white text-sm">
+                <label class="block text-base md:text-sm font-bold text-slate-500">Envase</label>
+                <select formControlName="envase" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-4 md:py-3 px-4 bg-white text-lg md:text-base">
                   <option value="" disabled selected>Seleccione Envase...</option>
                   <option value="Big Bag">Big Bag</option>
                   <option value="Bolsa">Bolsa</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-bold text-slate-500">Grado</label>
-                <select formControlName="grado" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-2.5 px-3 bg-white text-sm">
+                <label class="block text-base md:text-sm font-bold text-slate-500">Grado</label>
+                <select formControlName="grado" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-4 md:py-3 px-4 bg-white text-lg md:text-base">
                   <option value="" disabled selected>Seleccione Grado...</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </select>
               </div>
-              <div><label class="block text-xs font-bold text-slate-500">Silo Origen</label><input type="text" formControlName="silo_origen" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Balanza MP Total Kilos</label><input type="number" formControlName="balanza_mp_total_kilos" class="w-full border-indigo-300 bg-indigo-50 font-bold rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Productor Origen</label><input type="text" formControlName="productor_lote_origen" class="w-full border-slate-200 rounded p-2"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Silo Origen</label><input type="text" formControlName="silo_origen" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Balanza MP Total Kilos</label><input type="number" formControlName="balanza_mp_total_kilos" class="w-full border-indigo-300 bg-indigo-50 font-bold rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Productor Origen</label><input type="text" formControlName="productor_lote_origen" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
             </div>
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Agregados</h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div><label class="block text-xs font-bold text-slate-500">(Agregados) 1/2 Grano KG</label><input type="number" formControlName="agregados_1_2_grano_kg" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Arroz Elaborado KG</label><input type="number" formControlName="agregados_arroz_elaborado_kg" class="w-full border-slate-200 rounded p-2"></div>
+            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">(Agregados) 1/2 Grano KG</label><input type="number" formControlName="agregados_1_2_grano_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Arroz Elaborado KG</label><input type="number" formControlName="agregados_arroz_elaborado_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
             </div>
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Terminados y Subproductos</h4>
-            <div class="grid grid-cols-3 gap-4">
-              <div><label class="block text-xs font-bold text-slate-500">Medio Grano KG</label><input type="number" formControlName="terminado_1_2_grano_kg" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Arrocín KG</label><input type="number" formControlName="terminado_arrocin_kg" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Afrechillo KG</label><input type="number" formControlName="terminado_afrechillo_kg" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Descarte Selectora KG</label><input type="number" formControlName="terminado_descarte_selectora_kg" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Producto Terminado KG</label><input type="number" formControlName="producto_terminado_kg" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-indigo-500">(Terminado) Cáscara KG</label><input type="number" formControlName="terminado_cascara_kg" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded p-2 cursor-not-allowed"></div>
+            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Medio Grano KG</label><input type="number" formControlName="terminado_1_2_grano_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Arrocín KG</label><input type="number" formControlName="terminado_arrocin_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Afrechillo KG</label><input type="number" formControlName="terminado_afrechillo_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Descarte Selectora KG</label><input type="number" formControlName="terminado_descarte_selectora_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Producto Terminado KG</label><input type="number" formControlName="producto_terminado_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-indigo-500">(Terminado) Cáscara KG</label><input type="number" formControlName="terminado_cascara_kg" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
             </div>
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Calidad</h4>
             <div class="flex justify-end mb-2">
-              <button type="button" (click)="$event.preventDefault(); addControlCalidad()" class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 text-xs">Añadir Control</button>
+              <button type="button" (click)="$event.preventDefault(); addControlCalidad()" class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 text-base md:text-sm">Añadir Control</button>
             </div>
             <div formArrayName="controles" class="space-y-3">
               <div *ngFor="let ctrl of controles.controls; let i = index" [formGroupName]="i" class="flex gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
-                <div class="w-32"><label class="block text-xs font-bold text-slate-500">Hora</label><input type="time" formControlName="hora" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
-                <div class="flex-1"><label class="block text-xs font-bold text-slate-500">% Ent</label><input type="number" formControlName="porcentaje_ent" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
-                <div class="flex-1"><label class="block text-xs font-bold text-slate-500">% Queb</label><input type="number" formControlName="porcentaje_queb" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
-                <div class="flex-1"><label class="block text-xs font-bold text-slate-500">Molinero</label><input type="text" formControlName="molinero" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
+                <div class="w-32"><label class="block text-base md:text-sm font-bold text-slate-500">Hora</label><input type="time" formControlName="hora" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
+                <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">% Ent</label><input type="number" formControlName="porcentaje_ent" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
+                <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">% Queb</label><input type="number" formControlName="porcentaje_queb" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
+                <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">Molinero</label><input type="text" formControlName="molinero" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
                 <button type="button" (click)="removeControlCalidad(i)" class="text-red-500 font-bold px-2 py-1 hover:bg-red-50 rounded self-end mb-1">X</button>
               </div>
             </div>
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Control Molino</h4>
-            <div class="grid grid-cols-3 gap-4">
-              <div><label class="block text-xs font-bold text-indigo-500">% Rendimiento</label><input type="number" formControlName="molino_rendimiento" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded p-2 cursor-not-allowed"></div>
-              <div><label class="block text-xs font-bold text-slate-500">% Quebrado</label><input type="number" formControlName="molino_quebrado" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-indigo-500">% Enteros</label><input type="number" formControlName="molino_enteros" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded p-2 cursor-not-allowed"></div>
-              <div><label class="block text-xs font-bold text-indigo-500">% Ent. Puros</label><input type="number" formControlName="molino_ent_puros" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded p-2 cursor-not-allowed"></div>
-              <div><label class="block text-xs font-bold text-slate-500">Prod Term Descarte</label><input type="number" formControlName="molino_prod_term_descarte" class="w-full border-slate-200 rounded p-2"></div>
+            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div><label class="block text-base md:text-sm font-bold text-indigo-500">% Rendimiento</label><input type="number" formControlName="molino_rendimiento" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">% Quebrado</label><input type="number" formControlName="molino_quebrado" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-indigo-500">% Enteros</label><input type="number" formControlName="molino_enteros" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
+              <div><label class="block text-base md:text-sm font-bold text-indigo-500">% Ent. Puros</label><input type="number" formControlName="molino_ent_puros" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Prod Term Descarte</label><input type="number" formControlName="molino_prod_term_descarte" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
             </div>
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Control Molinillo</h4>
-            <div class="grid grid-cols-3 gap-4">
-              <div><label class="block text-xs font-bold text-slate-500">% Rendimiento</label><input type="number" formControlName="molinillo_rendimiento" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-indigo-500">% Quebrado</label><input type="number" formControlName="molinillo_quebrado" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded p-2 cursor-not-allowed"></div>
-              <div><label class="block text-xs font-bold text-slate-500">% Enteros</label><input type="number" formControlName="molinillo_enteros" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">% ME</label><input type="number" formControlName="molinillo_me" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-slate-500">% Yeso</label><input type="number" formControlName="molinillo_yeso" class="w-full border-slate-200 rounded p-2"></div>
-              <div><label class="block text-xs font-bold text-indigo-500">Prod Term Esperado</label><input type="number" formControlName="producto_terminado_esperado" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded p-2 cursor-not-allowed"></div>
+            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">% Rendimiento</label><input type="number" formControlName="molinillo_rendimiento" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-indigo-500">% Quebrado</label><input type="number" formControlName="molinillo_quebrado" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">% Enteros</label><input type="number" formControlName="molinillo_enteros" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">% ME</label><input type="number" formControlName="molinillo_me" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">% Yeso</label><input type="number" formControlName="molinillo_yeso" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-indigo-500">Prod Term Esperado</label><input type="number" formControlName="producto_terminado_esperado" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
             </div>
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Inspección</h4>
@@ -164,7 +164,7 @@ import { environment } from '../../../environments/environment';
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Paradas</h4>
             <div class="flex justify-end mb-2">
-              <button type="button" (click)="$event.preventDefault(); addParada()" class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 text-xs">Añadir Parada</button>
+              <button type="button" (click)="$event.preventDefault(); addParada()" class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 text-base md:text-sm">Añadir Parada</button>
             </div>
             <div formArrayName="paradas" class="space-y-3">
               <div *ngFor="let parada of paradas.controls; let i = index" [formGroupName]="i" class="flex gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
@@ -183,7 +183,7 @@ import { environment } from '../../../environments/environment';
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Otros</h4>
             <div class="grid grid-cols-1 gap-4">
-              <div><label class="block text-xs font-bold text-slate-500">Observaciones</label><textarea formControlName="observaciones" rows="3" class="w-full border-slate-200 rounded p-2"></textarea></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Observaciones</label><textarea formControlName="observaciones" rows="3" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></textarea></div>
             </div>
             
             <div class="fixed bottom-0 right-0 w-2/3 p-4 border-t border-slate-200 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] flex justify-end">
@@ -199,52 +199,52 @@ import { environment } from '../../../environments/environment';
             <!-- DATOS GENERALES -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Datos Generales</h5>
-              <div class="grid grid-cols-4 gap-4">
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Fecha</p><p class="font-medium">{{ selectedParte.fecha | date:'shortDate' }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Nro Lote</p><p class="font-medium">{{ selectedParte.nro_lote }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Producto</p><p class="font-medium text-indigo-700">{{ selectedParte.producto_elaborado }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Turno</p><p class="font-medium">{{ selectedParte.horario_turno }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Variedad</p><p class="font-medium">{{ selectedParte.variedad || '-' }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">% Quebrado Esp.</p><p class="font-medium">{{ selectedParte.porcentaje_quebrado_esperado }}%</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Envase</p><p class="font-medium">{{ selectedParte.envase || '-' }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Grado</p><p class="font-medium">{{ selectedParte.grado || '-' }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Silo</p><p class="font-medium">{{ selectedParte.silo_origen || '-' }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Balanza MP</p><p class="font-black text-indigo-800">{{ selectedParte.balanza_mp_total_kilos | number:'1.2-2' }} KG</p></div>
-                <div class="col-span-2"><p class="text-xs text-slate-500 font-bold uppercase">Productor Origen</p><p class="font-medium">{{ selectedParte.productor_lote_origen || '-' }}</p></div>
+              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Fecha</p><p class="font-medium">{{ selectedParte.fecha | date:'shortDate' }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Nro Lote</p><p class="font-medium">{{ selectedParte.nro_lote }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Producto</p><p class="font-medium text-indigo-700">{{ selectedParte.producto_elaborado }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Turno</p><p class="font-medium">{{ selectedParte.horario_turno }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Variedad</p><p class="font-medium">{{ selectedParte.variedad || '-' }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">% Quebrado Esp.</p><p class="font-medium">{{ selectedParte.porcentaje_quebrado_esperado }}%</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Envase</p><p class="font-medium">{{ selectedParte.envase || '-' }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Grado</p><p class="font-medium">{{ selectedParte.grado || '-' }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Silo</p><p class="font-medium">{{ selectedParte.silo_origen || '-' }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Balanza MP</p><p class="font-black text-indigo-800">{{ selectedParte.balanza_mp_total_kilos | number:'1.2-2' }} KG</p></div>
+                <div class="col-span-2"><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Productor Origen</p><p class="font-medium">{{ selectedParte.productor_lote_origen || '-' }}</p></div>
               </div>
             </div>
 
             <!-- AGREGADOS -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Agregados</h5>
-              <div class="grid grid-cols-2 gap-4">
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Medio Grano</p><p class="font-medium">{{ selectedParte.agregados_1_2_grano_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Arroz Elaborado</p><p class="font-medium">{{ selectedParte.agregados_arroz_elaborado_kg | number:'1.2-2' }} KG</p></div>
+              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Medio Grano</p><p class="font-medium">{{ selectedParte.agregados_1_2_grano_kg | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Arroz Elaborado</p><p class="font-medium">{{ selectedParte.agregados_arroz_elaborado_kg | number:'1.2-2' }} KG</p></div>
               </div>
             </div>
 
             <!-- TERMINADOS Y SUBPRODUCTOS -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Terminados y Subproductos</h5>
-              <div class="grid grid-cols-3 gap-4">
-                <div><p class="text-xs text-slate-500 font-bold uppercase">1/2 Grano</p><p class="font-medium">{{ selectedParte.terminado_1_2_grano_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Arrocín</p><p class="font-medium">{{ selectedParte.terminado_arrocin_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Afrechillo</p><p class="font-medium">{{ selectedParte.terminado_afrechillo_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Descarte</p><p class="font-medium">{{ selectedParte.terminado_descarte_selectora_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Producto Terminado</p><p class="font-black text-green-700">{{ selectedParte.producto_terminado_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-xs text-indigo-500 font-bold uppercase">Cáscara</p><p class="font-black text-indigo-700">{{ selectedParte.terminado_cascara_kg | number:'1.2-2' }} KG</p></div>
+              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">1/2 Grano</p><p class="font-medium">{{ selectedParte.terminado_1_2_grano_kg | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Arrocín</p><p class="font-medium">{{ selectedParte.terminado_arrocin_kg | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Afrechillo</p><p class="font-medium">{{ selectedParte.terminado_afrechillo_kg | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Descarte</p><p class="font-medium">{{ selectedParte.terminado_descarte_selectora_kg | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Producto Terminado</p><p class="font-black text-green-700">{{ selectedParte.producto_terminado_kg | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Cáscara</p><p class="font-black text-indigo-700">{{ selectedParte.terminado_cascara_kg | number:'1.2-2' }} KG</p></div>
               </div>
             </div>
 
             <!-- CONTROL MOLINO -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Control Molino</h5>
-              <div class="grid grid-cols-5 gap-4">
-                <div><p class="text-xs text-indigo-500 font-bold uppercase">Rendimiento</p><p class="font-black text-indigo-700">{{ selectedParte.molino_rendimiento | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Quebrado</p><p class="font-medium">{{ selectedParte.molino_quebrado | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-indigo-500 font-bold uppercase">Enteros</p><p class="font-black text-indigo-700">{{ selectedParte.molino_enteros | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-indigo-500 font-bold uppercase">Ent. Puros</p><p class="font-black text-indigo-700">{{ selectedParte.molino_ent_puros | number:'1.2-2' }}</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Prod Term + Desc</p><p class="font-medium">{{ selectedParte.molino_prod_term_descarte | number:'1.2-2' }}</p></div>
+              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+                <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Rendimiento</p><p class="font-black text-indigo-700">{{ selectedParte.molino_rendimiento | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Quebrado</p><p class="font-medium">{{ selectedParte.molino_quebrado | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Enteros</p><p class="font-black text-indigo-700">{{ selectedParte.molino_enteros | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Ent. Puros</p><p class="font-black text-indigo-700">{{ selectedParte.molino_ent_puros | number:'1.2-2' }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Prod Term + Desc</p><p class="font-medium">{{ selectedParte.molino_prod_term_descarte | number:'1.2-2' }}</p></div>
               </div>
             </div>
 
@@ -252,12 +252,12 @@ import { environment } from '../../../environments/environment';
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Control Molinillo</h5>
               <div class="grid grid-cols-6 gap-4">
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Rendimiento</p><p class="font-medium">{{ selectedParte.molinillo_rendimiento | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-indigo-500 font-bold uppercase">Quebrado</p><p class="font-black text-indigo-700">{{ selectedParte.molinillo_quebrado | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Enteros</p><p class="font-medium">{{ selectedParte.molinillo_enteros | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">M/E</p><p class="font-medium">{{ selectedParte.molinillo_me | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-slate-500 font-bold uppercase">Yeso</p><p class="font-medium">{{ selectedParte.molinillo_yeso | number:'1.2-2' }}%</p></div>
-                <div><p class="text-xs text-indigo-500 font-bold uppercase">Prod. Esp.</p><p class="font-black text-indigo-700">{{ selectedParte.producto_terminado_esperado | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Rendimiento</p><p class="font-medium">{{ selectedParte.molinillo_rendimiento | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Quebrado</p><p class="font-black text-indigo-700">{{ selectedParte.molinillo_quebrado | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Enteros</p><p class="font-medium">{{ selectedParte.molinillo_enteros | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">M/E</p><p class="font-medium">{{ selectedParte.molinillo_me | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Yeso</p><p class="font-medium">{{ selectedParte.molinillo_yeso | number:'1.2-2' }}%</p></div>
+                <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Prod. Esp.</p><p class="font-black text-indigo-700">{{ selectedParte.producto_terminado_esperado | number:'1.2-2' }} KG</p></div>
               </div>
             </div>
 
@@ -265,15 +265,15 @@ import { environment } from '../../../environments/environment';
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Inspección y Observaciones</h5>
               <div class="flex flex-wrap gap-3 mb-6">
-                <span class="px-3 py-1 text-xs font-bold rounded-full" [ngClass]="selectedParte.insp_bolsa ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Bolsa: {{ selectedParte.insp_bolsa ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-xs font-bold rounded-full" [ngClass]="selectedParte.insp_big_bag ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Big Bag: {{ selectedParte.insp_big_bag ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-xs font-bold rounded-full" [ngClass]="selectedParte.imanes_pulidora ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Pul.: {{ selectedParte.imanes_pulidora ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-xs font-bold rounded-full" [ngClass]="selectedParte.imanes_envasado ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Env.: {{ selectedParte.imanes_envasado ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-xs font-bold rounded-full" [ngClass]="selectedParte.zarandas_inicio ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda In.: {{ selectedParte.zarandas_inicio ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-xs font-bold rounded-full" [ngClass]="selectedParte.zarandas_fin ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda Fin: {{ selectedParte.zarandas_fin ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.insp_bolsa ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Bolsa: {{ selectedParte.insp_bolsa ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.insp_big_bag ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Big Bag: {{ selectedParte.insp_big_bag ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.imanes_pulidora ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Pul.: {{ selectedParte.imanes_pulidora ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.imanes_envasado ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Env.: {{ selectedParte.imanes_envasado ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.zarandas_inicio ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda In.: {{ selectedParte.zarandas_inicio ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.zarandas_fin ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda Fin: {{ selectedParte.zarandas_fin ? 'Sí' : 'No' }}</span>
               </div>
               <div class="bg-white p-4 rounded border border-slate-200">
-                <p class="text-xs text-slate-500 font-bold uppercase mb-1">Observaciones</p>
+                <p class="text-base md:text-sm text-slate-500 font-bold uppercase mb-1">Observaciones</p>
                 <p class="text-sm text-slate-700">{{ selectedParte.observaciones || 'Ninguna observación registrada.' }}</p>
               </div>
             </div>
@@ -286,6 +286,13 @@ import { environment } from '../../../environments/environment';
       <button *ngIf="!isCreatingParte && !isViewingParte" 
               (click)="isCreatingParte=true" 
               class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-3xl font-black z-50 hover:bg-indigo-700 active:scale-95 transition-transform">
+        +
+      </button>
+
+      <!-- BOTÓN FLOTANTE FAB ELABORACION -->
+      <button *ngIf="!isCreatingParte && !isViewingParte" 
+              (click)="toggleCreate()" 
+              class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-4xl font-black z-50 hover:bg-indigo-700 active:scale-95 transition-transform border-4 border-white">
         +
       </button>
     </div>
@@ -434,7 +441,7 @@ export class ElaboracionComponent implements OnInit {
         showCancelButton: true
       });
       if (nuevo) {
-        this.http.post(`${environment.apiUrl}/produccion/productos`, { nombre: nuevo }).subscribe((res: any) => {
+        this.http.post(`${environment.apiUrl}/produccion/productos`, { nombre_carga: nuevo, nombre: nuevo }).subscribe((res: any) => {
           this.listadoProductos.push({ nombre: nuevo });
           this.elaboracionForm.get('producto_elaborado')?.setValue(nuevo);
         });
@@ -477,7 +484,7 @@ export class ElaboracionComponent implements OnInit {
   }
 
   verJSON(p: any) {
-    let html = '<div class="text-left text-xs font-mono bg-slate-100 p-4 rounded overflow-auto h-96">' + JSON.stringify(p, null, 2) + '</div>';
+    let html = '<div class="text-left text-base md:text-sm font-mono bg-slate-100 p-4 rounded overflow-auto h-96">' + JSON.stringify(p, null, 2) + '</div>';
     Swal.fire({
       title: "RAW Data",
       html: html,
@@ -489,7 +496,12 @@ export class ElaboracionComponent implements OnInit {
 
   submitForm() {
     this.isLoading = true;
-    this.http.post(`${environment.apiUrl}/produccion/partes`, this.elaboracionForm.getRawValue()).subscribe({
+    const payload = { ...this.elaboracionForm.getRawValue() };
+    if (payload.producto_elaborado) {
+      payload.nombre_carga = payload.producto_elaborado;
+    }
+    
+    this.http.post(`${environment.apiUrl}/produccion/partes`, payload).subscribe({
       next: (res: any) => {
         Swal.fire('¡Éxito!', 'Parte guardado.', 'success');
         this.isLoading = false;
