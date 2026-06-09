@@ -441,7 +441,7 @@ export class ElaboracionComponent implements OnInit {
         showCancelButton: true
       });
       if (nuevo) {
-        this.http.post(`${environment.apiUrl}/produccion/productos`, { nombre_carga: nuevo, nombre: nuevo }).subscribe((res: any) => {
+        this.http.post(`${environment.apiUrl}/produccion/productos`, { nombre_carga: nuevo }).subscribe((res: any) => {
           this.listadoProductos.push({ nombre: nuevo });
           this.elaboracionForm.get('producto_elaborado')?.setValue(nuevo);
         });
