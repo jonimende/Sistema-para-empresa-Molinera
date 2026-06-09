@@ -40,31 +40,31 @@ export const routes: Routes = [
       {
         path: 'viajes',
         canActivate: [roleGuard],
-        data: { roles: ['Logistica', 'Camionero', 'Chofer'] },
+        data: { roles: ['Admin', 'Logistica', 'Camionero'] },
         loadComponent: () => import('./features/viajes/viajes.component').then(m => m.ViajesComponent),
       },
       {
         path: 'elaboracion',
         canActivate: [roleGuard],
-        data: { roles: ['Molinero'] },
+        data: { roles: ['Admin', 'Elaboracion'] },
         loadComponent: () => import('./features/elaboracion/elaboracion.component').then(m => m.ElaboracionComponent),
       },
       {
         path: 'higiene',
         canActivate: [roleGuard],
-        data: { roles: ['Inspector_Calidad', 'Higiene'] },
+        data: { roles: ['Admin', 'Higiene'] },
         loadComponent: () => import('./features/higiene/higiene.component').then(m => m.HigieneComponent),
       },
       {
         path: 'recorrida',
         canActivate: [roleGuard],
-        data: { roles: ['Inspector_Calidad'] },
+        data: { roles: ['Admin', 'Auditoria'] },
         loadComponent: () => import('./features/recorrida/recorrida.component').then(m => m.RecorridaComponent),
       },
       {
         path: 'nc',
         canActivate: [roleGuard],
-        data: { roles: ['Inspector_Calidad', 'No_Conformidades'] },
+        data: { roles: ['Admin', 'Calidad'] },
         loadComponent: () => import('./features/nc/nc.component').then(m => m.NcComponent),
       }
     ]

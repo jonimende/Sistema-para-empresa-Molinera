@@ -19,15 +19,15 @@ import { environment } from '../../../environments/environment';
 
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-bold text-slate-700">Historial de Partes</h3>
-        <button type="button" (click)="$event.preventDefault(); toggleCreate()" class="px-4 py-2 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm flex items-center">
+        <button type="button" (click)="$event.preventDefault(); toggleCreate()" class="hidden md:flex px-4 py-2 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm items-center">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           {{ isCreatingParte ? 'Cancelar' : 'Nuevo Parte' }}
         </button>
       </div>
 
-      <div class="flex gap-6 h-[calc(100vh-12rem)]">
+      <div class="flex flex-col md:flex-row gap-6 h-auto md:h-[calc(100vh-12rem)]">
         <!-- Panel Izquierdo -->
-        <div class="w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex flex-col">
+        <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm" [ngClass]="{'hidden md:flex flex-col': isCreatingParte || isViewingParte, 'flex flex-col': !isCreatingParte && !isViewingParte}">
           <div *ngFor="let p of partes" (click)="verDetalleParte(p)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedParte?.id === p.id">
             <div>
               <p class="font-bold text-slate-800 text-lg">Lote: {{ p.nro_lote || 'N/A' }}</p>
@@ -41,9 +41,15 @@ import { environment } from '../../../environments/environment';
         </div>
 
         <!-- Panel Derecho -->
-        <div class="w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto relative">
+        <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto relative" [ngClass]="{'hidden md:flex flex-col': !isCreatingParte && !isViewingParte, 'flex flex-col': isCreatingParte || isViewingParte}">
           
-          <div *ngIf="!isViewingParte && !isCreatingParte" class="h-full flex flex-col items-center justify-center text-slate-400">
+          <!-- Botón Volver para Celular -->
+          <button *ngIf="isCreatingParte || isViewingParte" (click)="isCreatingParte=false; isViewingParte=false" class="md:hidden m-4 w-[calc(100%-2rem)] bg-slate-100 text-slate-700 font-bold py-4 rounded-xl flex items-center justify-center text-lg shadow-sm active:scale-95 transition-all">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            Volver a la Lista
+          </button>
+          
+          <div *ngIf="!isViewingParte && !isCreatingParte" class="h-full hidden md:flex flex-col items-center justify-center text-slate-400">
             <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             <p class="font-medium text-lg">Seleccione un parte para ver detalles.</p>
           </div>
@@ -275,6 +281,13 @@ import { environment } from '../../../environments/environment';
 
         </div>
       </div>
+
+      <!-- BOTÓN FLOTANTE FAB (Solo en móvil, cuando se ve la lista) -->
+      <button *ngIf="!isCreatingParte && !isViewingParte" 
+              (click)="isCreatingParte=true" 
+              class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-3xl font-black z-50 hover:bg-indigo-700 active:scale-95 transition-transform">
+        +
+      </button>
     </div>
   `,
   styles: [`
