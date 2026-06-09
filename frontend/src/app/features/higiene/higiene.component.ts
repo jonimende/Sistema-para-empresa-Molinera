@@ -10,15 +10,15 @@ import { environment } from '../../../environments/environment';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="h-[calc(100vh-8rem)] flex gap-6">
+    <div class="h-[calc(100vh-8rem)] flex flex-col md:flex-row gap-6">
       <!-- Izquierda: Lista de Historial -->
-      <div class="w-1/3 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col overflow-hidden">
+      <div class="w-full md:w-1/3 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-y-auto" [ngClass]="{'hidden md:flex flex-col': isCreating || isViewing || isEditing, 'flex flex-col': !(isCreating || isViewing || isEditing)}">
         <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
           <div>
             <h2 class="text-xl font-black text-slate-800">Control Higiene</h2>
             <p class="text-sm text-slate-500 font-medium">Registros PCC</p>
           </div>
-          <button type="button" (click)="$event.preventDefault(); crearNuevo()" class="px-3 py-1.5 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm flex items-center">
+          <button type="button" (click)="$event.preventDefault(); crearNuevo()" class="hidden md:flex px-3 py-1.5 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm items-center">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Nuevo
           </button>
@@ -50,7 +50,12 @@ import { environment } from '../../../environments/environment';
       </div>
 
       <!-- Derecha: Visualización / Wizard -->
-      <div class="w-2/3 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col relative">
+      <div class="w-full md:w-2/3 bg-white border border-slate-200 rounded-2xl shadow-sm relative overflow-y-auto" [ngClass]="{'hidden md:flex flex-col': !(isCreating || isViewing || isEditing), 'flex flex-col h-full w-full': isCreating || isViewing || isEditing}">
+        
+        <button *ngIf="isCreating || isViewing || isEditing" (click)="isCreating=false; isViewing=false; isEditing=false; selectedRecord=null" class="md:hidden m-4 w-[calc(100%-2rem)] bg-slate-100 text-slate-700 font-bold py-4 rounded-xl flex items-center justify-center text-lg shadow-sm active:scale-95 transition-all">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          Volver a la Lista
+        </button>
         
         <!-- Estado Vacío -->
         <div *ngIf="!isCreating && !isViewing && !isEditing" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/80 z-10">
@@ -161,49 +166,49 @@ import { environment } from '../../../environments/environment';
               <h3 class="text-xl font-bold text-slate-700 border-b pb-2">Fase 1: Datos Generales</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Fecha</label>
-                  <input type="date" formControlName="fecha" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Fecha</label>
+                  <input type="date" formControlName="fecha" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Transporte / Empresa</label>
-                  <input type="text" formControlName="transporte" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Transporte / Empresa</label>
+                  <input type="text" formControlName="transporte" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Patente Vehículo</label>
-                  <input type="text" formControlName="patente" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Patente Vehículo</label>
+                  <input type="text" formControlName="patente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Habilitación Transporte</label>
+                  <label class="block text-base font-bold text-slate-700 mb-2">Habilitación Transporte</label>
                   <select formControlName="habilitacion_transporte" class="w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="Y">Sí (Y)</option>
                     <option value="N">No (N)</option>
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Chofer</label>
-                  <input type="text" formControlName="chofer" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Chofer</label>
+                  <input type="text" formControlName="chofer" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">DNI Chofer</label>
-                  <input type="text" formControlName="dni_chofer" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">DNI Chofer</label>
+                  <input type="text" formControlName="dni_chofer" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">C.M.A.</label>
+                  <label class="block text-base font-bold text-slate-700 mb-2">C.M.A.</label>
                   <select formControlName="cma" class="w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="Y">Sí (Y)</option>
                     <option value="N">No (N)</option>
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Cliente / Destino</label>
-                  <input type="text" formControlName="cliente" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Cliente / Destino</label>
+                  <input type="text" formControlName="cliente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Producto</label>
-                  <input type="text" formControlName="producto" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Producto</label>
+                  <input type="text" formControlName="producto" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Tipo Envase</label>
+                  <label class="block text-base font-bold text-slate-700 mb-2">Tipo Envase</label>
                   <select formControlName="tipo_envase" class="w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="" disabled>Seleccione...</option>
                     <option value="BIG BAG">BIG BAG</option>
@@ -211,13 +216,13 @@ import { environment } from '../../../environments/environment';
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">N° Lote</label>
-                  <input type="text" formControlName="n_lote" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">N° Lote</label>
+                  <input type="text" formControlName="n_lote" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
               </div>
               
               <div class="flex justify-end mt-8 pt-4 border-t border-slate-100">
-                <button type="button" (click)="$event.preventDefault(); nextStep()" class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition">Siguiente</button>
+                <button type="button" (click)="$event.preventDefault(); nextStep()" class="px-8 py-4 md:py-3 w-full md:w-auto bg-indigo-600 text-white font-black text-xl md:text-base rounded-xl mt-4 md:mt-0 hover:bg-indigo-700 transition">Siguiente</button>
               </div>
             </div>
 
@@ -244,8 +249,8 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <div class="flex justify-between mt-8 pt-4 border-t border-slate-100">
-                <button type="button" (click)="$event.preventDefault(); prevStep()" class="px-8 py-3 bg-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-300 transition">Volver</button>
-                <button type="button" (click)="$event.preventDefault(); nextStep()" class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition">Siguiente</button>
+                <button type="button" (click)="$event.preventDefault(); prevStep()" class="px-8 py-4 md:py-3 w-full md:w-auto bg-slate-200 text-slate-700 font-bold text-xl md:text-base rounded-xl mt-4 md:mt-0 hover:bg-slate-300 transition">Volver</button>
+                <button type="button" (click)="$event.preventDefault(); nextStep()" class="px-8 py-4 md:py-3 w-full md:w-auto bg-indigo-600 text-white font-black text-xl md:text-base rounded-xl mt-4 md:mt-0 hover:bg-indigo-700 transition">Siguiente</button>
               </div>
             </div>
 
@@ -255,16 +260,16 @@ import { environment } from '../../../environments/environment';
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Estado del Clima</label>
-                  <input type="text" formControlName="estado_clima" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Estado del Clima</label>
+                  <input type="text" formControlName="estado_clima" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Responsable de Inspección</label>
-                  <input type="text" formControlName="responsable_inspeccion" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500">
+                  <label class="block text-base font-bold text-slate-700 mb-2">Responsable de Inspección</label>
+                  <input type="text" formControlName="responsable_inspeccion" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500">
                 </div>
                 <div class="col-span-2">
-                  <label class="block text-sm font-bold text-slate-700 mb-1">Observaciones Generales</label>
-                  <textarea formControlName="observaciones_generales" rows="3" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50 focus:ring-indigo-500"></textarea>
+                  <label class="block text-base font-bold text-slate-700 mb-2">Observaciones Generales</label>
+                  <textarea formControlName="observaciones_generales" rows="3" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 md:px-3 bg-slate-50 text-lg md:text-base focus:ring-indigo-500"></textarea>
                 </div>
               </div>
 
@@ -295,7 +300,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <div class="flex justify-between mt-8 pt-4 border-t border-slate-100">
-                <button type="button" (click)="$event.preventDefault(); prevStep()" class="px-8 py-3 bg-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-300 transition">Volver</button>
+                <button type="button" (click)="$event.preventDefault(); prevStep()" class="px-8 py-4 md:py-3 w-full md:w-auto bg-slate-200 text-slate-700 font-bold text-xl md:text-base rounded-xl mt-4 md:mt-0 hover:bg-slate-300 transition">Volver</button>
                 <button type="button" (click)="submitForm()" [disabled]="isLoading" class="px-8 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 shadow-md transition disabled:opacity-50">
                   {{ isLoading ? 'Procesando...' : 'Guardar PCC' }}
                 </button>
@@ -303,7 +308,13 @@ import { environment } from '../../../environments/environment';
             </div>
           </form>
         </div>
-      </div>
+      
+      <!-- BOTÓN FLOTANTE FAB -->
+      <button *ngIf="!(isCreating || isViewing || isEditing)" 
+              (click)="crearNuevo()" 
+              class="md:hidden fixed bottom-4 right-4 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-3xl font-black z-50 hover:bg-indigo-700 active:scale-95 transition-transform">
+        +
+      </button>
     </div>
   `,
   styles: [`
