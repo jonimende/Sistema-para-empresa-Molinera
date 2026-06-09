@@ -441,9 +441,20 @@ export class ElaboracionComponent implements OnInit {
         showCancelButton: true
       });
       if (nuevo) {
-        this.http.post(`${environment.apiUrl}/produccion/productos`, { nombre_carga: nuevo }).subscribe((res: any) => {
-          this.listadoProductos.push({ nombre: nuevo });
-          this.elaboracionForm.get('producto_elaborado')?.setValue(nuevo);
+        const formData = new FormData();
+        formData.append('nombre_carga', nuevo);
+
+        this.http.post(`${environment.apiUrl}/logistica/productos_carga`, formData).subscribe({
+          next: (res: any) => {
+            this.listadoProductos.push({ nombre: nuevo, nombre_carga: nuevo });
+            this.elaboracionForm.get('producto_elaborado')?.setValue(nuevo);
+            Swal.fire('Guardado', 'Producto agregado con éxito', 'success');
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error', 'No se pudo guardar el producto', 'error');
+            this.elaboracionForm.patchValue({ producto_elaborado: '' });
+          }
         });
       } else {
         this.elaboracionForm.patchValue({ producto_elaborado: '' });
