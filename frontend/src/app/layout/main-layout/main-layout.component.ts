@@ -9,7 +9,7 @@ import { ChatbotComponent } from '../../shared/chatbot.component';
   standalone: true,
   imports: [CommonModule, RouterModule, ChatbotComponent],
   template: `
-    <div class="flex h-screen bg-slate-50 font-sans text-slate-800 relative overflow-x-hidden w-full max-w-[100vw] overflow-y-auto md:overflow-hidden">
+    <div class="flex h-screen bg-slate-50 font-sans text-slate-800 relative overflow-x-hidden w-full max-w-[100vw] overflow-x-hidden">
       <!-- Mobile backdrop -->
       <div *ngIf="isMobileMenuOpen" class="fixed inset-0 bg-slate-900/50 z-40 md:hidden backdrop-blur-sm transition-opacity" (click)="toggleMobileMenu()"></div>
 
@@ -103,7 +103,7 @@ import { ChatbotComponent } from '../../shared/chatbot.component';
         
         <!-- Área de las Vistas (Router Outlet) -->
         <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50 w-full">
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6 min-h-full w-full overflow-hidden">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6 min-h-full w-full overflow-visible">
             <router-outlet></router-outlet>
           </div>
         </div>

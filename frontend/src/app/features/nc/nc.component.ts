@@ -12,14 +12,14 @@ import { environment } from '../../../environments/environment';
   template: `
     <div class="h-auto md:h-[calc(100vh-8rem)] flex flex-col md:flex-row gap-4 md:gap-6 w-full">
       <!-- Izquierda: Lista de NCs -->
-      <div class="w-full md:w-1/3 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex-col max-h-[80vh] md:max-h-full"
+      <div class="w-full md:w-1/3 bg-white border border-slate-200 rounded-2xl shadow-sm flex-col overflow-y-auto max-h-[80vh] md:max-h-full"
            [ngClass]="{'hidden md:flex': selectedRecord || isCreating || isEditing || isViewing, 'flex': !selectedRecord && !isCreating && !isEditing && !isViewing}">
         <div class="p-4 md:p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
           <div>
             <h2 class="text-xl font-black text-slate-800">Historial NC</h2>
             <p class="text-sm text-slate-500 font-medium">No Conformidades Registradas</p>
           </div>
-          <button type="button" (click)="$event.preventDefault(); crearNuevo()" class="px-3 py-2 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm flex items-center min-h-[44px]">
+          <button type="button" (click)="$event.preventDefault(); crearNuevo()" class="hidden md:flex px-3 py-2 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm items-center min-h-[44px]">
             <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             <span class="hidden sm:inline">Nueva NC</span>
           </button>
@@ -54,8 +54,13 @@ import { environment } from '../../../environments/environment';
       </div>
 
       <!-- Derecha: Panel Detalle / Formulario NC -->
-      <div class="w-full md:w-2/3 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex-col relative min-h-[50vh]"
-           [ngClass]="{'flex': selectedRecord || isCreating || isEditing || isViewing, 'hidden md:flex': !selectedRecord && !isCreating && !isEditing && !isViewing}">
+      <div class="w-full md:w-2/3 bg-white border border-slate-200 rounded-2xl shadow-sm flex-col relative overflow-y-auto"
+           [ngClass]="{'flex h-full w-full': selectedRecord || isCreating || isEditing || isViewing, 'hidden md:flex': !selectedRecord && !isCreating && !isEditing && !isViewing}">
+        
+        <button *ngIf="selectedRecord || isCreating || isEditing || isViewing" (click)="isCreating=false; isViewing=false; isEditing=false; selectedRecord=null" class="md:hidden m-4 w-[calc(100%-2rem)] bg-slate-100 text-slate-700 font-bold py-4 rounded-xl flex items-center justify-center text-lg shadow-sm active:scale-95 transition-all">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          Volver a la Lista
+        </button>
         
         <!-- Estado Vacío (Solo Desktop) -->
         <div *ngIf="!isCreating && !isEditing && !isViewing" class="absolute inset-0 hidden md:flex flex-col items-center justify-center bg-slate-50/80 z-10">
@@ -161,7 +166,7 @@ import { environment } from '../../../environments/environment';
 
             <!-- Foto Drag & Drop -->
             <div class="w-full">
-              <label class="block text-sm font-bold text-slate-700 mb-1">Evidencia Fotográfica</label>
+              <label class="block text-base font-bold text-slate-700 mb-2">Evidencia Fotográfica</label>
               
               <!-- Visor de Foto Existente -->
               <div *ngIf="ncForm.get('foto_url')?.value" class="mb-4 w-full">

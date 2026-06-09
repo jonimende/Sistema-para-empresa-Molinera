@@ -41,7 +41,7 @@ import { environment } from '../../../environments/environment';
         </div>
 
         <!-- Panel Derecho -->
-        <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto relative" [ngClass]="{'hidden md:flex flex-col': !isCreatingParte && !isViewingParte, 'flex flex-col': isCreatingParte || isViewingParte}">
+        <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm relative overflow-y-auto" [ngClass]="{'hidden md:flex flex-col': !isCreatingParte && !isViewingParte, 'flex flex-col h-full w-full': isCreatingParte || isViewingParte}">
           
           <!-- Botón Volver para Celular -->
           <button *ngIf="isCreatingParte || isViewingParte" (click)="isCreatingParte=false; isViewingParte=false" class="md:hidden m-4 w-[calc(100%-2rem)] bg-slate-100 text-slate-700 font-bold py-4 rounded-xl flex items-center justify-center text-lg shadow-sm active:scale-95 transition-all">
