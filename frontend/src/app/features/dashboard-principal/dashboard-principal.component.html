@@ -53,35 +53,37 @@
         </h3>
         
         <!-- Responsive form flex to flex-col on mobile -->
-        <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()" class="flex flex-col md:flex-row md:items-end gap-3 md:gap-4 w-full">
-          <div class="flex-1 w-full">
-            <label class="block text-xs font-bold text-slate-500 mb-1">Correo Electrónico</label>
-            <input type="email" formControlName="email" class="w-full min-h-[44px] md:min-h-[auto] border-slate-200 rounded-lg py-2.5 px-3 focus:ring-indigo-500 bg-slate-50 focus:bg-white transition-colors text-base md:text-sm">
+        <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()" class="space-y-4 md:space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+            <div class="flex flex-col">
+              <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Correo Electrónico</label>
+              <input type="email" formControlName="email" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+            </div>
+            <div class="flex flex-col">
+              <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">
+                Contraseña <span *ngIf="modoEdicion" class="text-slate-400 font-normal hidden md:inline">(Vacía = sin cambios)</span>
+              </label>
+              <input type="password" formControlName="password" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+            </div>
+            <div class="flex flex-col">
+              <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Rol Operativo</label>
+              <select formControlName="role" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <option value="" disabled selected>Seleccione...</option>
+                <option value="Admin">Admin</option>
+                <option value="Logistica">Logística</option>
+                <option value="Camionero">Camionero</option>
+                <option value="Inspector_Calidad">Inspector de Calidad</option>
+                <option value="No_Conformidades">No Conformidades</option>
+                <option value="Auditoria">Auditoría</option>
+              </select>
+            </div>
           </div>
-          <div class="flex-1 w-full">
-            <label class="block text-xs font-bold text-slate-500 mb-1">
-              Contraseña <span *ngIf="modoEdicion" class="text-slate-400 font-normal hidden md:inline">(Vacía = sin cambios)</span>
-            </label>
-            <input type="password" formControlName="password" class="w-full min-h-[44px] md:min-h-[auto] border-slate-200 rounded-lg py-2.5 px-3 focus:ring-indigo-500 bg-slate-50 focus:bg-white transition-colors text-base md:text-sm">
-          </div>
-          <div class="flex-1 w-full">
-            <label class="block text-xs font-bold text-slate-500 mb-1">Rol Operativo</label>
-            <select formControlName="role" class="w-full min-h-[44px] md:min-h-[auto] border-slate-200 rounded-lg py-2.5 px-3 focus:ring-indigo-500 bg-slate-50 focus:bg-white transition-colors text-base md:text-sm">
-              <option value="" disabled selected>Seleccione...</option>
-              <option value="Admin">Admin</option>
-              <option value="Logistica">Logística</option>
-              <option value="Camionero">Camionero</option>
-              <option value="Inspector_Calidad">Inspector de Calidad</option>
-              <option value="No_Conformidades">No Conformidades</option>
-              <option value="Auditoria">Auditoría</option>
-            </select>
-          </div>
-          <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full md:w-auto mt-2 md:mt-0">
-            <button type="submit" [disabled]="usuarioForm.invalid" class="w-full md:w-auto min-h-[44px] bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm">
-              {{ modoEdicion ? 'Guardar' : 'Crear' }}
-            </button>
-            <button type="button" *ngIf="modoEdicion" (click)="resetForm()" class="w-full md:w-auto min-h-[44px] bg-slate-100 text-slate-600 px-4 py-2.5 rounded-lg font-bold hover:bg-slate-200 transition-all">
+          <div class="pt-2 flex flex-col md:flex-row md:justify-end gap-3">
+            <button type="button" *ngIf="modoEdicion" (click)="resetForm()" class="w-full md:w-auto px-6 py-3.5 md:py-2.5 bg-slate-100 text-slate-600 font-bold text-lg md:text-base rounded-xl md:rounded-lg hover:bg-slate-200 transition-all flex justify-center items-center">
               Cancelar
+            </button>
+            <button type="submit" [disabled]="usuarioForm.invalid" class="w-full md:w-auto px-6 py-3.5 md:py-2.5 bg-indigo-600 text-white font-black text-lg md:text-base rounded-xl md:rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95 flex justify-center items-center disabled:opacity-50">
+              {{ modoEdicion ? 'Guardar Cambios' : 'Crear Usuario' }}
             </button>
           </div>
         </form>
