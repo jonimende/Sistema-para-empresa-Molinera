@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
   imports: [CommonModule],
   template: `
     <!-- Chatbot Flotante -->
-    <div class="fixed bottom-6 left-6 z-40 flex flex-col items-start">
+    <div class="fixed bottom-6 left-6 md:right-6 md:left-auto z-40 flex flex-col items-start md:items-end">
       <!-- Ventana Chat -->
       <div *ngIf="isChatOpen" class="w-80 h-96 flex flex-col bg-white rounded-xl shadow-2xl border border-slate-200 mb-4 overflow-hidden fade-in">
         <div class="bg-indigo-600 text-white p-4 flex justify-between items-center font-bold">

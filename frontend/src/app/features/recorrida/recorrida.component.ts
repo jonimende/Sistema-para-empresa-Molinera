@@ -34,7 +34,7 @@ import { environment } from '../../../environments/environment';
                class="p-4 border border-slate-200 bg-white rounded-xl hover:bg-indigo-50 cursor-pointer transition shadow-sm">
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-black text-indigo-700 bg-indigo-100 px-2 py-1 rounded">RDP #{{ r.id }}</span>
-              <span class="text-xs text-slate-500 font-bold">{{ r.fecha | date:'dd/MM/yyyy' }}</span>
+              <span class="text-xs text-slate-500 font-bold">{{ r.fecha | date:'dd/MM/yyyy':'UTC' }}</span>
             </div>
             <p class="font-bold text-slate-700 mt-2">Inspector: {{ r.responsable_nombre || r.inspector || '-' }}</p>
             <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-100">
@@ -71,7 +71,7 @@ import { environment } from '../../../environments/environment';
           <div class="flex flex-col md:flex-row justify-between md:items-start mb-6 gap-4 border-b border-slate-100 pb-6">
             <div>
               <h2 class="text-2xl font-black text-slate-800">Detalle de Recorrida (#{{ selectedRecord.id }})</h2>
-              <p class="text-slate-500 font-medium text-lg md:text-base mt-1">Fecha: <span class="text-indigo-600 font-bold">{{ selectedRecord.fecha | date:'dd/MM/yyyy' }}</span></p>
+              <p class="text-slate-500 font-medium text-lg md:text-base mt-1">Fecha: <span class="text-indigo-600 font-bold">{{ selectedRecord.fecha | date:'dd/MM/yyyy':'UTC' }}</span></p>
             </div>
             <button type="button" (click)="$event.preventDefault(); editar(selectedRecord)" class="w-full md:w-auto px-6 py-4 md:py-2 bg-indigo-100 text-indigo-700 font-bold text-xl md:text-base rounded-xl md:rounded-lg hover:bg-indigo-200 transition shadow-sm">
               Editar Registro
