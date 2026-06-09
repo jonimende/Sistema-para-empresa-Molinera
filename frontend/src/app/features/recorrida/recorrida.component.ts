@@ -119,39 +119,39 @@ import { environment } from '../../../environments/environment';
             <h2 class="text-xl font-black text-slate-800">{{ isCreating ? 'Nueva Recorrida RDP' : 'Editar Recorrida' }}</h2>
             <p class="text-sm text-slate-500 font-medium">Inspector a cargo: <span class="font-bold text-indigo-600">{{ inspectorName }}</span></p>
           </div>
-          <button type="button" (click)="$event.preventDefault(); submitForm()"  [disabled]="isLoading" class="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 shadow-md transition disabled:opacity-50">
+          <button type="button" (click)="$event.preventDefault(); submitForm()" [disabled]="isLoading" class="w-full md:w-auto px-6 py-3.5 md:py-2.5 bg-indigo-600 text-white font-black text-lg md:text-base rounded-xl md:rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95 flex justify-center items-center disabled:opacity-50">
             {{ isLoading ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Guardar y Enviar') }}
           </button>
         </div>
 
         <!-- Módulo de Edición/Creación -->
         <div class="flex-1 overflow-y-auto p-8" *ngIf="isCreating || isEditing">
-          <form [formGroup]="recorridaForm" class="space-y-8 max-w-2xl mx-auto">
+          <form [formGroup]="recorridaForm" class="space-y-6 md:space-y-8 max-w-2xl mx-auto">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
-              <div>
-                <label class="block text-sm font-bold text-slate-700 mb-1">Fecha</label>
-                <input type="date" formControlName="fecha" class="w-full border-slate-200 rounded-lg shadow-sm py-2 px-3 bg-white focus:ring-indigo-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100">
+              <div class="flex flex-col">
+                <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Fecha</label>
+                <input type="date" formControlName="fecha" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
               </div>
-              <div>
-                <label class="block text-sm font-bold text-slate-700 mb-1">Inspector</label>
-                <input type="text" formControlName="responsable_nombre" class="w-full border-slate-200 rounded-lg shadow-sm py-2 px-3 bg-white focus:ring-indigo-500">
+              <div class="flex flex-col">
+                <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Inspector</label>
+                <input type="text" formControlName="responsable_nombre" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
               </div>
             </div>
 
-            <div *ngFor="let item of items" class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-              <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-                <span class="text-lg font-black text-slate-700">{{ item.label }}</span>
-                <!-- Bloques Toggle CUMPLE / NO CUMPLE -->
+            <div *ngFor="let item of items" class="bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100 flex flex-col space-y-4">
+              <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <span class="text-base md:text-lg font-black text-slate-700">{{ item.label }}</span>
+                <!-- Bloques Toggle CUMPLE / NO CUMPLE (mutant buttons for mobile) -->
                 <div class="flex bg-slate-200 p-1 rounded-lg mt-3 md:mt-0">
                   <button type="button" (click)="$event.preventDefault(); recorridaForm.get(item.formControlName)?.setValue('CUMPLE')" 
                     [class]="recorridaForm.get(item.formControlName)?.value === 'CUMPLE' ? 'bg-green-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
-                    class="px-6 py-2 rounded-md font-bold text-sm transition-all duration-200">
+                    class="flex-1 md:flex-none px-4 md:px-6 py-3.5 md:py-2.5 rounded-md font-bold text-base md:text-sm transition-all duration-200 flex justify-center items-center">
                     CUMPLE
                   </button>
                   <button type="button" (click)="$event.preventDefault(); recorridaForm.get(item.formControlName)?.setValue('NO CUMPLE')" 
                     [class]="recorridaForm.get(item.formControlName)?.value === 'NO CUMPLE' ? 'bg-red-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-700'"
-                    class="px-6 py-2 rounded-md font-bold text-sm transition-all duration-200 ml-1">
+                    class="flex-1 md:flex-none px-4 md:px-6 py-3.5 md:py-2.5 rounded-md font-bold text-base md:text-sm transition-all duration-200 ml-1 flex justify-center items-center">
                     NO CUMPLE
                   </button>
                 </div>
@@ -160,7 +160,7 @@ import { environment } from '../../../environments/environment';
                 [formControlName]="item.commentControlName" 
                 rows="2" 
                 placeholder="Observaciones o comentarios (Opcional)" 
-                class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-2.5 px-3 bg-white text-sm">
+                class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
               </textarea>
             </div>
 
