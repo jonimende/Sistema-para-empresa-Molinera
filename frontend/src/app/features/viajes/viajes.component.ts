@@ -331,36 +331,36 @@ import { environment } from '../../../environments/environment';
                   
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100">
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Camión</label>
-                      <select formControlName="patente_chasis" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base font-bold text-indigo-700 font-mono shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                      <label class="text-base font-bold text-slate-700 mb-2">Camión</label>
+                      <select formControlName="patente_chasis" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base font-bold text-indigo-700 font-mono shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
                         <option value="" disabled selected>Seleccione Vehículo...</option>
                         <option *ngFor="let c of camiones" [value]="c.patente_chasis">{{ c.patente_chasis }}</option>
                       </select>
                     </div>
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Fecha</label>
-                      <input type="date" formControlName="fecha" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                      <label class="text-base font-bold text-slate-700 mb-2">Fecha</label>
+                      <input type="date" formControlName="fecha" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
                     </div>
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Litros de Gasoil</label>
-                      <input type="number" step="0.1" formControlName="litros_gasoil" placeholder="Ej: 150.5" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors font-bold">
+                      <label class="text-base font-bold text-slate-700 mb-2">Litros de Gasoil</label>
+                      <input type="number" step="0.1" formControlName="litros_gasoil" placeholder="Ej: 150.5" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors font-bold">
                     </div>
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Kilometraje</label>
-                      <input type="number" formControlName="kilometraje" placeholder="Ej: 125000" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                      <label class="text-base font-bold text-slate-700 mb-2">Kilometraje</label>
+                      <input type="number" formControlName="kilometraje" placeholder="Ej: 125000" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
                     </div>
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Consumo L/100km</label>
-                      <input type="number" formControlName="consumo" class="w-full bg-indigo-50 border border-indigo-100 rounded-lg p-3 text-base text-indigo-700 shadow-sm font-bold" readonly>
+                      <label class="text-base font-bold text-slate-700 mb-2">Consumo L/100km</label>
+                      <input type="number" formControlName="consumo" class="w-full bg-indigo-50 border border-indigo-100 rounded-xl p-4 md:p-3 text-lg md:text-base text-indigo-700 shadow-sm font-bold" readonly>
                     </div>
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Foto Tablero</label>
+                      <label class="text-base font-bold text-slate-700 mb-2">Foto Tablero</label>
                       <input type="file" (change)="onFileSelected($event)" accept="image/*" class="w-full text-base text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200">
                     </div>
                   </div>
                   
                   <div class="pt-4 flex flex-col md:flex-row md:justify-end border-t border-slate-100">
-                    <button type="button" (click)="$event.preventDefault(); submitCombustible()"  [disabled]="combustibleForm.invalid || isLoading" class="w-full md:w-auto px-6 py-3.5 md:py-2.5 bg-indigo-600 text-white font-black text-lg md:text-base rounded-xl md:rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95 flex justify-center items-center disabled:opacity-50">
+                    <button type="button" (click)="$event.preventDefault(); submitCombustible()"  [disabled]="combustibleForm.invalid || isLoading" class="w-full md:w-auto px-6 py-4 md:py-3 bg-indigo-600 text-white font-black text-xl md:text-base rounded-xl md:rounded-lg shadow-md mt-4 md:mt-0 hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95 flex justify-center items-center disabled:opacity-50">
                       Guardar Carga
                     </button>
                   </div>
@@ -634,12 +634,12 @@ import { environment } from '../../../environments/environment';
                   
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100">
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Patente Chasis</label>
-                      <input type="text" formControlName="patente_chasis" placeholder="Ej: AB123CD" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors font-mono font-bold">
+                      <label class="text-base font-bold text-slate-700 mb-2">Patente Chasis</label>
+                      <input type="text" formControlName="patente_chasis" placeholder="Ej: AB123CD" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors font-mono font-bold">
                     </div>
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Chofer Asignado</label>
-                      <select formControlName="chofer_asignado" (change)="onChoferChange($event)" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-base text-indigo-700 font-bold shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                      <label class="text-base font-bold text-slate-700 mb-2">Chofer Asignado</label>
+                      <select formControlName="chofer_asignado" (change)="onChoferChange($event)" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-indigo-700 font-bold shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
                         <option value="" disabled selected>Seleccione Chofer...</option>
                         <option value="NUEVO" class="font-bold text-indigo-600 bg-indigo-50">+ Agregar Nuevo Chofer...</option>
                         <option *ngFor="let ch of listadoChoferes" [value]="ch.nombre">{{ ch.nombre }}</option>
@@ -648,7 +648,7 @@ import { environment } from '../../../environments/environment';
                   </div>
 
                   <div class="pt-4 flex flex-col md:flex-row md:justify-end border-t border-slate-100">
-                    <button type="button" (click)="$event.preventDefault(); submitCamion()" [disabled]="camionForm.invalid || isLoading" class="w-full md:w-auto px-6 py-3.5 md:py-2.5 bg-indigo-600 text-white font-black text-lg md:text-base rounded-xl md:rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95 flex justify-center items-center disabled:opacity-50">
+                    <button type="button" (click)="$event.preventDefault(); submitCamion()" [disabled]="camionForm.invalid || isLoading" class="w-full md:w-auto px-6 py-4 md:py-3 bg-indigo-600 text-white font-black text-xl md:text-base rounded-xl md:rounded-lg shadow-md mt-4 md:mt-0 hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95 flex justify-center items-center disabled:opacity-50">
                       Guardar Vehículo
                     </button>
                   </div>

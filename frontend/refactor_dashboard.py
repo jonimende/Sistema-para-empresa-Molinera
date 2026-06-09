@@ -1,59 +1,46 @@
-<div class="w-full md:max-w-7xl mx-auto space-y-4 md:space-y-6 fade-in h-[calc(100vh-4rem)] md:h-[calc(100vh-6rem)] overflow-y-auto pb-8 pr-1 md:pr-2">
-  
-  <header class="mb-4 md:mb-2 px-1">
-    <h2 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Dashboard Principal</h2>
-    <p class="text-sm md:text-base text-slate-500 font-medium mt-1">Centro de Control de Usuarios y Estadísticas</p>
-  </header>
+import re
 
-  <!-- Top: Estadísticas -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 px-1">
-    <!-- Card Usuarios -->
-    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center hover:shadow-md transition">
-      <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mr-4 md:mr-5 shrink-0">
-        <svg class="w-6 h-6 md:w-7 md:h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-      </div>
-      <div>
-        <p class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider">Total Usuarios</p>
-        <p class="text-2xl md:text-3xl font-black text-slate-800">{{ stats?.totalUsuarios || 0 }}</p>
-      </div>
-    </div>
-    <!-- Card Viajes -->
-    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center hover:shadow-md transition">
-      <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mr-4 md:mr-5 shrink-0">
-        <svg class="w-6 h-6 md:w-7 md:h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-      </div>
-      <div>
-        <p class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider">Viajes Registrados</p>
-        <p class="text-2xl md:text-3xl font-black text-slate-800">{{ stats?.totalViajes || 0 }}</p>
-      </div>
-    </div>
-    <!-- Card Recorridas -->
-    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center hover:shadow-md transition">
-      <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-amber-50 flex items-center justify-center mr-4 md:mr-5 shrink-0">
-        <svg class="w-6 h-6 md:w-7 md:h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-      </div>
-      <div>
-        <p class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider">Recorridas Diarias</p>
-        <p class="text-2xl md:text-3xl font-black text-slate-800">{{ stats?.totalRecorridas || 0 }}</p>
-      </div>
-    </div>
-  </div>
+filepath = r'c:\Users\JereM\OneDrive\Desktop\Paoloni\frontend\src\app\features\dashboard-principal\dashboard-principal.component.html'
+with open(filepath, 'r', encoding='utf-8') as f:
+    content = f.read()
 
-  <!-- Grid Inferior (100% en mobile, 70/30 en desktop) -->
-  <div class="flex flex-col lg:flex-row gap-4 md:gap-6 items-start px-1">
-    
-    <!-- Izquierda: CRUD Usuarios -->
-    <div class="w-full lg:w-[70%] flex flex-col space-y-4 md:space-y-6">
-      
-      <!-- Formulario Usuarios -->
-      <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
-        <h3 class="text-base md:text-lg font-bold text-slate-800 mb-4 flex items-center">
-          <svg class="w-5 h-5 text-indigo-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
-          {{ modoEdicion ? 'Editar Credenciales' : 'Registrar Nuevo Usuario' }}
-        </h3>
-        
-        <!-- Responsive form flex to flex-col on mobile -->
-        <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()" class="space-y-6 md:space-y-6">
+# Replace the user form
+old_form = """        <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()" class="space-y-4 md:space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+            <div class="flex flex-col">
+              <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Correo Electrónico</label>
+              <input type="email" formControlName="email" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+            </div>
+            <div class="flex flex-col">
+              <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">
+                Contraseña <span *ngIf="modoEdicion" class="text-slate-400 font-normal hidden md:inline">(Vacía = sin cambios)</span>
+              </label>
+              <input type="password" formControlName="password" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+            </div>
+            <div class="flex flex-col">
+              <label class="text-sm font-bold text-slate-700 mb-1.5 ml-1">Rol Operativo</label>
+              <select formControlName="role" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <option value="" disabled selected>Seleccione...</option>
+                <option value="Admin">Admin</option>
+                <option value="Logistica">Logística</option>
+                <option value="Camionero">Camionero</option>
+                <option value="Inspector_Calidad">Inspector de Calidad</option>
+                <option value="No_Conformidades">No Conformidades</option>
+                <option value="Auditoria">Auditoría</option>
+              </select>
+            </div>
+          </div>
+          <div class="pt-2 flex flex-col md:flex-row md:justify-end gap-3">
+            <button type="button" *ngIf="modoEdicion" (click)="resetForm()" class="w-full md:w-auto px-6 py-3.5 md:py-2.5 bg-slate-100 text-slate-600 font-bold text-lg md:text-base rounded-xl md:rounded-lg hover:bg-slate-200 transition-all flex justify-center items-center">
+              Cancelar
+            </button>
+            <button type="submit" [disabled]="usuarioForm.invalid" class="w-full md:w-auto px-6 py-3.5 md:py-2.5 bg-indigo-600 text-white font-black text-lg md:text-base rounded-xl md:rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all active:scale-95 flex justify-center items-center disabled:opacity-50">
+              {{ modoEdicion ? 'Guardar Cambios' : 'Crear Usuario' }}
+            </button>
+          </div>
+        </form>"""
+
+new_form = """        <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()" class="space-y-6 md:space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="flex flex-col">
               <label class="text-base font-bold text-slate-700 mb-2">Correo Electrónico</label>
@@ -86,10 +73,50 @@
               {{ modoEdicion ? 'Guardar Cambios' : 'Crear Usuario' }}
             </button>
           </div>
-        </form>
-      </div>
+        </form>"""
 
-      <!-- Tabla Usuarios Híbrida -->
+content = content.replace(old_form, new_form)
+
+# Replace the table with hybrid table/cards
+old_table = """      <!-- Tabla Usuarios -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto w-full">
+        <table class="w-full text-left min-w-[500px]">
+          <thead class="bg-slate-50 border-b border-slate-200">
+            <tr>
+              <th class="px-4 md:px-6 py-3 md:py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Usuario</th>
+              <th class="px-4 md:px-6 py-3 md:py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Rol</th>
+              <th class="px-4 md:px-6 py-3 md:py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr *ngFor="let u of usuarios" class="hover:bg-slate-50/50 transition-colors">
+              <td class="px-4 md:px-6 py-3 md:py-4">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center mr-3 flex-shrink-0">
+                    {{ u.email.charAt(0).toUpperCase() }}
+                  </div>
+                  <span class="font-bold text-slate-700 text-sm md:text-base truncate max-w-[120px] md:max-w-none">{{ u.email }}</span>
+                </div>
+              </td>
+              <td class="px-4 md:px-6 py-3 md:py-4">
+                <span class="px-2 md:px-3 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-full text-[10px] md:text-xs font-bold shadow-sm whitespace-nowrap">
+                  {{ u.role }}
+                </span>
+              </td>
+              <td class="px-4 md:px-6 py-3 md:py-4 text-right space-x-2 whitespace-nowrap">
+                <button (click)="editarUsuario(u)" class="text-blue-600 hover:text-white hover:bg-blue-600 p-2 min-h-[44px] min-w-[44px] bg-blue-50 rounded-lg transition-colors border border-blue-100 inline-flex items-center justify-center">
+                  <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </button>
+                <button (click)="eliminarUsuario(u.id)" class="text-red-600 hover:text-white hover:bg-red-600 p-2 min-h-[44px] min-w-[44px] bg-red-50 rounded-lg transition-colors border border-red-100 inline-flex items-center justify-center">
+                  <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>"""
+
+new_table = """      <!-- Tabla Usuarios Híbrida -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 w-full">
         <!-- VISTA MÓVIL: Tarjetas -->
         <div class="grid grid-cols-1 md:hidden gap-4 p-4 bg-slate-50/50">
@@ -156,45 +183,9 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
+      </div>"""
 
-    <!-- Derecha: Actividad Reciente -->
-    <div class="w-full lg:w-[30%] mt-4 md:mt-0">
-      <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200">
-        <h3 class="text-base md:text-lg font-bold text-slate-800 mb-4 md:mb-6 flex items-center pb-3 md:pb-4 border-b border-slate-100">
-          <svg class="w-5 h-5 text-indigo-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          Flujo Reciente
-        </h3>
-        
-        <div class="space-y-1">
-          <div *ngFor="let notif of notificaciones" class="flex gap-3 md:gap-4 relative py-2 md:py-3 group">
-            <div class="absolute left-[15px] top-10 bottom-[-16px] w-0.5 bg-slate-100 group-last:hidden hidden md:block"></div>
-            
-            <!-- Bullet Icon -->
-            <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center z-10 shadow-sm border border-white"
-                 [ngClass]="{'bg-indigo-100 text-indigo-600': notif.tipo === 'Viaje', 'bg-emerald-100 text-emerald-600': notif.tipo === 'Combustible'}">
-              <svg *ngIf="notif.tipo === 'Viaje'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-              <svg *ngIf="notif.tipo === 'Combustible'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            </div>
-            
-            <!-- Contenido Notificación -->
-            <div>
-              <p class="text-sm font-bold text-slate-700 leading-tight">{{ notif.mensaje }}</p>
-              <p class="text-xs font-semibold text-slate-400 mt-1 flex items-center">
-                {{ notif.fecha | date:'dd/MM/yyyy - HH:mm' }}
-              </p>
-            </div>
-          </div>
-          
-          <div *ngIf="notificaciones.length === 0" class="text-center py-6 md:py-10">
-             <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-2 md:mb-3">
-               <svg class="w-6 h-6 md:w-8 md:h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-             </div>
-             <p class="text-slate-500 text-xs md:text-sm font-medium">No hay actividad reciente.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+content = content.replace(old_table, new_table)
+
+with open(filepath, 'w', encoding='utf-8') as f:
+    f.write(content)
