@@ -12,7 +12,6 @@ import { environment } from '../../../environments/environment';
   imports: [CommonModule, ReactiveFormsModule],
   template: `    <div class="h-auto md:h-[calc(100vh-12rem)] min-h-[60vh] flex flex-col md:flex-row gap-6 w-full relative">
       
-      <!-- Lista Historial Izquierda -->
       <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-2xl overflow-y-auto shadow-sm max-h-[80vh] md:max-h-full" 
            [ngClass]="{'hidden md:flex flex-col': isCreating || isViewing || isEditing, 'flex flex-col': !(isCreating || isViewing || isEditing)}">
         
@@ -21,7 +20,7 @@ import { environment } from '../../../environments/environment';
             <h2 class="text-xl font-black text-slate-800">Recorrida Diaria</h2>
             <p class="text-sm text-slate-500 font-medium">Control de Planta</p>
           </div>
-          <button type="button" (click)="startCreate()" class="hidden md:flex px-4 py-2 bg-indigo-100 text-indigo-700 font-bold rounded-lg hover:bg-indigo-200 transition text-sm items-center shadow-sm">
+          <button type="button" (click)="crearNuevo()" class="hidden md:flex px-4 py-2 bg-indigo-100 text-indigo-700 font-bold rounded-lg hover:bg-indigo-200 transition text-sm items-center shadow-sm">
             <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Nueva
           </button>
@@ -54,24 +53,20 @@ import { environment } from '../../../environments/environment';
         </div>
       </div>
 
-      <!-- Formulario o Detalle Derecha -->
       <div class="w-full md:w-2/3 bg-white rounded-2xl border border-slate-200 shadow-sm relative overflow-y-auto" 
            [ngClass]="{'hidden md:flex flex-col': !(isCreating || isViewing || isEditing), 'flex flex-col h-full w-full': isCreating || isViewing || isEditing}">
         
-        <!-- Botón Volver para Celular -->
         <button *ngIf="isCreating || isViewing || isEditing" (click)="isCreating=false; isViewing=false; isEditing=false; selectedRecord=null" class="md:hidden m-4 w-[calc(100%-2rem)] bg-slate-100 text-slate-700 font-bold py-4 rounded-xl flex items-center justify-center text-lg shadow-sm active:scale-95 transition-all sticky top-4 z-20 border border-slate-200">
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           Volver a la Lista
         </button>
 
-        <!-- Placeholder Vacio -->
         <div *ngIf="!isCreating && !isEditing && !isViewing" class="h-full hidden md:flex flex-col items-center justify-center text-slate-400 bg-slate-50/50 absolute inset-0">
           <svg class="w-20 h-20 text-slate-200 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           <h3 class="text-2xl font-black text-slate-600">Ningún Registro Seleccionado</h3>
           <p class="text-slate-500 mt-2 font-medium">Seleccione una recorrida del historial o cree una nueva.</p>
         </div>
 
-        <!-- Módulo de Lectura -->
         <div *ngIf="isViewing && selectedRecord" class="flex-1 p-6 md:p-8 bg-white relative">
           <div class="flex flex-col md:flex-row justify-between md:items-start mb-6 gap-4 border-b border-slate-100 pb-6">
             <div>
@@ -134,7 +129,6 @@ import { environment } from '../../../environments/environment';
           </button>
         </div>
 
-        <!-- Módulo de Edición/Creación -->
         <div class="flex-1 p-4 md:p-8 bg-slate-50" *ngIf="isCreating || isEditing">
           <form [formGroup]="recorridaForm" class="flex flex-col space-y-6 md:space-y-8 max-w-3xl mx-auto">
             
@@ -152,7 +146,6 @@ import { environment } from '../../../environments/environment';
             <div *ngFor="let item of items" class="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col space-y-5">
               <div class="flex flex-col md:flex-row md:items-center justify-between">
                 <span class="text-xl md:text-lg font-black text-slate-800 mb-4 md:mb-0">{{ item.label }}</span>
-                <!-- Bloques Toggle CUMPLE / NO CUMPLE -->
                 <div class="flex space-x-2 w-full md:w-auto">
                   <button type="button" (click)="$event.preventDefault(); recorridaForm.get(item.formControlName)?.setValue('CUMPLE')" 
                     [class]="recorridaForm.get(item.formControlName)?.value === 'CUMPLE' ? 'bg-green-500 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'"
@@ -184,9 +177,8 @@ import { environment } from '../../../environments/environment';
         </div>
       </div>
 
-      <!-- BOTÓN FLOTANTE FAB RECORRIDA GLOBAL -->
       <button *ngIf="!(isCreating || isViewing || isEditing)" 
-              (click)="startCreate()" 
+              (click)="crearNuevo()" 
               class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-4xl font-black z-[60] hover:bg-indigo-700 active:scale-95 transition-transform border-4 border-white">
         +
       </button>
