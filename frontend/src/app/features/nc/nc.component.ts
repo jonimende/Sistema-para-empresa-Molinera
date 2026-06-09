@@ -10,8 +10,7 @@ import { environment } from '../../../environments/environment';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="h-auto md:h-[calc(100vh-8rem)] flex flex-col md:flex-row gap-4 md:gap-6 w-full">
-      <!-- Izquierda: Lista de NCs -->
+    <div class="h-auto md:h-[calc(100vh-8rem)] flex flex-col md:flex-row gap-4 md:gap-6 w-full relative">
       <div class="w-full md:w-1/3 bg-white border border-slate-200 rounded-2xl shadow-sm flex-col overflow-y-auto max-h-[80vh] md:max-h-full"
            [ngClass]="{'hidden md:flex': selectedRecord || isCreating || isEditing || isViewing, 'flex': !selectedRecord && !isCreating && !isEditing && !isViewing}">
         <div class="p-4 md:p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
@@ -25,7 +24,6 @@ import { environment } from '../../../environments/environment';
           </button>
         </div>
         <div class="flex-1 overflow-y-auto p-4 space-y-3">
-          <!-- Iterar Lista Real -->
           <div *ngFor="let nc of ncs" 
                (click)="verDetalle(nc)"
                [class.border-indigo-500]="selectedRecord?.id === nc.id"
@@ -53,7 +51,6 @@ import { environment } from '../../../environments/environment';
         </div>
       </div>
 
-      <!-- Derecha: Panel Detalle / Formulario NC -->
       <div class="w-full md:w-2/3 bg-white border border-slate-200 rounded-2xl shadow-sm flex-col relative overflow-y-auto"
            [ngClass]="{'flex h-full w-full': selectedRecord || isCreating || isEditing || isViewing, 'hidden md:flex': !selectedRecord && !isCreating && !isEditing && !isViewing}">
         
@@ -62,16 +59,13 @@ import { environment } from '../../../environments/environment';
           Volver a la Lista
         </button>
         
-        <!-- Estado Vacío (Solo Desktop) -->
         <div *ngIf="!isCreating && !isEditing && !isViewing" class="absolute inset-0 hidden md:flex flex-col items-center justify-center bg-slate-50/80 z-10">
           <svg class="w-16 h-16 text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
           <h3 class="text-xl font-bold text-slate-600">Ninguna NC Seleccionada</h3>
           <p class="text-slate-500 mt-1">Seleccione una No Conformidad del historial o reporte una nueva.</p>
         </div>
 
-        <!-- Modo Lectura -->
         <div *ngIf="isViewing && selectedRecord" class="flex-1 overflow-y-auto p-4 md:p-8 bg-white relative">
-          <!-- Botón Volver (Mobile) -->
           <button (click)="volverLista()" class="md:hidden flex items-center justify-center w-full text-indigo-600 font-bold mb-4 bg-indigo-50 px-3 py-2 rounded-lg min-h-[44px] border border-indigo-100">
             <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             Volver a la lista
@@ -113,9 +107,7 @@ import { environment } from '../../../environments/environment';
           </div>
         </div>
 
-        <!-- Cabecera Formulario -->
         <div class="p-4 md:p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 gap-4" *ngIf="isCreating || isEditing">
-          <!-- Botón Volver (Mobile) -->
           <button (click)="volverLista()" class="md:hidden flex items-center justify-center w-full text-indigo-600 font-bold bg-indigo-50/50 px-3 py-2 rounded-lg min-h-[44px] border border-indigo-100">
             <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             Volver a la lista
@@ -130,30 +122,25 @@ import { environment } from '../../../environments/environment';
           </button>
         </div>
 
-        <!-- Formulario -->
         <div class="flex-1 overflow-y-auto p-4 md:p-8" *ngIf="isCreating || isEditing">
           <form [formGroup]="ncForm" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100">
               
-              <!-- Requisito Incumplido -->
               <div class="flex flex-col">
                 <label class="text-base font-bold text-slate-700 mb-2">Requisito Incumplido</label>
                 <input type="text" formControlName="requisito_incumplido" placeholder="Ej: BPM 4.2" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
               </div>
 
-              <!-- Ubicación -->
               <div class="flex flex-col">
                 <label class="text-base font-bold text-slate-700 mb-2">Ubicación</label>
                 <input type="text" formControlName="ubicacion" placeholder="Lugar exacto del hallazgo" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
               </div>
 
-              <!-- Responsable -->
               <div class="flex flex-col md:col-span-2">
                 <label class="text-base font-bold text-slate-700 mb-2">Responsable No Conformidad</label>
                 <input type="text" formControlName="nombre_responsable" placeholder="Nombre de quien reporta" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
               </div>
 
-              <!-- Descripción -->
               <div class="flex flex-col md:col-span-2">
                 <label class="text-base font-bold text-slate-700 mb-2">Descripción Detallada del Hallazgo</label>
                 <textarea 
@@ -164,17 +151,14 @@ import { environment } from '../../../environments/environment';
               </div>
             </div>
 
-            <!-- Foto Drag & Drop -->
             <div class="w-full">
               <label class="block text-base font-bold text-slate-700 mb-2">Evidencia Fotográfica</label>
               
-              <!-- Visor de Foto Existente -->
               <div *ngIf="ncForm.get('foto_url')?.value" class="mb-4 w-full">
                 <img [src]="getImageUrl(ncForm.get('foto_url')?.value)" class="w-full max-h-64 object-contain bg-slate-100 rounded shadow-md border" alt="Evidencia NC">
                 <button type="button" (click)="$event.preventDefault(); ncForm.get('foto_url')?.setValue(''); selectedFile = null; selectedFileName = ''" class="mt-2 text-sm text-red-600 font-bold hover:underline min-h-[44px] px-2 w-full text-center sm:w-auto sm:text-left">Reemplazar imagen</button>
               </div>
 
-              <!-- Subida de Archivo -->
               <div *ngIf="!ncForm.get('foto_url')?.value" class="mt-1 flex justify-center px-4 md:px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl bg-slate-50 hover:bg-slate-100 transition relative w-full">
                 <div class="space-y-1 text-center w-full">
                   <svg class="mx-auto h-12 w-12 text-slate-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -197,6 +181,12 @@ import { environment } from '../../../environments/environment';
           </form>
         </div>
       </div>
+
+      <button *ngIf="!selectedRecord && !isCreating && !isEditing && !isViewing" 
+              (click)="crearNuevo()" 
+              class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-4xl font-black z-[60] hover:bg-indigo-700 active:scale-95 transition-transform border-4 border-white">
+        +
+      </button>
     </div>
   `
 })
