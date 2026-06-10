@@ -142,7 +142,7 @@ import { environment } from '../../../environments/environment';
               
               <div class="flex flex-col">
                 <label class="text-base font-bold text-slate-700 mb-2">Nro NC</label>
-                <input type="text" formControlName="nro_nc" placeholder="Ej: NC-2026-01" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <input type="text" formControlName="nro_nc" placeholder="Autogenerado al guardar" readonly class="w-full bg-slate-100 border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-500 shadow-sm cursor-not-allowed">
               </div>
 
               <div class="flex flex-col">
