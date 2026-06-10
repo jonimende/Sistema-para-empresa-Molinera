@@ -76,9 +76,9 @@ import { environment } from '../../../environments/environment';
           <!-- A. Cabecera -->
           <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex flex-col space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
             <div><span class="text-xs font-bold text-slate-400 block uppercase">Transporte / Patente</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.transporte }} ({{ selectedRecord.patente }})</span></div>
-            <div><span class="text-xs font-bold text-slate-400 block uppercase">Habilitación Transporte</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.habilitacion_transporte === 'Y' ? 'SÍ' : 'NO' }}</span></div>
+            <div><span class="text-xs font-bold text-slate-400 block uppercase">Habilitación Transporte</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ parseBoolean(selectedRecord.habilitacion_transporte) === true ? 'SÍ' : (parseBoolean(selectedRecord.habilitacion_transporte) === false ? 'NO' : 'S/D') }}</span></div>
             <div><span class="text-xs font-bold text-slate-400 block uppercase">Chofer / DNI</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.chofer }} (DNI: {{ selectedRecord.dni_chofer || 'S/D' }})</span></div>
-            <div><span class="text-xs font-bold text-slate-400 block uppercase">C.M.A.</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.cma === 'Y' ? 'SÍ' : 'NO' }}</span></div>
+            <div><span class="text-xs font-bold text-slate-400 block uppercase">C.M.A.</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ parseBoolean(selectedRecord.cma) === true ? 'SÍ' : (parseBoolean(selectedRecord.cma) === false ? 'NO' : 'S/D') }}</span></div>
             <div><span class="text-xs font-bold text-slate-400 block uppercase">Cliente</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.cliente }}</span></div>
             <div><span class="text-xs font-bold text-slate-400 block uppercase">Producto / Lote</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.producto }} (Lote: {{ selectedRecord.n_lote || 'S/D' }})</span></div>
             <div class="md:col-span-2"><span class="text-xs font-bold text-slate-400 block uppercase">Tipo Envase</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.tipo_envase || 'S/D' }}</span></div>
@@ -97,11 +97,11 @@ import { environment } from '../../../environments/environment';
           </div>
 
           <ng-template #checkItem let-title="title" let-val="val" let-obs="obs">
-            <div class="p-4 border rounded-xl shadow-sm flex flex-col" [ngClass]="{'bg-red-50 border-red-200': val === 'N', 'bg-green-50 border-green-200': val === 'Y', 'bg-slate-50 border-slate-200': !val || (val !== 'Y' && val !== 'N')}">
+            <div class="p-4 border rounded-xl shadow-sm flex flex-col" [ngClass]="{'bg-red-50 border-red-200': parseBoolean(val) === false, 'bg-green-50 border-green-200': parseBoolean(val) === true, 'bg-slate-50 border-slate-200': parseBoolean(val) === null}">
               <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <span class="font-bold text-slate-700 text-lg md:text-base">{{ title }}</span>
-                <span class="font-black px-4 py-2 md:px-3 md:py-1 rounded text-sm w-fit" [ngClass]="{'bg-red-200 text-red-800': val === 'N', 'bg-green-200 text-green-800': val === 'Y'}">
-                  {{ val === 'Y' ? 'SÍ CUMPLE' : (val === 'N' ? 'NO CUMPLE' : 'S/D') }}
+                <span class="font-black px-4 py-2 md:px-3 md:py-1 rounded text-sm w-fit" [ngClass]="{'bg-red-200 text-red-800': parseBoolean(val) === false, 'bg-green-200 text-green-800': parseBoolean(val) === true, 'bg-slate-200 text-slate-600': parseBoolean(val) === null}">
+                  {{ parseBoolean(val) === true ? 'SÍ CUMPLE' : (parseBoolean(val) === false ? 'NO CUMPLE' : 'S/D') }}
                 </span>
               </div>
               <div *ngIf="obs" class="mt-3 text-base md:text-sm text-slate-600 italic border-t border-slate-200/50 pt-3">
