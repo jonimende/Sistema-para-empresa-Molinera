@@ -54,7 +54,7 @@ import { environment } from '../../../environments/environment';
             <p class="font-medium text-lg">Seleccione un parte para ver detalles.</p>
           </div>
 
-          <form *ngIf="isCreatingParte" [formGroup]="elaboracionForm" class="p-8 space-y-6 pb-24">
+          <form *ngIf="isCreatingParte" [formGroup]="elaboracionForm" class="p-8 space-y-6 pb-24 w-full max-w-lg mx-auto overflow-y-auto m-4 md:m-0 w-full max-w-lg mx-auto m-4 md:m-0">
             
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase">Datos Generales</h4>
             <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
