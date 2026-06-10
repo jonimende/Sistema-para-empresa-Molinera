@@ -282,11 +282,13 @@ import { environment } from '../../../environments/environment';
                   <!-- Contenedor Tarjetas Móvil -->
                   <div class="grid grid-cols-1 gap-4 md:hidden p-4">
                     <div *ngFor="let c of cargas" (click)="verDetalleCombustible(c); isViewingCombustible=true" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative" [class.border-indigo-400]="selectedCombustible?.id === c.id">
-                      <div class="flex flex-col gap-2 mb-2">
-                        <p class="font-black text-slate-800 text-lg break-words">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
-                        <span class="w-max px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ c.litros_gasoil }} L</span>
+                      <div class="flex flex-col gap-2 mb-3">
+                        <p class="text-slate-700"><strong class="text-slate-900">Patente:</strong> {{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
+                        <p class="text-slate-700"><strong class="text-slate-900">Litros de Gasoil:</strong> {{ c.litros_gasoil }} L</p>
+                        <p class="text-slate-700"><strong class="text-slate-900">Kilometraje:</strong> {{ c.kilometraje }} KM</p>
+                        <p class="text-slate-700"><strong class="text-slate-900">Consumo Promedio:</strong> {{ c.consumo || (c.kilometraje ? (c.litros_gasoil / c.kilometraje * 100) : 0) | number:'1.2-2' }} L/100km</p>
+                        <p class="text-slate-700"><strong class="text-slate-900">Evidencia:</strong> <a *ngIf="c.foto_tablero" [href]="c.foto_tablero" target="_blank" class="text-indigo-600 underline">Ver Foto</a><span *ngIf="!c.foto_tablero" class="text-slate-400">Sin foto</span></p>
                       </div>
-                      <p class="text-sm text-slate-500 font-medium mb-3">{{ c.fecha | date:'mediumDate' }}</p>
                       <div class="flex gap-2 mt-auto pt-3 border-t border-slate-100">
                         <button type="button" (click)="$event.stopPropagation(); editarCombustible(c)" class="flex-1 bg-blue-50 text-blue-700 py-2 rounded-lg font-bold text-sm">Editar</button>
                         <button type="button" (click)="$event.stopPropagation(); deleteCombustible(c.id)" class="flex-1 bg-red-50 text-red-700 py-2 rounded-lg font-bold text-sm">Borrar</button>
@@ -348,7 +350,7 @@ import { environment } from '../../../environments/environment';
                   
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
                     <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Veh├¡culo (Patente)</p>
+                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Vehículo (Patente)</p>
                       <p class="text-slate-800 font-mono font-bold text-lg bg-slate-100 px-3 py-1 rounded inline-block border border-slate-200">{{ selectedCombustible.CamionRel?.patente_chasis || selectedCombustible.patente_chasis }}</p>
                     </div>
                     <div>
@@ -435,11 +437,25 @@ import { environment } from '../../../environments/environment';
                   <!-- Contenedor Tarjetas Móvil -->
                   <div class="grid grid-cols-1 gap-4 md:hidden p-4">
                     <div *ngFor="let s of services" (click)="verDetalleService(s); selectedService=s" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative" [class.border-indigo-400]="selectedService?.id === s.id">
-                      <div class="flex flex-col gap-2 mb-2">
-                        <p class="font-black text-slate-800 text-lg break-words">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
-                        <span class="w-max px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ s.km }} KM</span>
+                      <div class="flex flex-col gap-2 mb-3">
+                        <p class="text-slate-700"><strong class="text-slate-900">Vehículo (Patente):</strong> {{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
+                        <p class="text-slate-700"><strong class="text-slate-900">Kilómetros Actuales:</strong> {{ s.km }} KM</p>
+                        <p class="text-slate-700"><strong class="text-slate-900">Próximo Cambio de Filtro:</strong> {{ s.proximo_cambio_filtro }} KM</p>
+                        <div class="mt-2 border-t border-slate-100 pt-2">
+                           <strong class="text-slate-900 block mb-1">Checklist de Mantenimiento:</strong>
+                           <ul class="flex flex-col gap-1 text-sm text-slate-700">
+                             <li *ngIf="s.aceite_motor">✅ Aceite de Motor</li>
+                             <li *ngIf="s.aire">✅ Filtro de Aire</li>
+                             <li *ngIf="s.aceite">✅ Filtro de Aceite</li>
+                             <li *ngIf="s.combustible">✅ Filtro de Combustible</li>
+                             <li *ngIf="s.hidraulico">✅ Hidráulico</li>
+                             <li *ngIf="s.caja">✅ Caja</li>
+                             <li *ngIf="s.diferencial">✅ Diferencial</li>
+                             <li *ngIf="s.lubricacion_chasis">✅ Lubricación Chasis</li>
+                             <li *ngIf="!s.aceite_motor && !s.aire && !s.aceite && !s.combustible && !s.hidraulico && !s.caja && !s.diferencial && !s.lubricacion_chasis" class="text-slate-400 italic">Sin elementos marcados</li>
+                           </ul>
+                        </div>
                       </div>
-                      <p class="text-sm text-slate-500 font-medium mb-3">{{ s.fecha | date:'mediumDate' }}</p>
                       <div class="flex gap-2 mt-auto pt-3 border-t border-slate-100">
                         <button type="button" (click)="$event.stopPropagation(); editarService(s)" class="flex-1 bg-blue-50 text-blue-700 py-2 rounded-lg font-bold text-sm">Editar</button>
                         <button type="button" (click)="$event.stopPropagation(); deleteService(s.id)" class="flex-1 bg-red-50 text-red-700 py-2 rounded-lg font-bold text-sm">Borrar</button>
@@ -501,16 +517,16 @@ import { environment } from '../../../environments/environment';
                   
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
                     <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Veh├¡culo (Patente)</p>
+                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Vehículo (Patente)</p>
                       <p class="text-slate-800 font-mono font-bold text-lg bg-slate-100 px-3 py-1 rounded inline-block border border-slate-200">{{ selectedService.CamionRel?.patente_chasis || selectedService.patente_chasis }}</p>
                     </div>
                     <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Kil├│metros Actuales</p>
+                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Kilómetros Actuales</p>
                       <p class="text-indigo-700 font-black text-2xl">{{ selectedService.km }} KM</p>
                     </div>
 
                     <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 col-span-2">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Pr├│ximo Cambio de Filtro</p>
+                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Próximo Cambio de Filtro</p>
                       <p class="text-slate-800 font-bold text-lg">{{ selectedService.proximo_cambio_filtro }} KM</p>
                     </div>
                     
@@ -540,7 +556,7 @@ import { environment } from '../../../environments/environment';
                         <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.hidraulico" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.hidraulico" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Hidr├íulico</span>
+                          <span class="text-slate-700 font-medium">Hidráulico</span>
                         </div>
                         <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.caja" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -555,7 +571,7 @@ import { environment } from '../../../environments/environment';
                         <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.lubricacion_chasis" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.lubricacion_chasis" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Lubricaci├│n Chasis</span>
+                          <span class="text-slate-700 font-medium">Lubricación Chasis</span>
                         </div>
                       </div>
                     </div>
@@ -706,11 +722,11 @@ import { environment } from '../../../environments/environment';
                   <button (click)="isViewingCamion=false; selectedCamion=null" class="md:hidden mb-4 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-start border-b border-slate-100 pb-6 mb-6">
                     <div>
-                      <h4 class="text-2xl font-black text-slate-800">Detalle del Veh├¡culo</h4>
+                      <h4 class="text-2xl font-black text-slate-800">Detalle del Vehículo</h4>
                     </div>
                     <button type="button" (click)="$event.preventDefault(); editarCamion(selectedCamion)" class="px-5 py-2.5 bg-indigo-50 text-indigo-700 font-bold rounded-lg hover:bg-indigo-100 transition flex items-center shadow-sm">
                       <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                      Editar Veh├¡culo
+                      Editar Vehículo
                     </button>
                   </div>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
