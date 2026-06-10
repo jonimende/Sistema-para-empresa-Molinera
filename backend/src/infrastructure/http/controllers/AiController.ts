@@ -6,6 +6,11 @@ import { MailService } from '../../services/MailService';
 import { Op } from 'sequelize';
 // Removed PDFKit dependency for email reports
 import { ControlCarga } from '../../database/sequelize/models/ControlCarga';
+import { NoConformidad } from '../../database/sequelize/models/NoConformidad';
+import { ElaboracionParte } from '../../database/sequelize/models/ElaboracionParte';
+import { ServiceMantenimiento } from '../../database/sequelize/models/ServiceMantenimiento';
+import { CargaCombustible } from '../../database/sequelize/models/CargaCombustible';
+
 
 export const handleChat = async (req: Request, res: Response) => {
   try {
@@ -29,16 +34,31 @@ export const handleChat = async (req: Request, res: Response) => {
           { model: ProductoCarga, as: 'Carga', attributes: ['nombre_carga'] }
         ]
       });
-      const viajesOptimizados = viajes.map((v: any) => ({
-        chofer: v.chofer_email,
-        salida: v.Origen?.nombre_lugar || v.lugar_salida,
-        llegada: v.Destino?.nombre_lugar || v.lugar_llegada,
-        kilos: v.kg_carga,
-        producto: v.Carga?.nombre_carga || v.carga_transportada
-      }));
+      const viajesOptimizados = viajes.map((v: any) => v.toJSON ? v.toJSON() : v);
       viajesOptimizadosRef = viajesOptimizados;
-      systemData += 'Últimos 15 viajes: ' + JSON.stringify(viajesOptimizados);
+      systemData += 'Últimos 15 viajes (con km y todos los detalles): ' + JSON.stringify(viajesOptimizados) + '\n';
     }
+
+    // Inyectar estado global
+    try {
+      const noConformidades = await NoConformidad.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
+      const controlesCarga = await ControlCarga.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
+      const partesElaboracion = await ElaboracionParte.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
+      const services = await ServiceMantenimiento.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
+      const combustibles = await CargaCombustible.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
+      
+      systemData += 'Últimas 10 No Conformidades: ' + JSON.stringify(noConformidades) + '
+';
+      systemData += 'Últimos 10 Controles de Carga (Higiene): ' + JSON.stringify(controlesCarga) + '
+';
+      systemData += 'Últimos 10 Partes de Elaboración: ' + JSON.stringify(partesElaboracion) + '
+';
+      systemData += 'Últimos 10 Mantenimientos (Services): ' + JSON.stringify(services) + '
+';
+    } catch (err) {
+      console.error('Error inyectando estado global:', err);
+    }
+
 
     const systemPrompt = `Eres el asistente operativo de la fábrica Paoloni. El usuario está en el módulo: ${ctx}. 
   Aquí tienes los DATOS REALES y exactos de la base de datos de la empresa:
