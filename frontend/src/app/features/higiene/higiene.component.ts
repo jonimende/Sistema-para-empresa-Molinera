@@ -334,6 +334,14 @@ import { environment } from '../../../environments/environment';
   `]
 })
 export class HigieneComponent implements AfterViewInit {
+
+  parseBoolean(val: any): boolean | null {
+    if (val === null || val === undefined || val === '') return null;
+    const str = String(val).toUpperCase().trim();
+    if (str === 'TRUE' || str === 'SI' || str === 'Y') return true;
+    if (str === 'FALSE' || str === 'NO' || str === 'N') return false;
+    return null;
+  }
   currentStep = 1;
   isLoading = false;
 
