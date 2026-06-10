@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../core/services/auth.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 
@@ -82,20 +83,36 @@ import { environment } from '../../../environments/environment';
           </div>
           
           <div class="space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <p class="text-sm font-bold text-slate-500">Ubicación</p>
-                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.ubicacion || '-' }}</p>
+                <p class="text-sm font-bold text-slate-500">Nro NC</p>
+                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.nro_nc || '-' }}</p>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <p class="text-sm font-bold text-slate-500">Estado</p>
+                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.estado || 'PENDIENTE' }}</p>
               </div>
               <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
                 <p class="text-sm font-bold text-slate-500">Responsable</p>
-                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.nombre_responsable || selectedRecord.responsable || '-' }}</p>
+                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.nombre_responsable || '-' }}</p>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <p class="text-sm font-bold text-slate-500">Quién Eleva</p>
+                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.quien_eleva || '-' }}</p>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <p class="text-sm font-bold text-slate-500">Generar Informe</p>
+                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.generar_informe || '-' }}</p>
               </div>
             </div>
             
             <div>
               <p class="text-sm font-bold text-slate-500 mb-2">Descripción</p>
               <p class="text-base text-slate-800 font-medium p-4 bg-slate-50 rounded-lg border border-slate-100">{{ selectedRecord.descripcion || '-' }}</p>
+            </div>
+            <div *ngIf="selectedRecord.accion_correctiva">
+              <p class="text-sm font-bold text-slate-500 mb-2">Acción Correctiva</p>
+              <p class="text-base text-slate-800 font-medium p-4 bg-slate-50 rounded-lg border border-slate-100">{{ selectedRecord.accion_correctiva || '-' }}</p>
             </div>
 
             <div class="mt-4" *ngIf="getImageUrl(selectedRecord?.foto_url || selectedRecord?.foto) !== ''">
@@ -127,6 +144,21 @@ import { environment } from '../../../environments/environment';
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100">
               
               <div class="flex flex-col">
+                <label class="text-base font-bold text-slate-700 mb-2">Nro NC</label>
+                <input type="text" formControlName="nro_nc" placeholder="Ej: NC-2026-01" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+              </div>
+
+              <div class="flex flex-col">
+                <label class="text-base font-bold text-slate-700 mb-2">Estado</label>
+                <select formControlName="estado" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                  <option value="PENDIENTE">PENDIENTE</option>
+                  <option value="EN TRATAMIENTO">EN TRATAMIENTO</option>
+                  <option value="RESUELTO">RESUELTO</option>
+                  <option value="CERRADO">CERRADO</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col md:col-span-2">
                 <label class="text-base font-bold text-slate-700 mb-2">Requisito Incumplido</label>
                 <input type="text" formControlName="requisito_incumplido" placeholder="Ej: BPM 4.2" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
               </div>
@@ -145,9 +177,32 @@ import { environment } from '../../../environments/environment';
                 <label class="text-base font-bold text-slate-700 mb-2">Descripción Detallada del Hallazgo</label>
                 <textarea 
                   formControlName="descripcion" 
-                  rows="4" 
+                  rows="3" 
                   placeholder="Describa el problema encontrado..." 
                   class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors"></textarea>
+              </div>
+
+              <div class="flex flex-col md:col-span-2">
+                <label class="text-base font-bold text-slate-700 mb-2">Acción Correctiva</label>
+                <textarea 
+                  formControlName="accion_correctiva" 
+                  rows="3" 
+                  placeholder="Acciones a tomar..." 
+                  class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors"></textarea>
+              </div>
+
+              <div class="flex flex-col">
+                <label class="text-base font-bold text-slate-700 mb-2">Quién Eleva</label>
+                <input type="text" formControlName="quien_eleva" readonly class="w-full bg-slate-100 border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-500 shadow-sm">
+              </div>
+
+              <div class="flex flex-col">
+                <label class="text-base font-bold text-slate-700 mb-2">Generar Informe</label>
+                <select formControlName="generar_informe" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
+                  <option value="">Seleccionar...</option>
+                  <option value="SI">SI</option>
+                  <option value="NO">NO</option>
+                </select>
               </div>
             </div>
 
@@ -193,6 +248,7 @@ import { environment } from '../../../environments/environment';
 export class NcComponent implements OnInit {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
+  public authService = inject(AuthService);
   
   isLoading = false;
   isCreating = false;
@@ -211,10 +267,15 @@ export class NcComponent implements OnInit {
 
   constructor() {
     this.ncForm = this.fb.group({
+      nro_nc: [''],
       requisito_incumplido: ['', Validators.required],
       ubicacion: ['', Validators.required],
       descripcion: ['', Validators.required],
-      nombre_responsable: ['', Validators.required],
+      nombre_responsable: [''],
+      quien_eleva: [this.authService.currentUser()?.email || '', Validators.required],
+      generar_informe: [''],
+      estado: ['PENDIENTE', Validators.required],
+      accion_correctiva: [''],
       foto_url: ['']
     });
   }
@@ -251,6 +312,7 @@ export class NcComponent implements OnInit {
     this.selectedRecord = null;
     this.selectedId = null;
     this.ncForm.reset();
+    this.ncForm.patchValue({ estado: 'PENDIENTE', quien_eleva: this.authService.currentUser()?.email || '' });
     this.selectedFile = null;
     this.selectedFileName = '';
   }
@@ -308,6 +370,7 @@ export class NcComponent implements OnInit {
         this.isLoading = false;
         this.volverLista();
         this.ncForm.reset();
+    this.ncForm.patchValue({ estado: 'PENDIENTE', quien_eleva: this.authService.currentUser()?.email || '' });
         this.selectedFile = null;
         this.selectedFileName = '';
         this.fetchNCs();
