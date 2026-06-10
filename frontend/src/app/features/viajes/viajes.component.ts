@@ -278,20 +278,46 @@ import { environment } from '../../../environments/environment';
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Lista Izquierda -->
               <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingCombustible || isViewingCombustible || selectedCombustibleId, 'flex': !(isCreatingCombustible || isViewingCombustible || selectedCombustibleId)}">
-                <div *ngFor="let c of cargas" (click)="verDetalleCombustible(c); isViewingCombustible=true" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col md:flex-row md:justify-between items-start md:items-center gap-3 w-full relative" [class.bg-indigo-50]="selectedCombustible?.id === c.id">
-                  <div>
-                    <p class="font-bold text-slate-800">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
-                    <p class="text-xs text-slate-500 font-medium">{{ c.fecha | date:'shortDate' }} | <span class="text-indigo-600 font-bold">{{ c.litros_gasoil }} L</span></p>
+                
+                  <!-- Contenedor Tarjetas Móvil -->
+                  <div class="grid grid-cols-1 gap-4 md:hidden p-4">
+                    <div *ngFor="let c of cargas" (click)="verDetalleCombustible(c); isViewingCombustible=true" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative" [class.border-indigo-400]="selectedCombustible?.id === c.id">
+                      <div class="flex justify-between items-start mb-2">
+                        <p class="font-black text-slate-800 text-lg">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
+                        <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ c.litros_gasoil }} L</span>
+                      </div>
+                      <p class="text-sm text-slate-500 font-medium mb-3">{{ c.fecha | date:'mediumDate' }}</p>
+                      <div class="flex gap-2 mt-auto pt-3 border-t border-slate-100">
+                        <button type="button" (click)="$event.stopPropagation(); editarCombustible(c)" class="flex-1 bg-blue-50 text-blue-700 py-2 rounded-lg font-bold text-sm">Editar</button>
+                        <button type="button" (click)="$event.stopPropagation(); deleteCombustible(c.id)" class="flex-1 bg-red-50 text-red-700 py-2 rounded-lg font-bold text-sm">Borrar</button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                    <button type="button" (click)="$event.stopPropagation(); editarCombustible(c)" class="text-blue-600 hover:text-blue-800 font-medium" title="Editar">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                    </button>
-                    <button type="button" (click)="$event.stopPropagation(); deleteCombustible(c.id)" class="text-red-600 hover:text-red-800 font-medium" title="Borrar">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
+                  
+                  <!-- Tabla Escritorio -->
+                  <div class="hidden md:block">
+                    <table class="w-full text-left">
+                      <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">Patente</th>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">Fecha</th>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">Litros</th>
+                          <th class="px-4 py-3 text-right"></th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100">
+                        <tr *ngFor="let c of cargas" (click)="verDetalleCombustible(c); isViewingCombustible=true" class="hover:bg-slate-50 cursor-pointer transition-colors" [class.bg-indigo-50]="selectedCombustible?.id === c.id">
+                          <td class="px-4 py-3 font-bold text-slate-800">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</td>
+                          <td class="px-4 py-3 text-sm text-slate-500">{{ c.fecha | date:'shortDate' }}</td>
+                          <td class="px-4 py-3 text-sm font-bold text-indigo-600">{{ c.litros_gasoil }} L</td>
+                          <td class="px-4 py-3 text-right space-x-2">
+                            <button type="button" (click)="$event.stopPropagation(); editarCombustible(c)" class="text-blue-600 hover:text-blue-800 font-medium" title="Editar"><svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                            <button type="button" (click)="$event.stopPropagation(); deleteCombustible(c.id)" class="text-red-600 hover:text-red-800 font-medium" title="Borrar"><svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                </div>
                 <div *ngIf="cargas.length === 0" class="p-6 text-center text-slate-400">
                   No hay cargas registradas
                 </div>
@@ -348,7 +374,7 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Formulario -->
-                <form *ngIf="isCreatingCombustible || selectedCombustibleId" [formGroup]="combustibleForm" class="p-4 md:p-6 space-y-6">
+                <form *ngIf="isCreatingCombustible || selectedCombustibleId" [formGroup]="combustibleForm" class="p-4 md:p-6 space-y-6 w-full max-w-lg mx-auto overflow-y-auto">
                   <button (click)="isCreatingCombustible=false; selectedCombustibleId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
                     <h4 class="font-black text-xl text-slate-800">{{ selectedCombustibleId ? 'Editar Carga' : 'Nueva Carga' }}</h4>
@@ -405,20 +431,46 @@ import { environment } from '../../../environments/environment';
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Lista Izquierda -->
               <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingService || selectedService || selectedServiceId, 'flex': !(isCreatingService || selectedService || selectedServiceId)}">
-                <div *ngFor="let s of services" (click)="verDetalleService(s); selectedService=s" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col md:flex-row md:justify-between items-start md:items-center gap-3 w-full relative" [class.bg-indigo-50]="selectedService?.id === s.id">
-                  <div>
-                    <p class="font-bold text-slate-800">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
-                    <p class="text-xs text-slate-500 font-medium">{{ s.fecha | date:'shortDate' }} | <span class="text-indigo-600 font-bold">{{ s.km }} KM</span></p>
+                
+                  <!-- Contenedor Tarjetas Móvil -->
+                  <div class="grid grid-cols-1 gap-4 md:hidden p-4">
+                    <div *ngFor="let s of services" (click)="verDetalleService(s); selectedService=s" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative" [class.border-indigo-400]="selectedService?.id === s.id">
+                      <div class="flex justify-between items-start mb-2">
+                        <p class="font-black text-slate-800 text-lg">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
+                        <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ s.km }} KM</span>
+                      </div>
+                      <p class="text-sm text-slate-500 font-medium mb-3">{{ s.fecha | date:'mediumDate' }}</p>
+                      <div class="flex gap-2 mt-auto pt-3 border-t border-slate-100">
+                        <button type="button" (click)="$event.stopPropagation(); editarService(s)" class="flex-1 bg-blue-50 text-blue-700 py-2 rounded-lg font-bold text-sm">Editar</button>
+                        <button type="button" (click)="$event.stopPropagation(); deleteService(s.id)" class="flex-1 bg-red-50 text-red-700 py-2 rounded-lg font-bold text-sm">Borrar</button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                    <button type="button" (click)="$event.stopPropagation(); editarService(s)" class="text-blue-600 hover:text-blue-800 font-medium mr-2" title="Editar">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                    </button>
-                    <button type="button" (click)="$event.stopPropagation(); deleteService(s.id)" class="text-red-600 hover:text-red-800 font-medium" title="Borrar">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
+                  
+                  <!-- Tabla Escritorio -->
+                  <div class="hidden md:block">
+                    <table class="w-full text-left">
+                      <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">Patente</th>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">Fecha</th>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">KMs</th>
+                          <th class="px-4 py-3 text-right"></th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100">
+                        <tr *ngFor="let s of services" (click)="verDetalleService(s); selectedService=s" class="hover:bg-slate-50 cursor-pointer transition-colors" [class.bg-indigo-50]="selectedService?.id === s.id">
+                          <td class="px-4 py-3 font-bold text-slate-800">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</td>
+                          <td class="px-4 py-3 text-sm text-slate-500">{{ s.fecha | date:'shortDate' }}</td>
+                          <td class="px-4 py-3 text-sm font-bold text-indigo-600">{{ s.km }}</td>
+                          <td class="px-4 py-3 text-right space-x-2">
+                            <button type="button" (click)="$event.stopPropagation(); editarService(s)" class="text-blue-600 hover:text-blue-800 font-medium"><svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                            <button type="button" (click)="$event.stopPropagation(); deleteService(s.id)" class="text-red-600 hover:text-red-800 font-medium"><svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                </div>
                 <div *ngIf="services.length === 0" class="p-6 text-center text-slate-400">
                   No hay services registrados
                 </div>
@@ -512,7 +564,7 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Formulario -->
-                <form *ngIf="isCreatingService || selectedServiceId" [formGroup]="serviceForm" class="p-4 md:p-6 space-y-6">
+                <form *ngIf="isCreatingService || selectedServiceId" [formGroup]="serviceForm" class="p-4 md:p-6 space-y-6 w-full max-w-lg mx-auto overflow-y-auto">
                   <button (click)="isCreatingService=false; selectedServiceId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
                     <h4 class="font-black text-xl text-slate-800">{{ selectedServiceId ? 'Editar Service' : 'Nuevo Service' }}</h4>
@@ -598,20 +650,43 @@ import { environment } from '../../../environments/environment';
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Panel Izquierdo -->
               <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
-                <div *ngFor="let cam of camiones" (click)="verDetalleCamion(cam); isViewingCamion=true" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col md:flex-row md:justify-between items-start md:items-center gap-3 w-full relative" [class.bg-indigo-50]="selectedCamion?.id === cam.id">
-                  <div>
-                    <p class="font-bold text-slate-800 text-lg">{{ cam.patente_chasis }}</p>
-                    <p class="text-xs text-slate-500 font-medium">Chofer: <span class="text-indigo-600 font-bold">{{ cam.chofer_asignado || 'Sin Asignar' }}</span></p>
+                
+                  <!-- Contenedor Tarjetas Móvil -->
+                  <div class="grid grid-cols-1 gap-4 md:hidden p-4">
+                    <div *ngFor="let cam of camiones" (click)="verDetalleCamion(cam); isViewingCamion=true" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative" [class.border-indigo-400]="selectedCamion?.id === cam.id">
+                      <div class="flex justify-between items-start mb-2">
+                        <p class="font-black text-slate-800 text-lg">{{ cam.patente_chasis }}</p>
+                      </div>
+                      <p class="text-sm text-slate-500 font-medium mb-3">Chofer: {{ cam.UsuarioRel?.email || 'No asignado' }}</p>
+                      <div class="flex gap-2 mt-auto pt-3 border-t border-slate-100">
+                        <button type="button" (click)="$event.stopPropagation(); editarCamion(cam)" class="flex-1 bg-blue-50 text-blue-700 py-2 rounded-lg font-bold text-sm">Editar</button>
+                        <button type="button" (click)="$event.stopPropagation(); deleteCamion(cam.id)" class="flex-1 bg-red-50 text-red-700 py-2 rounded-lg font-bold text-sm">Borrar</button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                    <button type="button" (click)="$event.stopPropagation(); editarCamion(cam)" class="text-blue-600 hover:text-blue-800 font-medium mr-2" title="Editar">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                    </button>
-                    <button type="button" (click)="$event.stopPropagation(); deleteCamion(cam.id)" class="text-red-600 hover:text-red-800 font-medium" title="Borrar">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
+                  
+                  <!-- Tabla Escritorio -->
+                  <div class="hidden md:block">
+                    <table class="w-full text-left">
+                      <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">Patente</th>
+                          <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase">Chofer</th>
+                          <th class="px-4 py-3 text-right"></th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100">
+                        <tr *ngFor="let cam of camiones" (click)="verDetalleCamion(cam); isViewingCamion=true" class="hover:bg-slate-50 cursor-pointer transition-colors" [class.bg-indigo-50]="selectedCamion?.id === cam.id">
+                          <td class="px-4 py-3 font-bold text-slate-800">{{ cam.patente_chasis }}</td>
+                          <td class="px-4 py-3 text-sm text-slate-500">{{ cam.UsuarioRel?.email || 'No asignado' }}</td>
+                          <td class="px-4 py-3 text-right space-x-2">
+                            <button type="button" (click)="$event.stopPropagation(); editarCamion(cam)" class="text-blue-600 hover:text-blue-800 font-medium"><svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                            <button type="button" (click)="$event.stopPropagation(); deleteCamion(cam.id)" class="text-red-600 hover:text-red-800 font-medium"><svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                </div>
                 <div *ngIf="camiones.length === 0" class="p-6 text-center text-slate-400">
                   No hay camiones registrados
                 </div>
@@ -651,7 +726,7 @@ import { environment } from '../../../environments/environment';
                 </div>
 
                 <!-- Modo Formulario -->
-                <form *ngIf="isCreatingCamion || selectedCamionId" [formGroup]="camionForm" class="p-4 md:p-6 space-y-6">
+                <form *ngIf="isCreatingCamion || selectedCamionId" [formGroup]="camionForm" class="p-4 md:p-6 space-y-6 w-full max-w-lg mx-auto overflow-y-auto">
                   <button (click)="isCreatingCamion=false; selectedCamionId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
                   <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
                     <h4 class="font-black text-xl text-slate-800">{{ selectedCamionId ? 'Editar Vehículo' : 'Alta de Vehículo' }}</h4>

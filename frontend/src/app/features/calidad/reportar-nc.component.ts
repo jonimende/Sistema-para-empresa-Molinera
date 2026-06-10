@@ -17,7 +17,7 @@ import { environment } from '../../../environments/environment';
         <p class="text-slate-500 text-sm mt-1">Adjunte la evidencia fotográfica y clasifique la desviación detectada.</p>
       </div>
 
-      <form [formGroup]="ncForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <form [formGroup]="ncForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-lg mx-auto m-4 md:m-0">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Sector Involucrado</label>
