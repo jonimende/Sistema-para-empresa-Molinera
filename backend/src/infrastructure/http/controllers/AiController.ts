@@ -47,14 +47,10 @@ export const handleChat = async (req: Request, res: Response) => {
       const services = await ServiceMantenimiento.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
       const combustibles = await CargaCombustible.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
       
-      systemData += 'Últimas 10 No Conformidades: ' + JSON.stringify(noConformidades) + '
-';
-      systemData += 'Últimos 10 Controles de Carga (Higiene): ' + JSON.stringify(controlesCarga) + '
-';
-      systemData += 'Últimos 10 Partes de Elaboración: ' + JSON.stringify(partesElaboracion) + '
-';
-      systemData += 'Últimos 10 Mantenimientos (Services): ' + JSON.stringify(services) + '
-';
+      systemData += 'Últimas 10 No Conformidades: ' + JSON.stringify(noConformidades) + '\n';
+      systemData += 'Últimos 10 Controles de Carga (Higiene): ' + JSON.stringify(controlesCarga) + '\n';
+      systemData += 'Últimos 10 Partes de Elaboración: ' + JSON.stringify(partesElaboracion) + '\n';
+      systemData += 'Últimos 10 Mantenimientos (Services): ' + JSON.stringify(services) + '\n';
     } catch (err) {
       console.error('Error inyectando estado global:', err);
     }
