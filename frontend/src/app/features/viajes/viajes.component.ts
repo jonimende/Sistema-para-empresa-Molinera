@@ -348,29 +348,26 @@ import { environment } from '../../../environments/environment';
                     </button>
                   </div>
                   
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Vehículo (Patente)</p>
-                      <p class="text-slate-800 font-mono font-bold text-lg bg-slate-100 px-3 py-1 rounded inline-block border border-slate-200">{{ selectedCombustible.CamionRel?.patente_chasis || selectedCombustible.patente_chasis }}</p>
+                  <div class="flex flex-col space-y-3 p-4 bg-white rounded-lg border border-slate-200">
+                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Vehículo (Patente):</span>
+                      <span class="text-gray-900">{{ selectedCombustible.CamionRel?.patente_chasis || selectedCombustible.patente_chasis }}</span>
                     </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Litros de Gasoil</p>
-                      <p class="text-indigo-700 font-black text-2xl">{{ selectedCombustible.litros_gasoil }} L</p>
+                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Litros de Gasoil:</span>
+                      <span class="text-gray-900">{{ selectedCombustible.litros_gasoil }} L</span>
                     </div>
-
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Kilometraje</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedCombustible.kilometraje }} KM</p>
+                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Kilometraje:</span>
+                      <span class="text-gray-900">{{ selectedCombustible.kilometraje }} KM</span>
                     </div>
-
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Consumo Promedio</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedCombustible.consumo_l_100km > 0 ? (selectedCombustible.consumo_l_100km | number:'1.2-2') + ' L/100km' : 'Primera carga' }}</p>
+                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Consumo Promedio:</span>
+                      <span class="text-gray-900">{{ selectedCombustible.consumo_l_100km > 0 ? (selectedCombustible.consumo_l_100km | number:'1.2-2') + ' L/100km' : 'Primera carga' }}</span>
                     </div>
-                    
-                    <div *ngIf="selectedCombustible.foto_tablero" class="col-span-2 mt-4">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Evidencia (Tablero)</p>
-                      <img *ngIf="selectedCombustible.foto_url || selectedCombustible.foto_tablero" [src]="getImageUrl(selectedCombustible.foto_url || selectedCombustible.foto_tablero)" class="w-full max-h-64 object-contain bg-slate-100 rounded shadow-md border" alt="Evidencia">
+                    <div *ngIf="selectedCombustible.foto_tablero" class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Evidencia (Tablero):</span>
+                      <img *ngIf="selectedCombustible.foto_url || selectedCombustible.foto_tablero" [src]="getImageUrl(selectedCombustible.foto_url || selectedCombustible.foto_tablero)" class="w-full max-h-64 object-contain bg-slate-100 rounded shadow-md border mt-2" alt="Evidencia">
                     </div>
                   </div>
                 </div>
@@ -515,67 +512,49 @@ import { environment } from '../../../environments/environment';
                     </button>
                   </div>
                   
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Vehículo (Patente)</p>
-                      <p class="text-slate-800 font-mono font-bold text-lg bg-slate-100 px-3 py-1 rounded inline-block border border-slate-200">{{ selectedService.CamionRel?.patente_chasis || selectedService.patente_chasis }}</p>
+                  <div class="flex flex-col space-y-3 p-4 bg-white rounded-lg border border-slate-200">
+                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Vehículo (Patente):</span>
+                      <span class="text-gray-900">{{ selectedService.CamionRel?.patente_chasis || selectedService.patente_chasis }}</span>
                     </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Kilómetros Actuales</p>
-                      <p class="text-indigo-700 font-black text-2xl">{{ selectedService.km }} KM</p>
+                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Kilómetros Actuales:</span>
+                      <span class="text-gray-900">{{ selectedService.km }} KM</span>
                     </div>
-
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 col-span-2">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Próximo Cambio de Filtro</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedService.proximo_cambio_filtro }} KM</p>
+                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
+                      <span class="font-bold text-gray-700">Próximo Cambio de Filtro:</span>
+                      <span class="text-gray-900">{{ selectedService.proximo_cambio_filtro }} KM</span>
                     </div>
                     
-                    <div class="col-span-2">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Checklist de Mantenimiento</p>
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 flex-col w-full">
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.aceite_motor" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.aceite_motor" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Aceite de Motor</span>
+                    <div class="flex flex-col mb-2 pt-2">
+                      <span class="font-bold text-gray-700 mb-2">Checklist de Mantenimiento:</span>
+                      <div class="flex flex-col space-y-2">
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.aceite_motor ? '✅' : '❌' }} Aceite de Motor</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.aire" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.aire" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Filtro de Aire</span>
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.aire ? '✅' : '❌' }} Filtro de Aire</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.aceite" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.aceite" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Filtro de Aceite</span>
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.aceite ? '✅' : '❌' }} Filtro de Aceite</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.combustible" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.combustible" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Filtro de Combustible</span>
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.combustible ? '✅' : '❌' }} Filtro de Combustible</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.hidraulico" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.hidraulico" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Hidráulico</span>
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.hidraulico ? '✅' : '❌' }} Hidráulico</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.caja" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.caja" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Caja</span>
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.caja ? '✅' : '❌' }} Caja</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.diferencial" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.diferencial" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Diferencial</span>
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.diferencial ? '✅' : '❌' }} Diferencial</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
-                          <svg *ngIf="selectedService.lubricacion_chasis" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.lubricacion_chasis" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Lubricación Chasis</span>
+                        <div class="flex flex-col">
+                           <span class="text-sm text-gray-600">{{ selectedService.lubricacion_chasis ? '✅' : '❌' }} Lubricación Chasis</span>
                         </div>
                       </div>
                     </div>
-
                   </div>
                 </div>
 
