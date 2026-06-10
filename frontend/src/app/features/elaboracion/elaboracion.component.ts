@@ -239,7 +239,7 @@ import { environment } from '../../../environments/environment';
             <!-- CONTROL MOLINO -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Control Molino</h5>
-              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
                 <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Rendimiento</p><p class="font-black text-indigo-700">{{ selectedParte.molino_rendimiento | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Quebrado</p><p class="font-medium">{{ selectedParte.molino_quebrado | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Enteros</p><p class="font-black text-indigo-700">{{ selectedParte.molino_enteros | number:'1.2-2' }}%</p></div>
@@ -251,7 +251,7 @@ import { environment } from '../../../environments/environment';
             <!-- CONTROL MOLINILLO -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Control Molinillo</h5>
-              <div class="grid grid-cols-6 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Rendimiento</p><p class="font-medium">{{ selectedParte.molinillo_rendimiento | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Quebrado</p><p class="font-black text-indigo-700">{{ selectedParte.molinillo_quebrado | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Enteros</p><p class="font-medium">{{ selectedParte.molinillo_enteros | number:'1.2-2' }}%</p></div>

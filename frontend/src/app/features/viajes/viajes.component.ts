@@ -277,7 +277,7 @@ import { environment } from '../../../environments/environment';
 
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Lista Izquierda -->
-              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingCombustible || isViewingCombustible || selectedCombustibleId, 'flex': !(isCreatingCombustible || isViewingCombustible || selectedCombustibleId)}">
                 <div *ngFor="let c of cargas" (click)="verDetalleCombustible(c); isViewingCombustible=true" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col md:flex-row md:justify-between items-start md:items-center gap-3 w-full relative" [class.bg-indigo-50]="selectedCombustible?.id === c.id">
                   <div>
                     <p class="font-bold text-slate-800">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
@@ -298,7 +298,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingCombustible || isViewingCombustible || selectedCombustibleId), 'flex': isCreatingCombustible || isViewingCombustible || selectedCombustibleId}">
                 <!-- Modo Placeholder -->
                 <div *ngIf="!isViewingCombustible && !isCreatingCombustible && !selectedCombustibleId" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -433,7 +433,7 @@ import { environment } from '../../../environments/environment';
 
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Lista Izquierda -->
-              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingService || selectedService || selectedServiceId, 'flex': !(isCreatingService || selectedService || selectedServiceId)}">
                 <div *ngFor="let s of services" (click)="verDetalleService(s); selectedService=s" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col md:flex-row md:justify-between items-start md:items-center gap-3 w-full relative" [class.bg-indigo-50]="selectedService?.id === s.id">
                   <div>
                     <p class="font-bold text-slate-800">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
@@ -454,7 +454,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingService || selectedService || selectedServiceId), 'flex': isCreatingService || selectedService || selectedServiceId}">
                 <!-- Modo Placeholder -->
                 <div *ngIf="!selectedService && !isCreatingService && !selectedServiceId" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
