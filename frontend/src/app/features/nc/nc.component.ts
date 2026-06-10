@@ -112,10 +112,10 @@ import { environment } from '../../../environments/environment';
               <p class="text-base text-slate-800 font-medium p-4 bg-slate-50 rounded-lg border border-slate-100">{{ selectedRecord.accion_correctiva || '-' }}</p>
             </div>
 
-            <div class="mt-4" *ngIf="getImageUrl(selectedRecord?.foto_url || selectedRecord?.foto) !== ''">
+            <div class="mt-4" *ngIf="getImageUrl(selectedRecord?.firma_responsable || selectedRecord?.foto) !== ''">
               <span class="text-sm font-bold text-slate-500 mb-2 block">Evidencia Fotográfica</span>
               <div class="mt-2 w-full h-64 bg-gray-50 rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center">
-                <img [src]="getImageUrl(selectedRecord?.foto_url || selectedRecord?.foto)" alt="Evidencia NC" class="w-full h-full object-contain">
+                <img [src]="getImageUrl(selectedRecord?.firma_responsable || selectedRecord?.foto)" alt="Evidencia NC" class="w-full h-full object-contain">
               </div>
             </div>
           </div>
@@ -199,12 +199,12 @@ import { environment } from '../../../environments/environment';
             <div class="w-full">
               <label class="block text-base font-bold text-slate-700 mb-2">Evidencia Fotográfica</label>
               
-              <div *ngIf="ncForm.get('foto_url')?.value" class="mb-4 w-full">
-                <img [src]="getImageUrl(ncForm.get('foto_url')?.value)" class="w-full max-h-64 object-contain bg-slate-100 rounded shadow-md border" alt="Evidencia NC">
-                <button type="button" (click)="$event.preventDefault(); ncForm.get('foto_url')?.setValue(''); selectedFile = null; selectedFileName = ''" class="mt-2 text-sm text-red-600 font-bold hover:underline min-h-[44px] px-2 w-full text-center sm:w-auto sm:text-left">Reemplazar imagen</button>
+              <div *ngIf="ncForm.get('firma_responsable')?.value" class="mb-4 w-full">
+                <img [src]="getImageUrl(ncForm.get('firma_responsable')?.value)" class="w-full max-h-64 object-contain bg-slate-100 rounded shadow-md border" alt="Evidencia NC">
+                <button type="button" (click)="$event.preventDefault(); ncForm.get('firma_responsable')?.setValue(''); selectedFile = null; selectedFileName = ''" class="mt-2 text-sm text-red-600 font-bold hover:underline min-h-[44px] px-2 w-full text-center sm:w-auto sm:text-left">Reemplazar imagen</button>
               </div>
 
-              <div *ngIf="!ncForm.get('foto_url')?.value" class="mt-1 flex justify-center px-4 md:px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl bg-slate-50 hover:bg-slate-100 transition relative w-full">
+              <div *ngIf="!ncForm.get('firma_responsable')?.value" class="mt-1 flex justify-center px-4 md:px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl bg-slate-50 hover:bg-slate-100 transition relative w-full">
                 <div class="space-y-1 text-center w-full">
                   <svg class="mx-auto h-12 w-12 text-slate-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -265,7 +265,7 @@ export class NcComponent implements OnInit {
       quien_eleva: [this.authService.currentUser()?.email || '', Validators.required],
       estado: ['PENDIENTE', Validators.required],
       accion_correctiva: [''],
-      foto_url: ['']
+      firma_responsable: ['']
     });
   }
 
@@ -337,7 +337,7 @@ export class NcComponent implements OnInit {
     // Adjuntar los campos de texto
     const formValues = this.ncForm.value;
     Object.keys(formValues).forEach(key => {
-      if (key !== 'foto' && key !== 'foto_url' && formValues[key] !== null && formValues[key] !== undefined) {
+      if (key !== 'foto' && key !== 'firma_responsable' && formValues[key] !== null && formValues[key] !== undefined) {
         formData.append(key, formValues[key]);
       }
     });

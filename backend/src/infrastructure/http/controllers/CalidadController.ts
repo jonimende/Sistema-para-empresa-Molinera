@@ -16,7 +16,7 @@ export const reportarNC = async (req: Request, res: Response) => {
     
     // Si multer procesó una imagen, almacenamos la URL pública
     if (req.file) {
-      data.foto_url = `/uploads/no-conformidades/${req.file.filename}`;
+      data.firma_responsable = `/uploads/no-conformidades/${req.file.filename}`;
     }
 
     const nuevaNC = await NoConformidad.create(data);
@@ -34,7 +34,7 @@ export const reportarNC = async (req: Request, res: Response) => {
 export const listarNCs = async (req: Request, res: Response) => {
   try {
     // Obtenemos todas las No Conformidades, ordenadas por la más reciente
-    const ncs = await NoConformidad.findAll({ order: [['fecha_reporte', 'DESC']] });
+    const ncs = await NoConformidad.findAll({ order: [['fecha_hora', 'DESC']] });
     res.json(ncs);
   } catch (error) {
     console.error('Error listando NCs:', error);
