@@ -28,7 +28,7 @@ import { environment } from '../../../environments/environment';
       <div class="flex flex-col md:flex-row gap-6 h-auto md:h-[calc(100vh-12rem)]">
         <!-- Panel Izquierdo -->
         <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm" [ngClass]="{'hidden md:flex flex-col': isCreatingParte || isViewingParte, 'flex flex-col': !isCreatingParte && !isViewingParte}">
-          <div *ngFor="let p of partes" (click)="verDetalleParte(p)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex justify-between items-center" [class.bg-indigo-50]="selectedParte?.id === p.id">
+          <div *ngFor="let p of partes" (click)="verDetalleParte(p)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col md:flex-row md:justify-between items-start md:items-center gap-2 w-full" [class.bg-indigo-50]="selectedParte?.id === p.id">
             <div>
               <p class="font-bold text-slate-800 text-lg">Lote: {{ p.nro_lote || 'N/A' }}</p>
               <p class="text-sm font-medium text-slate-600 mt-1">{{ p.producto_elaborado }}</p>
