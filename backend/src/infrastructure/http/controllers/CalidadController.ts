@@ -6,6 +6,14 @@ export const reportarNC = async (req: Request, res: Response) => {
   try {
     const data = req.body;
     
+    // Autogenerar nro_nc si no viene en el body
+    if (!data.nro_nc || data.nro_nc.trim() === '') {
+      const maxIdRecord = await NoConformidad.findOne({ order: [['id', 'DESC']] });
+      const nextId = maxIdRecord ? maxIdRecord.id + 1 : 1;
+      const currentYear = new Date().getFullYear();
+      data.nro_nc = `NC-${currentYear}-${String(nextId).padStart(4, '0')}`;
+    }
+    
     // Si multer procesó una imagen, almacenamos la URL pública
     if (req.file) {
       data.foto_url = `/uploads/no-conformidades/${req.file.filename}`;
