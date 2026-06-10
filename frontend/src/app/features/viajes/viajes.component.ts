@@ -24,22 +24,22 @@ import { environment } from '../../../environments/environment';
       </header>
 
       <!-- TABS de Navegación con RBAC -->
-      <div class="flex overflow-x-auto hide-scrollbar space-x-1 bg-slate-200/50 p-1 rounded-xl shadow-inner mb-4">
+      <div class="flex overflow-x-auto whitespace-nowrap pb-2 w-full space-x-2 bg-slate-200/50 p-1 rounded-xl shadow-inner mb-4">
         <button type="button" (click)="$event.preventDefault(); activeTab = 'mis_viajes'" 
           [class]="activeTab === 'mis_viajes' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200'"
-          class="flex-1 py-2.5 px-4 whitespace-nowrap rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
+          class="flex-shrink-0 py-2.5 px-6 whitespace-nowrap min-w-max rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           Mis Viajes
         </button>
         <button type="button" (click)="$event.preventDefault(); activeTab = 'combustible'" 
           [class]="activeTab === 'combustible' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200'"
-          class="flex-1 py-2.5 px-4 whitespace-nowrap rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
+          class="flex-shrink-0 py-2.5 px-6 whitespace-nowrap min-w-max rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
           Combustible
         </button>
         <button type="button" (click)="$event.preventDefault(); activeTab = 'service'" 
           [class]="activeTab === 'service' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200'"
-          class="flex-1 py-2.5 px-4 whitespace-nowrap rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
+          class="flex-shrink-0 py-2.5 px-6 whitespace-nowrap min-w-max rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           Service
         </button>
@@ -48,14 +48,14 @@ import { environment } from '../../../environments/environment';
         <ng-container *ngIf="authService.tieneRol(['Admin', 'Logistica'])">
           <button type="button" (click)="$event.preventDefault(); activeTab = 'camiones'" 
             [class]="activeTab === 'camiones' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200'"
-            class="flex-1 py-2.5 px-4 whitespace-nowrap rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
+            class="flex-shrink-0 py-2.5 px-6 whitespace-nowrap min-w-max rounded-lg font-bold text-sm transition-all duration-200 flex items-center justify-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
             Camiones
           </button>
           
           <button type="button" (click)="$event.preventDefault(); activeTab = 'panel_admin'" 
             [class]="activeTab === 'panel_admin' ? 'bg-indigo-600 text-white shadow-md' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'"
-            class="flex-1 py-2.5 px-4 whitespace-nowrap rounded-lg font-black text-sm transition-all duration-200 border border-indigo-200 ml-2 flex items-center justify-center">
+            class="flex-shrink-0 py-2.5 px-6 whitespace-nowrap min-w-max rounded-lg font-black text-sm transition-all duration-200 border border-indigo-200 ml-2 flex items-center justify-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
             Panel de Admin
           </button>
@@ -84,7 +84,7 @@ import { environment } from '../../../environments/environment';
                     <p class="font-bold text-slate-800">{{ v.Destino?.nombre_lugar || v.lugar_llegada }}</p>
                     <p class="text-xs text-slate-500 font-medium">{{ v.fecha_salida | date:'shortDate' }} | <span class="text-indigo-600 font-bold">{{ v.kg_carga }} kg</span></p>
                   </div>
-                  <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                  <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                     <button type="button" (click)="$event.stopPropagation(); editarViaje(v)" class="text-blue-600 hover:text-blue-800 font-medium" title="Editar">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                     </button>
@@ -282,9 +282,9 @@ import { environment } from '../../../environments/environment';
                   <!-- Contenedor Tarjetas Móvil -->
                   <div class="grid grid-cols-1 gap-4 md:hidden p-4">
                     <div *ngFor="let c of cargas" (click)="verDetalleCombustible(c); isViewingCombustible=true" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative" [class.border-indigo-400]="selectedCombustible?.id === c.id">
-                      <div class="flex justify-between items-start mb-2">
-                        <p class="font-black text-slate-800 text-lg">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
-                        <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ c.litros_gasoil }} L</span>
+                      <div class="flex flex-col gap-2 mb-2">
+                        <p class="font-black text-slate-800 text-lg break-words">{{ c.CamionRel?.patente_chasis || c.patente_chasis }}</p>
+                        <span class="w-max px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ c.litros_gasoil }} L</span>
                       </div>
                       <p class="text-sm text-slate-500 font-medium mb-3">{{ c.fecha | date:'mediumDate' }}</p>
                       <div class="flex gap-2 mt-auto pt-3 border-t border-slate-100">
@@ -435,9 +435,9 @@ import { environment } from '../../../environments/environment';
                   <!-- Contenedor Tarjetas Móvil -->
                   <div class="grid grid-cols-1 gap-4 md:hidden p-4">
                     <div *ngFor="let s of services" (click)="verDetalleService(s); selectedService=s" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative" [class.border-indigo-400]="selectedService?.id === s.id">
-                      <div class="flex justify-between items-start mb-2">
-                        <p class="font-black text-slate-800 text-lg">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
-                        <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ s.km }} KM</span>
+                      <div class="flex flex-col gap-2 mb-2">
+                        <p class="font-black text-slate-800 text-lg break-words">{{ s.CamionRel?.patente_chasis || s.patente_chasis }}</p>
+                        <span class="w-max px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{{ s.km }} KM</span>
                       </div>
                       <p class="text-sm text-slate-500 font-medium mb-3">{{ s.fecha | date:'mediumDate' }}</p>
                       <div class="flex gap-2 mt-auto pt-3 border-t border-slate-100">
@@ -516,43 +516,43 @@ import { environment } from '../../../environments/environment';
                     
                     <div class="col-span-2">
                       <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Checklist de Mantenimiento</p>
-                      <div class="grid grid-cols-2 gap-3">
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 flex-col w-full">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.aceite_motor" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.aceite_motor" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Aceite de Motor</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.aire" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.aire" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Filtro de Aire</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.aceite" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.aceite" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Filtro de Aceite</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.combustible" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.combustible" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Filtro de Combustible</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.hidraulico" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.hidraulico" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Hidr├íulico</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.caja" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.caja" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Caja</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.diferencial" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.diferencial" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Diferencial</span>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
+                        <div class="flex items-center space-x-2 w-full justify-start mt-2 relative z-10">
                           <svg *ngIf="selectedService.lubricacion_chasis" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                           <svg *ngIf="!selectedService.lubricacion_chasis" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           <span class="text-slate-700 font-medium">Lubricaci├│n Chasis</span>
