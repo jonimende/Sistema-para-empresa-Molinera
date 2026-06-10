@@ -122,39 +122,60 @@ import { environment } from '../../../environments/environment';
                   </div>
                   
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Chofer</p>
-                      <p class="text-slate-800 font-medium">{{ selectedViaje.chofer_email || selectedViaje.chofer || 'No asignado' }}</p>
-                                          </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Carga Transportada</p>
-                      <p class="text-slate-800 font-medium">{{ selectedViaje.Carga?.nombre_carga || selectedViaje.carga_transportada }}</p>
-                      <p class="text-indigo-700 font-black mt-1 text-lg">{{ selectedViaje.kg_carga }} kg</p>
-                    </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Distancia Recorrida</p>
-                      <p class="text-slate-800 font-medium">{{ selectedViaje.km_recorridos || 'S/D' }} KM</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Origen (Salida)</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedViaje.Origen?.nombre_lugar || selectedViaje.lugar_salida }}</p>
-                      <p class="text-slate-600 mt-1 flex items-center">
-                        <svg class="w-4 h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        {{ selectedViaje.fecha_salida | date:'mediumDate' }}
-                      </p>
-                    </div>
-
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Destino (Llegada)</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedViaje.Destino?.nombre_lugar || selectedViaje.lugar_llegada }}</p>
-                      <p class="text-slate-600 mt-1 flex items-center">
-                        <svg class="w-4 h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        {{ selectedViaje.fecha_llegada | date:'mediumDate' }}
-                      </p>
+                      <div class="col-span-2 md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Chofer</p>
+                        <p class="text-slate-800 font-bold text-lg">{{ selectedViaje.chofer_email || selectedViaje.chofer || 'Sin Asignar' }}</p>
+                      </div>
+                      
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Ruta y Tiempos</p>
+                        <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-4">
+                          <div class="w-5/12">
+                            <p class="text-xs text-slate-500 font-bold mb-1">ORIGEN</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Origen?.nombre_lugar || selectedViaje.lugar_salida }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_salida | date:'mediumDate' }} </p>
+                          </div>
+                          <div class="w-2/12 flex justify-center text-indigo-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                          </div>
+                          <div class="w-5/12 text-right">
+                            <p class="text-xs text-slate-500 font-bold mb-1">DESTINO</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Destino?.nombre_lugar || selectedViaje.lugar_llegada }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_llegada | date:'mediumDate' }} </p>
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Manifiesto de Carga</p>
+                        <div class="grid grid-cols-3 gap-4">
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Carga</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.Carga?.nombre_carga || selectedViaje.carga_transportada }}</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Peso</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.kg_carga }} kg</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Distancia</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.km_recorridos }} km</p>
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Comprobante Respaldatorio</p>
+                        <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                          <div>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.comprobante_relacionado }}</p>
+                            <p class="text-slate-500 font-mono mt-1 text-sm">{{ selectedViaje.numero_comprobante }}</p>
+                          </div>
+                          <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
                 <!-- Modo Formulario -->
                 <form *ngIf="isCreatingViaje || selectedViajeId" [formGroup]="viajeForm" class="p-4 md:p-6 space-y-6">
@@ -300,31 +321,60 @@ import { environment } from '../../../environments/environment';
                   </div>
                   
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Vehículo (Patente)</p>
-                      <p class="text-slate-800 font-mono font-bold text-lg bg-slate-100 px-3 py-1 rounded inline-block border border-slate-200">{{ selectedCombustible.CamionRel?.patente_chasis || selectedCombustible.patente_chasis }}</p>
-                    </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Litros de Gasoil</p>
-                      <p class="text-indigo-700 font-black text-2xl">{{ selectedCombustible.litros_gasoil }} L</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Kilometraje</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedCombustible.kilometraje }} KM</p>
-                    </div>
-
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Consumo Promedio</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedCombustible.consumo_l_100km > 0 ? (selectedCombustible.consumo_l_100km | number:'1.2-2') + ' L/100km' : 'Primera carga' }}</p>
-                    </div>
-                    
-                    <div *ngIf="selectedCombustible.foto_tablero" class="col-span-2 mt-4">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Evidencia (Tablero)</p>
-                      <img *ngIf="selectedCombustible.foto_url || selectedCombustible.foto_tablero" [src]="getImageUrl(selectedCombustible.foto_url || selectedCombustible.foto_tablero)" class="w-full max-h-64 object-contain bg-slate-100 rounded shadow-md border" alt="Evidencia">
+                      <div class="col-span-2 md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Chofer</p>
+                        <p class="text-slate-800 font-bold text-lg">{{ selectedViaje.chofer_email || selectedViaje.chofer || 'Sin Asignar' }}</p>
+                      </div>
+                      
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Ruta y Tiempos</p>
+                        <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-4">
+                          <div class="w-5/12">
+                            <p class="text-xs text-slate-500 font-bold mb-1">ORIGEN</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Origen?.nombre_lugar || selectedViaje.lugar_salida }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_salida | date:'mediumDate' }} </p>
+                          </div>
+                          <div class="w-2/12 flex justify-center text-indigo-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                          </div>
+                          <div class="w-5/12 text-right">
+                            <p class="text-xs text-slate-500 font-bold mb-1">DESTINO</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Destino?.nombre_lugar || selectedViaje.lugar_llegada }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_llegada | date:'mediumDate' }} </p>
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Manifiesto de Carga</p>
+                        <div class="grid grid-cols-3 gap-4">
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Carga</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.Carga?.nombre_carga || selectedViaje.carga_transportada }}</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Peso</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.kg_carga }} kg</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Distancia</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.km_recorridos }} km</p>
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Comprobante Respaldatorio</p>
+                        <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                          <div>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.comprobante_relacionado }}</p>
+                            <p class="text-slate-500 font-mono mt-1 text-sm">{{ selectedViaje.numero_comprobante }}</p>
+                          </div>
+                          <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
                 <!-- Modo Formulario -->
                 <form *ngIf="isCreatingCombustible || selectedCombustibleId" [formGroup]="combustibleForm" class="p-4 md:p-6 space-y-6">
@@ -427,68 +477,60 @@ import { environment } from '../../../environments/environment';
                   </div>
                   
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Vehículo (Patente)</p>
-                      <p class="text-slate-800 font-mono font-bold text-lg bg-slate-100 px-3 py-1 rounded inline-block border border-slate-200">{{ selectedService.CamionRel?.patente_chasis || selectedService.patente_chasis }}</p>
-                    </div>
-                    <div>
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Kilómetros Actuales</p>
-                      <p class="text-indigo-700 font-black text-2xl">{{ selectedService.km }} KM</p>
-                    </div>
-
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 col-span-2">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Próximo Cambio de Filtro</p>
-                      <p class="text-slate-800 font-bold text-lg">{{ selectedService.proximo_cambio_filtro }} KM</p>
-                    </div>
-                    
-                    <div class="col-span-2">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Checklist de Mantenimiento</p>
-                      <div class="grid grid-cols-2 gap-3">
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.aceite_motor" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.aceite_motor" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Aceite de Motor</span>
+                      <div class="col-span-2 md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Chofer</p>
+                        <p class="text-slate-800 font-bold text-lg">{{ selectedViaje.chofer_email || selectedViaje.chofer || 'Sin Asignar' }}</p>
+                      </div>
+                      
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Ruta y Tiempos</p>
+                        <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-4">
+                          <div class="w-5/12">
+                            <p class="text-xs text-slate-500 font-bold mb-1">ORIGEN</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Origen?.nombre_lugar || selectedViaje.lugar_salida }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_salida | date:'mediumDate' }} </p>
+                          </div>
+                          <div class="w-2/12 flex justify-center text-indigo-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                          </div>
+                          <div class="w-5/12 text-right">
+                            <p class="text-xs text-slate-500 font-bold mb-1">DESTINO</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Destino?.nombre_lugar || selectedViaje.lugar_llegada }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_llegada | date:'mediumDate' }} </p>
+                          </div>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.aire" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.aire" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Filtro de Aire</span>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Manifiesto de Carga</p>
+                        <div class="grid grid-cols-3 gap-4">
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Carga</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.Carga?.nombre_carga || selectedViaje.carga_transportada }}</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Peso</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.kg_carga }} kg</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Distancia</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.km_recorridos }} km</p>
+                          </div>
                         </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.aceite" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.aceite" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Filtro de Aceite</span>
-                        </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.combustible" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.combustible" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Filtro de Combustible</span>
-                        </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.hidraulico" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.hidraulico" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Hidráulico</span>
-                        </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.caja" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.caja" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Caja</span>
-                        </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.diferencial" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.diferencial" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Diferencial</span>
-                        </div>
-                        <div class="flex items-center space-x-2 w-full justify-end md:w-auto mt-2 md:mt-0 relative z-10">
-                          <svg *ngIf="selectedService.lubricacion_chasis" class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                          <svg *ngIf="!selectedService.lubricacion_chasis" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                          <span class="text-slate-700 font-medium">Lubricación Chasis</span>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Comprobante Respaldatorio</p>
+                        <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                          <div>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.comprobante_relacionado }}</p>
+                            <p class="text-slate-500 font-mono mt-1 text-sm">{{ selectedViaje.numero_comprobante }}</p>
+                          </div>
+                          <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         </div>
                       </div>
                     </div>
-
                   </div>
-                </div>
 
                 <!-- Modo Formulario -->
                 <form *ngIf="isCreatingService || selectedServiceId" [formGroup]="serviceForm" class="p-4 md:p-6 space-y-6">
@@ -618,16 +660,60 @@ import { environment } from '../../../environments/environment';
                     </button>
                   </div>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div class="col-span-2 md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Patente Chasis</p>
-                      <p class="text-slate-800 font-mono font-bold text-2xl">{{ selectedCamion.patente_chasis }}</p>
-                    </div>
-                    <div class="col-span-2 md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Chofer Asignado</p>
-                      <p class="text-indigo-700 font-bold text-xl">{{ selectedCamion.chofer_asignado || 'Sin Asignar' }}</p>
+                      <div class="col-span-2 md:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Chofer</p>
+                        <p class="text-slate-800 font-bold text-lg">{{ selectedViaje.chofer_email || selectedViaje.chofer || 'Sin Asignar' }}</p>
+                      </div>
+                      
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Ruta y Tiempos</p>
+                        <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-4">
+                          <div class="w-5/12">
+                            <p class="text-xs text-slate-500 font-bold mb-1">ORIGEN</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Origen?.nombre_lugar || selectedViaje.lugar_salida }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_salida | date:'mediumDate' }} </p>
+                          </div>
+                          <div class="w-2/12 flex justify-center text-indigo-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                          </div>
+                          <div class="w-5/12 text-right">
+                            <p class="text-xs text-slate-500 font-bold mb-1">DESTINO</p>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.Destino?.nombre_lugar || selectedViaje.lugar_llegada }}</p>
+                            <p class="text-sm text-slate-500">{{ selectedViaje.fecha_llegada | date:'mediumDate' }} </p>
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Manifiesto de Carga</p>
+                        <div class="grid grid-cols-3 gap-4">
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Carga</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.Carga?.nombre_carga || selectedViaje.carga_transportada }}</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Peso</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.kg_carga }} kg</p>
+                          </div>
+                          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Distancia</p>
+                            <p class="font-bold text-indigo-900">{{ selectedViaje.km_recorridos }} km</p>
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Comprobante Respaldatorio</p>
+                        <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                          <div>
+                            <p class="font-bold text-slate-800">{{ selectedViaje.comprobante_relacionado }}</p>
+                            <p class="text-slate-500 font-mono mt-1 text-sm">{{ selectedViaje.numero_comprobante }}</p>
+                          </div>
+                          <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
                 <!-- Modo Formulario -->
                 <form *ngIf="isCreatingCamion || selectedCamionId" [formGroup]="camionForm" class="p-4 md:p-6 space-y-6">
