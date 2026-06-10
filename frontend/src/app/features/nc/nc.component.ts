@@ -83,7 +83,7 @@ import { environment } from '../../../environments/environment';
           </div>
           
           <div class="space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
                 <p class="text-sm font-bold text-slate-500">Nro NC</p>
                 <p class="text-base text-slate-800 font-bold">{{ selectedRecord.nro_nc || '-' }}</p>
@@ -100,10 +100,7 @@ import { environment } from '../../../environments/environment';
                 <p class="text-sm font-bold text-slate-500">Quién Eleva</p>
                 <p class="text-base text-slate-800 font-bold">{{ selectedRecord.quien_eleva || '-' }}</p>
               </div>
-              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <p class="text-sm font-bold text-slate-500">Generar Informe</p>
-                <p class="text-base text-slate-800 font-bold">{{ selectedRecord.generar_informe || '-' }}</p>
-              </div>
+
             </div>
             
             <div>
@@ -196,14 +193,7 @@ import { environment } from '../../../environments/environment';
                 <input type="text" formControlName="quien_eleva" readonly class="w-full bg-slate-100 border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-500 shadow-sm">
               </div>
 
-              <div class="flex flex-col">
-                <label class="text-base font-bold text-slate-700 mb-2">Generar Informe</label>
-                <select formControlName="generar_informe" class="w-full bg-white border border-slate-300 rounded-xl p-4 md:p-3 text-lg md:text-base text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 transition-colors">
-                  <option value="">Seleccionar...</option>
-                  <option value="SI">SI</option>
-                  <option value="NO">NO</option>
-                </select>
-              </div>
+
             </div>
 
             <div class="w-full">
@@ -273,7 +263,6 @@ export class NcComponent implements OnInit {
       descripcion: ['', Validators.required],
       nombre_responsable: [''],
       quien_eleva: [this.authService.currentUser()?.email || '', Validators.required],
-      generar_informe: [''],
       estado: ['PENDIENTE', Validators.required],
       accion_correctiva: [''],
       foto_url: ['']

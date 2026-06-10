@@ -10,7 +10,6 @@ export class NoConformidad extends Model {
   public declare nombre_responsable: string | null;
   public declare firma_responsable: string | null;
   public declare quien_eleva: string;
-  public declare generar_informe: string | null;
   public declare estado: string;
   public declare accion_correctiva: string | null;
 }
@@ -54,10 +53,6 @@ export const initNoConformidad = (sequelize: Sequelize) => {
     quien_eleva: { 
       type: DataTypes.STRING, 
       allowNull: false 
-    },
-    generar_informe: { 
-      type: DataTypes.STRING, 
-      allowNull: true 
     },
     estado: { 
       type: DataTypes.ENUM('PENDIENTE', 'EN TRATAMIENTO', 'RESUELTO', 'CERRADO'), 
