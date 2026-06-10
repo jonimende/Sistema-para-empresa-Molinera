@@ -129,7 +129,7 @@ import { environment } from '../../../environments/environment';
                       
                       <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
                         <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Ruta y Tiempos</p>
-                        <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-4">
+                        <div class="flex flex-col md:flex-row items-center justify-between bg-white border border-slate-200 rounded-lg p-4 gap-4 md:gap-0">
                           <div class="w-5/12">
                             <p class="text-xs text-slate-500 font-bold mb-1">ORIGEN</p>
                             <p class="font-bold text-slate-800">{{ selectedViaje.Origen?.nombre_lugar || selectedViaje.lugar_salida }}</p>
@@ -148,7 +148,7 @@ import { environment } from '../../../environments/environment';
   
                       <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
                         <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Manifiesto de Carga</p>
-                        <div class="grid grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
                             <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Carga</p>
                             <p class="font-bold text-indigo-900">{{ selectedViaje.Carga?.nombre_carga || selectedViaje.carga_transportada }}</p>
@@ -166,7 +166,7 @@ import { environment } from '../../../environments/environment';
   
                       <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
                         <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Comprobante Respaldatorio</p>
-                        <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="flex flex-col md:flex-row justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100 gap-2 md:gap-0">
                           <div>
                             <p class="font-bold text-slate-800">{{ selectedViaje.comprobante_relacionado }}</p>
                             <p class="text-slate-500 font-mono mt-1 text-sm">{{ selectedViaje.numero_comprobante }}</p>
@@ -649,7 +649,7 @@ import { environment } from '../../../environments/environment';
 
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Panel Izquierdo -->
-              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingCamion || isViewingCamion || selectedCamionId, 'flex': !(isCreatingCamion || isViewingCamion || selectedCamionId)}">
                 
                   <!-- Contenedor Tarjetas Móvil -->
                   <div class="grid grid-cols-1 gap-4 md:hidden p-4">
@@ -693,7 +693,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingCamion || isViewingCamion || selectedCamionId), 'flex': (isCreatingCamion || isViewingCamion || selectedCamionId)}">
                 <!-- Modo Placeholder -->
                 <div *ngIf="!isViewingCamion && !isCreatingCamion && !selectedCamionId" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
@@ -766,7 +766,7 @@ import { environment } from '../../../environments/environment';
             
             <div class="flex flex-col md:flex-row gap-4 md:gap-6 h-auto md:h-[calc(100vh-12rem)] min-h-[60vh]">
               <!-- Panel Izquierdo -->
-              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isCreatingViaje || isViewingViaje || selectedViajeId, 'flex': !(isCreatingViaje || isViewingViaje || selectedViajeId)}">
+              <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm flex-col" [ngClass]="{'hidden md:flex': isViewingAdminViaje || selectedAdminViaje, 'flex': !(isViewingAdminViaje || selectedAdminViaje)}">
                 <div *ngFor="let v of viajes" (click)="verDetalleAdminViaje(v); isViewingAdminViaje=true" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition" [class.bg-indigo-50]="selectedAdminViaje?.id === v.id">
                   <p class="font-bold text-slate-800 text-lg">{{ v.chofer_email || 'Sin Asignar' }}</p>
                   <p class="text-sm font-medium text-slate-600 mt-1">{{ v.Origen?.nombre_lugar || v.lugar_salida }} <span class="text-indigo-400 font-bold">&rarr;</span> {{ v.Destino?.nombre_lugar || v.lugar_llegada }}</p>
@@ -778,7 +778,7 @@ import { environment } from '../../../environments/environment';
               </div>
 
               <!-- Panel Derecho -->
-              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isCreatingViaje || isViewingViaje || selectedViajeId), 'flex': isCreatingViaje || isViewingViaje || selectedViajeId}">
+              <div class="w-full md:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto flex-col" [ngClass]="{'hidden md:flex': !(isViewingAdminViaje || selectedAdminViaje), 'flex': (isViewingAdminViaje || selectedAdminViaje)}">
                 <!-- Estado Vacío -->
                 <div *ngIf="!isViewingAdminViaje" class="h-full flex flex-col items-center justify-center text-slate-400">
                   <svg class="w-16 h-16 mb-4 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -804,7 +804,7 @@ import { environment } from '../../../environments/environment';
                     
                     <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
                       <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Ruta y Tiempos</p>
-                      <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-4">
+                      <div class="flex flex-col md:flex-row items-center justify-between bg-white border border-slate-200 rounded-lg p-4 gap-4 md:gap-0">
                         <div class="w-5/12">
                           <p class="text-xs text-slate-500 font-bold mb-1">ORIGEN</p>
                           <p class="font-bold text-slate-800">{{ selectedAdminViaje.Origen?.nombre_lugar || selectedAdminViaje.lugar_salida }}</p>
@@ -823,7 +823,7 @@ import { environment } from '../../../environments/environment';
 
                     <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
                       <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Manifiesto de Carga</p>
-                      <div class="grid grid-cols-3 gap-4">
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
                           <p class="text-xs font-bold text-indigo-400 uppercase mb-1">Carga</p>
                           <p class="font-bold text-indigo-900">{{ selectedAdminViaje.Carga?.nombre_carga || selectedAdminViaje.carga_transportada }}</p>
@@ -841,7 +841,7 @@ import { environment } from '../../../environments/environment';
 
                     <div class="col-span-2 border-t border-slate-100 pt-4 mt-2">
                       <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Comprobante Respaldatorio</p>
-                      <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+                      <div class="flex flex-col md:flex-row justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100 gap-2 md:gap-0">
                         <div>
                           <p class="font-bold text-slate-800">{{ selectedAdminViaje.comprobante_relacionado }}</p>
                           <p class="text-sm text-slate-500 font-mono mt-1">Nº {{ selectedAdminViaje.numero_comprobante }}</p>
