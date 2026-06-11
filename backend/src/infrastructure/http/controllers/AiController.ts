@@ -142,7 +142,13 @@ export const handleChat = async (req: Request, res: Response) => {
       }]
     });
 
-    const formattedHistory = history.slice(0, -1).map((msg: any) => ({
+    let validHistory = history.slice(0, -1);
+    // Gemini exige estrictamente que el primer mensaje del historial sea 'user'
+    while (validHistory.length > 0 && validHistory[0].role !== 'user') {
+      validHistory.shift();
+    }
+
+    const formattedHistory = validHistory.map((msg: any) => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.content }]
     }));
