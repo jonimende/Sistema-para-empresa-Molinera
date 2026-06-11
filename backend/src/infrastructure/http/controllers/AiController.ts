@@ -11,6 +11,8 @@ import { NoConformidad } from '../../database/sequelize/models/NoConformidad';
 import { ElaboracionParte } from '../../database/sequelize/models/ElaboracionParte';
 import { ServiceMantenimiento } from '../../database/sequelize/models/ServiceMantenimiento';
 import { CargaCombustible } from '../../database/sequelize/models/CargaCombustible';
+import { RecorridaDiaria } from '../../database/sequelize/models/RecorridaDiaria';
+import { Vehiculo } from '../../database/sequelize/models/Vehiculo';
 
 
 export const handleChat = async (req: Request, res: Response) => {
@@ -26,49 +28,72 @@ export const handleChat = async (req: Request, res: Response) => {
 
     // Inyectar estado global masivo
     try {
-      const viajesFull = await Viaje.findAll({ 
-        order: [['createdAt', 'DESC']],
-        include: [
-          { model: Ubicacion, as: 'Origen', attributes: ['nombre_lugar'] },
-          { model: Ubicacion, as: 'Destino', attributes: ['nombre_lugar'] },
-          { model: ProductoCarga, as: 'Carga', attributes: ['nombre_carga'] }
-        ]
-      });
-      const combustibles = await CargaCombustible.findAll({ order: [['createdAt', 'DESC']] });
-      const services = await ServiceMantenimiento.findAll({ order: [['createdAt', 'DESC']] });
-      const noConformidades = await NoConformidad.findAll({ order: [['createdAt', 'DESC']] });
-      const controlesCarga = await ControlCarga.findAll({ order: [['createdAt', 'DESC']] });
-      const partesElaboracion = await ElaboracionParte.findAll({ order: [['createdAt', 'DESC']] });
+      const [
+        viajesFull,
+        combustibles,
+        services,
+        noConformidades,
+        controlesCarga,
+        partesElaboracion,
+        recorridasDiarias,
+        vehiculos
+      ] = await Promise.all([
+        Viaje.findAll({ 
+          order: [['createdAt', 'DESC']],
+          include: [
+            { model: Ubicacion, as: 'Origen', attributes: ['nombre_lugar'] },
+            { model: Ubicacion, as: 'Destino', attributes: ['nombre_lugar'] },
+            { model: ProductoCarga, as: 'Carga', attributes: ['nombre_carga'] }
+          ]
+        }),
+        CargaCombustible.findAll({ order: [['createdAt', 'DESC']] }),
+        ServiceMantenimiento.findAll({ order: [['createdAt', 'DESC']] }),
+        NoConformidad.findAll({ order: [['createdAt', 'DESC']] }),
+        ControlCarga.findAll({ order: [['createdAt', 'DESC']] }),
+        ElaboracionParte.findAll({ order: [['createdAt', 'DESC']] }),
+        RecorridaDiaria.findAll({ order: [['createdAt', 'DESC']] }),
+        Vehiculo.findAll({ order: [['createdAt', 'DESC']] })
+      ]);
 
       const systemDataObj = {
-        viajes: viajesFull.map((v: any) => ({ id: v.id, orig: v.Origen?.nombre_lugar || v.lugar_salida, dest: v.Destino?.nombre_lugar || v.lugar_llegada, prod: v.Carga?.nombre_carga || v.carga_transportada, km: v.km_recorridos, f: v.fecha_salida, pat: v.patente_camion, chofer: v.chofer_email })),
-        comb: combustibles.map((c: any) => ({ f: c.fecha, pat: c.patente, l: c.litros, km: c.km_actual, p: c.precio_total })),
-        serv: services.map((s: any) => ({ f: s.fecha, pat: s.patente, km: s.km_service, t: s.tipo_service })),
-        nc: noConformidades.map((n: any) => ({ f: n.fecha, desc: n.descripcion })),
-        cc: controlesCarga.map((c: any) => ({ f: c.fecha, pat: c.patente, prod: c.producto })),
-        pe: partesElaboracion.map((p: any) => ({ f: p.fecha, prod: p.producto, cant: p.cantidad }))
+        logistica: {
+          viajes: viajesFull.map((v: any) => ({ id: v.id, orig: v.Origen?.nombre_lugar || v.lugar_salida, dest: v.Destino?.nombre_lugar || v.lugar_llegada, prod: v.Carga?.nombre_carga || v.carga_transportada, km: v.km_recorridos, f: v.fecha_salida, pat: v.patente_camion, chof: v.chofer_email })),
+          combust: combustibles.map((c: any) => ({ f: c.fecha, pat: c.patente, lit: c.litros, km: c.km_actual, p: c.precio_total })),
+          maint: services.map((s: any) => ({ f: s.fecha, pat: s.patente, km: s.km_service, t: s.tipo_service }))
+        },
+        calidad: {
+          noconf: noConformidades.map((n: any) => ({ f: n.fecha, desc: n.descripcion })),
+          ctrlCarga: controlesCarga.map((c: any) => ({ f: c.fecha, pat: c.patente, prod: c.producto })),
+          recorridas: recorridasDiarias.map((r: any) => ({ f: r.fecha, resp: r.responsable_nombre, roed: r.chk_roedores, epp: r.chk_epp, ban: r.chk_banos, com: r.chk_comedor, mol: r.chk_molino_diario, abert: r.chk_aberturas }))
+        },
+        produccion: {
+          partes: partesElaboracion.map((p: any) => ({ f: p.fecha, lote: p.nro_lote, prod: p.producto_elaborado, rend_mol: p.molino_rendimiento, rend_molinillo: p.molinillo_rendimiento, enteros: p.molino_enteros, quebrados: p.molino_quebrado, silo: p.silo_origen }))
+        },
+        maestros: {
+          camiones: vehiculos.map((v: any) => ({ pat: v.patente_chasis, marca: v.marca, mod: v.modelo, chof: v.chofer_asignado, cap: v.capacidad_kg }))
+        }
       };
       
-      systemData += JSON.stringify(systemDataObj);
+      systemData += `\n[ESTADO_GLOBAL_EMPRESA]: ${JSON.stringify(systemDataObj)}\n`;
     } catch (err) {
       console.error('Error inyectando estado global:', err);
     }
 
 
-    const systemPrompt = `Eres el asistente operativo de la fábrica Paoloni. El usuario está en el módulo: ${ctx}. 
-  Aquí tienes los DATOS REALES y exactos de la base de datos de la empresa:
+    const systemPrompt = `Eres el asistente analítico central de la planta. Tienes acceso completo al estado en tiempo real de la empresa en el objeto [ESTADO_GLOBAL_EMPRESA]. Tu deber es cruzar información de logística, calidad y elaboración para responder cualquier consulta gerencial de forma exacta.
+  
   ${systemData}
   
   Reglas:
-  1. Responde a la pregunta del usuario utilizando ÚNICAMENTE los datos proporcionados arriba.
-  2. Sé directo, profesional y no pidas disculpas. Haz los cálculos matemáticos (sumas de kilos, conteo de viajes) tú mismo basándote en los datos crudos.
-  3. Si la información no está en los datos, dile amablemente que no hay registros recientes de eso.
+  1. Responde a la pregunta utilizando ÚNICAMENTE los datos proporcionados en [ESTADO_GLOBAL_EMPRESA].
+  2. Sé directo, profesional y no pidas disculpas. Haz los cálculos matemáticos cruzando arrays cuando sea necesario.
+  3. Si la información no está en los datos, dilo amablemente.
   
   REGLA VITAL: Si el usuario te solicita enviar un correo, reporte o planilla de logística/viajes, TIENES PROHIBIDO decir que lo enviaste usando texto normal. DEBES invocar OBLIGATORIAMENTE la herramienta enviar_reporte_logistica.
   REGLA VITAL 2: Si el usuario solicita información, reportes o planillas sobre control de carga, higiene o limpieza, DEBES invocar OBLIGATORIAMENTE la herramienta enviar_reporte_higiene_pdf.
   REGLA VITAL 3: Si el usuario te pide enviar un reporte pero NO te da un correo electrónico válido (ej. solo te dice un nombre), NO invoques la herramienta. En su lugar, pídele amablemente la dirección de correo electrónico.
   REGLA 4: Memoria de Email. Si el usuario te pide enviar un reporte a 'ese mismo correo' o no menciona el email en su mensaje actual, BUSCA en el historial de la conversación el último correo válido que haya proporcionado y utilízalo.
-  REGLA 5: Cero Alucinaciones. NUNCA inventes direcciones de correo electrónico uniendo el nombre y apellido de una persona. Si no encuentras un email válido con @ en el historial, pídeselo al usuario explícitamente.`;
+  REGLA 5: Cero Alucinaciones. NUNCA inventes direcciones de correo electrónico uniendo el nombre y apellido de una persona. Si no encuentras un email válido con @ en el historial, pídeselo explícitamente.`;
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
