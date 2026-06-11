@@ -348,30 +348,32 @@ import { environment } from '../../../environments/environment';
                     </button>
                   </div>
                   
-                  <div class="flex flex-col space-y-3 p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Vehículo (Patente):</span>
-                      <span class="text-gray-900">{{ selectedCombustible.CamionRel?.patente_chasis || selectedCombustible.patente_chasis }}</span>
+                  <div class="flex flex-col p-5 bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                    <div class="flex flex-col py-3 px-4 bg-slate-50 border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Vehículo (Patente)</span>
+                      <span class="text-base font-semibold text-slate-900 bg-slate-100 border border-slate-200 px-3 py-1 font-mono rounded w-max">{{ selectedCombustible.CamionRel?.patente_chasis || selectedCombustible.patente_chasis }}</span>
                     </div>
-                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Litros de Gasoil:</span>
-                      <span class="text-gray-900">{{ selectedCombustible.litros_gasoil }} L</span>
+                    <div class="flex flex-col py-3 px-4 bg-white border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Litros de Gasoil</span>
+                      <span class="text-base font-semibold text-slate-900">{{ selectedCombustible.litros_gasoil }} L</span>
                     </div>
-                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Kilometraje:</span>
-                      <span class="text-gray-900">{{ selectedCombustible.kilometraje }} KM</span>
+                    <div class="flex flex-col py-3 px-4 bg-slate-50 border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Kilometraje</span>
+                      <span class="text-base font-semibold text-slate-900">{{ selectedCombustible.kilometraje }} KM</span>
                     </div>
-                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Consumo Promedio:</span>
-                      <span class="text-gray-900">{{ selectedCombustible.consumo_l_100km > 0 ? (selectedCombustible.consumo_l_100km | number:'1.2-2') + ' L/100km' : 'Primera carga' }}</span>
+                    <div class="flex flex-col py-3 px-4 bg-white border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Consumo Promedio</span>
+                      <span class="text-base font-semibold text-slate-900">{{ selectedCombustible.consumo_l_100km > 0 ? (selectedCombustible.consumo_l_100km | number:'1.2-2') + ' L/100km' : 'Primera carga' }}</span>
                     </div>
-                    <div *ngIf="selectedCombustible.foto_tablero" class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Evidencia (Tablero):</span>
-                      <img *ngIf="selectedCombustible.foto_url || selectedCombustible.foto_tablero" [src]="getImageUrl(selectedCombustible.foto_url || selectedCombustible.foto_tablero)" class="w-full max-h-64 object-contain bg-slate-100 rounded shadow-md border mt-2" alt="Evidencia">
+                    <div *ngIf="selectedCombustible.foto_tablero || selectedCombustible.foto_url" class="flex flex-col py-3 px-4 bg-slate-50 border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-2">Evidencia (Tablero)</span>
+                      <a [href]="getImageUrl(selectedCombustible.foto_url || selectedCombustible.foto_tablero)" target="_blank" class="flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full transition w-full shadow-sm text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span>Ver Foto de Evidencia</span>
+                      </a>
                     </div>
                   </div>
                 </div>
-
                 <!-- Modo Formulario -->
                 <form *ngIf="isCreatingCombustible || selectedCombustibleId" [formGroup]="combustibleForm" class="p-4 md:p-6 space-y-6 w-full max-w-lg mx-auto overflow-y-auto">
                   <button (click)="isCreatingCombustible=false; selectedCombustibleId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
@@ -512,52 +514,32 @@ import { environment } from '../../../environments/environment';
                     </button>
                   </div>
                   
-                  <div class="flex flex-col space-y-3 p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Vehículo (Patente):</span>
-                      <span class="text-gray-900">{{ selectedService.CamionRel?.patente_chasis || selectedService.patente_chasis }}</span>
+                  <div class="flex flex-col p-5 bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                    <div class="flex flex-col py-3 px-4 bg-slate-50 border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Vehículo (Patente)</span>
+                      <span class="text-base font-semibold text-slate-900 bg-slate-100 border border-slate-200 px-3 py-1 font-mono rounded w-max">{{ selectedCombustible.CamionRel?.patente_chasis || selectedCombustible.patente_chasis }}</span>
                     </div>
-                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Kilómetros Actuales:</span>
-                      <span class="text-gray-900">{{ selectedService.km }} KM</span>
+                    <div class="flex flex-col py-3 px-4 bg-white border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Litros de Gasoil</span>
+                      <span class="text-base font-semibold text-slate-900">{{ selectedCombustible.litros_gasoil }} L</span>
                     </div>
-                    <div class="flex flex-col mb-2 border-b border-slate-100 pb-2">
-                      <span class="font-bold text-gray-700">Próximo Cambio de Filtro:</span>
-                      <span class="text-gray-900">{{ selectedService.proximo_cambio_filtro }} KM</span>
+                    <div class="flex flex-col py-3 px-4 bg-slate-50 border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Kilometraje</span>
+                      <span class="text-base font-semibold text-slate-900">{{ selectedCombustible.kilometraje }} KM</span>
                     </div>
-                    
-                    <div class="flex flex-col mb-2 pt-2">
-                      <span class="font-bold text-gray-700 mb-2">Checklist de Mantenimiento:</span>
-                      <div class="flex flex-col space-y-2">
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.aceite_motor ? '✅' : '❌' }} Aceite de Motor</span>
-                        </div>
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.aire ? '✅' : '❌' }} Filtro de Aire</span>
-                        </div>
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.aceite ? '✅' : '❌' }} Filtro de Aceite</span>
-                        </div>
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.combustible ? '✅' : '❌' }} Filtro de Combustible</span>
-                        </div>
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.hidraulico ? '✅' : '❌' }} Hidráulico</span>
-                        </div>
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.caja ? '✅' : '❌' }} Caja</span>
-                        </div>
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.diferencial ? '✅' : '❌' }} Diferencial</span>
-                        </div>
-                        <div class="flex flex-col">
-                           <span class="text-sm text-gray-600">{{ selectedService.lubricacion_chasis ? '✅' : '❌' }} Lubricación Chasis</span>
-                        </div>
-                      </div>
+                    <div class="flex flex-col py-3 px-4 bg-white border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-1">Consumo Promedio</span>
+                      <span class="text-base font-semibold text-slate-900">{{ selectedCombustible.consumo_l_100km > 0 ? (selectedCombustible.consumo_l_100km | number:'1.2-2') + ' L/100km' : 'Primera carga' }}</span>
+                    </div>
+                    <div *ngIf="selectedCombustible.foto_tablero || selectedCombustible.foto_url" class="flex flex-col py-3 px-4 bg-slate-50 border-b border-slate-100">
+                      <span class="text-sm font-normal text-slate-500 mb-2">Evidencia (Tablero)</span>
+                      <a [href]="getImageUrl(selectedCombustible.foto_url || selectedCombustible.foto_tablero)" target="_blank" class="flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full transition w-full shadow-sm text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span>Ver Foto de Evidencia</span>
+                      </a>
                     </div>
                   </div>
                 </div>
-
                 <!-- Modo Formulario -->
                 <form *ngIf="isCreatingService || selectedServiceId" [formGroup]="serviceForm" class="p-4 md:p-6 space-y-6 w-full max-w-lg mx-auto overflow-y-auto">
                   <button (click)="isCreatingService=false; selectedServiceId=null" class="md:hidden mb-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg font-bold w-full text-left flex items-center min-h-[44px]"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> Volver a la lista</button>
