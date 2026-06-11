@@ -102,8 +102,8 @@ export const handleChat = async (req: Request, res: Response) => {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const modelId = 'gemini-1.5-flash';
-    // const modelId = 'gemini-1.5-pro'; // Opcional para cruzar datos masivos a futuro
+    const modelId = 'gemini-3.5-flash';
+    // const modelId = 'gemini-3.1-pro'; // Opcional para cruzar datos masivos a futuro
 
     const model = genAI.getGenerativeModel({
       model: modelId,
