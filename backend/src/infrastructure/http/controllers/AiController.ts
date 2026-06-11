@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Viaje } from '../../database/sequelize/models/Viaje';
 import { Ubicacion } from '../../database/sequelize/models/Ubicacion';
 import { ProductoCarga } from '../../database/sequelize/models/ProductoCarga';
@@ -23,10 +24,9 @@ export const handleChat = async (req: Request, res: Response) => {
     let systemData = '';
     const ctx = contextModule || 'general';
 
-    let viajesOptimizadosRef: any[] = [];
-    if (['mis_viajes', 'camiones', 'logistica', 'general', 'dashboard'].includes(ctx)) {
-      const viajes = await Viaje.findAll({ 
-        limit: 15, 
+    // Inyectar estado global masivo
+    try {
+      const viajesFull = await Viaje.findAll({ 
         order: [['createdAt', 'DESC']],
         include: [
           { model: Ubicacion, as: 'Origen', attributes: ['nombre_lugar'] },
@@ -34,23 +34,22 @@ export const handleChat = async (req: Request, res: Response) => {
           { model: ProductoCarga, as: 'Carga', attributes: ['nombre_carga'] }
         ]
       });
-      const viajesOptimizados = viajes.map((v: any) => v.toJSON ? v.toJSON() : v);
-      viajesOptimizadosRef = viajesOptimizados;
-      systemData += 'Últimos 15 viajes (con km y todos los detalles): ' + JSON.stringify(viajesOptimizados) + '\n';
-    }
+      const combustibles = await CargaCombustible.findAll({ order: [['createdAt', 'DESC']] });
+      const services = await ServiceMantenimiento.findAll({ order: [['createdAt', 'DESC']] });
+      const noConformidades = await NoConformidad.findAll({ order: [['createdAt', 'DESC']] });
+      const controlesCarga = await ControlCarga.findAll({ order: [['createdAt', 'DESC']] });
+      const partesElaboracion = await ElaboracionParte.findAll({ order: [['createdAt', 'DESC']] });
 
-    // Inyectar estado global
-    try {
-      const noConformidades = await NoConformidad.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
-      const controlesCarga = await ControlCarga.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
-      const partesElaboracion = await ElaboracionParte.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
-      const services = await ServiceMantenimiento.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
-      const combustibles = await CargaCombustible.findAll({ limit: 10, order: [['createdAt', 'DESC']] });
+      const systemDataObj = {
+        viajes: viajesFull.map((v: any) => ({ id: v.id, orig: v.Origen?.nombre_lugar || v.lugar_salida, dest: v.Destino?.nombre_lugar || v.lugar_llegada, prod: v.Carga?.nombre_carga || v.carga_transportada, km: v.km_recorridos, f: v.fecha_salida, pat: v.patente_camion, chofer: v.chofer_email })),
+        comb: combustibles.map((c: any) => ({ f: c.fecha, pat: c.patente, l: c.litros, km: c.km_actual, p: c.precio_total })),
+        serv: services.map((s: any) => ({ f: s.fecha, pat: s.patente, km: s.km_service, t: s.tipo_service })),
+        nc: noConformidades.map((n: any) => ({ f: n.fecha, desc: n.descripcion })),
+        cc: controlesCarga.map((c: any) => ({ f: c.fecha, pat: c.patente, prod: c.producto })),
+        pe: partesElaboracion.map((p: any) => ({ f: p.fecha, prod: p.producto, cant: p.cantidad }))
+      };
       
-      systemData += 'Últimas 10 No Conformidades: ' + JSON.stringify(noConformidades) + '\n';
-      systemData += 'Últimos 10 Controles de Carga (Higiene): ' + JSON.stringify(controlesCarga) + '\n';
-      systemData += 'Últimos 10 Partes de Elaboración: ' + JSON.stringify(partesElaboracion) + '\n';
-      systemData += 'Últimos 10 Mantenimientos (Services): ' + JSON.stringify(services) + '\n';
+      systemData += JSON.stringify(systemDataObj);
     } catch (err) {
       console.error('Error inyectando estado global:', err);
     }
@@ -71,85 +70,75 @@ export const handleChat = async (req: Request, res: Response) => {
   REGLA 4: Memoria de Email. Si el usuario te pide enviar un reporte a 'ese mismo correo' o no menciona el email en su mensaje actual, BUSCA en el historial de la conversación el último correo válido que haya proporcionado y utilízalo.
   REGLA 5: Cero Alucinaciones. NUNCA inventes direcciones de correo electrónico uniendo el nombre y apellido de una persona. Si no encuentras un email válido con @ en el historial, pídeselo al usuario explícitamente.`;
 
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      console.warn('Falta GROQ_API_KEY. Retornando respuesta mock.');
-      return res.json({ response: `[Mock AI] He recibido tu mensaje en el módulo ${contextModule}. Configura tu GROQ_API_KEY en el backend para activar el modelo llama-3.3-70b-versatile.` });
+      console.warn('Falta GEMINI_API_KEY. Retornando respuesta mock.');
+      return res.json({ response: `[Mock AI] He recibido tu mensaje en el módulo ${contextModule}. Configura tu GEMINI_API_KEY en el backend para activar el modelo.` });
     }
 
-    const messagesParaGroq = [
-      { role: 'system', content: systemPrompt },
-      ...history
-    ];
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const modelId = 'gemini-1.5-flash';
+    // const modelId = 'gemini-1.5-pro'; // Opcional para cruzar datos masivos a futuro
 
-    const payload = {
-      model: 'llama-3.3-70b-versatile',
-      messages: messagesParaGroq,
-      temperature: 0.3,
-      tools: [
-        {
-          "type": "function",
-          "function": {
-            "name": "enviar_reporte_logistica",
-            "description": "Envía un correo electrónico con un reporte Excel de los últimos viajes al destinatario indicado por el usuario.",
-            "parameters": {
-              "type": "object",
-              "properties": {
-                "destinatario": { "type": "string", "description": "El correo electrónico del destinatario." },
-                "asunto": { "type": "string", "description": "Asunto del correo generado por la IA." },
-                "fecha": { "type": "string", "description": "Fecha específica de los viajes. DEBES usar OBLIGATORIAMENTE el formato ISO estricto YYYY-MM-DD (ej: 2026-04-01). No uses barras ni formatos locales." },
-                "chofer": { "type": "string", "description": "Nombre o correo del chofer para filtrar los viajes." }
+    const model = genAI.getGenerativeModel({
+      model: modelId,
+      systemInstruction: systemPrompt,
+      tools: [{
+        functionDeclarations: [
+          {
+            name: "enviar_reporte_logistica",
+            description: "Envía un correo electrónico con un reporte Excel de los últimos viajes al destinatario indicado por el usuario.",
+            parameters: {
+              type: "OBJECT" as any,
+              properties: {
+                destinatario: { type: "STRING" as any, description: "El correo electrónico del destinatario." },
+                asunto: { type: "STRING" as any, description: "Asunto del correo generado por la IA." },
+                fecha: { type: "STRING" as any, description: "Fecha específica de los viajes. DEBES usar OBLIGATORIAMENTE el formato ISO estricto YYYY-MM-DD (ej: 2026-04-01). No uses barras ni formatos locales." },
+                chofer: { type: "STRING" as any, description: "Nombre o correo del chofer para filtrar los viajes." }
               },
-              "required": ["destinatario", "asunto"]
+              required: ["destinatario", "asunto"]
+            }
+          },
+          {
+            name: "enviar_reporte_higiene_pdf",
+            description: "Envía un correo electrónico con un reporte PDF de higiene y control de carga al destinatario indicado por el usuario.",
+            parameters: {
+              type: "OBJECT" as any,
+              properties: {
+                destinatario: { type: "STRING" as any, description: "El correo electrónico del destinatario." },
+                asunto: { type: "STRING" as any, description: "Asunto del correo." },
+                fecha: { type: "STRING" as any, description: "Fecha específica. Formato ISO estricto YYYY-MM-DD." },
+                chofer: { type: "STRING" as any, description: "Nombre o DNI del chofer para filtrar los registros." }
+              },
+              required: ["destinatario"]
             }
           }
-        },
-        {
-          "type": "function",
-          "function": {
-            "name": "enviar_reporte_higiene_pdf",
-            "description": "Envía un correo electrónico con un reporte PDF de higiene y control de carga al destinatario indicado por el usuario.",
-            "parameters": {
-              "type": "object",
-              "properties": {
-                "destinatario": { "type": "string", "description": "El correo electrónico del destinatario." },
-                "asunto": { "type": "string", "description": "Asunto del correo." },
-                "fecha": { "type": "string", "description": "Fecha específica. Formato ISO estricto YYYY-MM-DD." },
-                "chofer": { "type": "string", "description": "Nombre o DNI del chofer para filtrar los registros." }
-              },
-              "required": ["destinatario"]
-            }
-          }
-        }
-      ],
-      tool_choice: "auto"
-    };
-
-    const aiResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
+        ]
+      }]
     });
 
-    if (!aiResponse.ok) {
-      const err = await aiResponse.json();
-      console.error('Error de Groq API:', err);
-      return res.status(500).json({ error: 'Error comunicando con el proveedor de IA' });
-    }
+    const formattedHistory = history.slice(0, -1).map((msg: any) => ({
+      role: msg.role === 'user' ? 'user' : 'model',
+      parts: [{ text: msg.content }]
+    }));
+    
+    const latestMessage = history[history.length - 1].content;
 
-    const data = await aiResponse.json();
-    const responseMessage = data.choices[0]?.message;
+    const chat = model.startChat({
+      history: formattedHistory
+    });
 
-    // Evaluamos si Groq decidió invocar una función
-    if (responseMessage?.tool_calls && responseMessage.tool_calls.length > 0) {
-      for (const toolCall of responseMessage.tool_calls) {
-        const args = JSON.parse(toolCall.function.arguments);
+    const result = await chat.sendMessage(latestMessage);
+    const responseMessage = result.response;
+
+    const toolCalls = responseMessage.functionCalls();
+
+    if (toolCalls && toolCalls.length > 0) {
+      for (const toolCall of toolCalls) {
+        const args = toolCall.args as any;
         const mailService = new MailService();
 
-        switch (toolCall.function.name) {
+        switch (toolCall.name) {
           case 'enviar_reporte_logistica':
             const emailRegexLogistica = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!args.destinatario || !emailRegexLogistica.test(args.destinatario)) {
@@ -382,7 +371,7 @@ export const handleChat = async (req: Request, res: Response) => {
       }
     }
 
-    const botReply = responseMessage?.content || 'No pude generar una respuesta.';
+    const botReply = responseMessage?.text() || 'No pude generar una respuesta.';
 
     res.json({ response: botReply });
   } catch (error) {
