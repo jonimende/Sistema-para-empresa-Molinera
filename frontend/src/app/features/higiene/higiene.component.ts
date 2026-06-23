@@ -180,10 +180,23 @@ import { AuthService } from '../../core/services/auth.service';
                   <label class="text-base font-bold text-slate-700 mb-2">Fecha</label>
                   <input type="date" formControlName="fecha" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base">
                 </div>
-                <div class="flex flex-col">
+                <div class="flex flex-col relative">
                   <label class="text-base font-bold text-slate-700 mb-2">Transporte / Empresa</label>
-                  <input list="listaTransportes" type="text" formControlName="transporte" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
-                  <datalist id="listaTransportes"><option *ngFor="let item of transportes" [value]="item"></datalist>
+                  <div class="relative">
+                    <input type="text" formControlName="transporte" (focus)="showTransporteList = true" (blur)="hideTransporteListDelay()" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base pr-10" placeholder="Escriba o seleccione...">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                  </div>
+                  <div *ngIf="showTransporteList" class="absolute top-[85px] z-50 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div *ngFor="let item of getFilteredTransportes()" (click)="selectTransporte(item)" class="px-4 py-3 hover:bg-indigo-50 cursor-pointer text-slate-700 border-b border-slate-100 last:border-0 font-medium">
+                      {{ item }}
+                    </div>
+                    <div *ngIf="getFilteredTransportes().length === 0 && wizardForm.get('transporte')?.value" (click)="addTransporte()" class="px-4 py-3 hover:bg-indigo-50 cursor-pointer text-indigo-600 font-bold bg-indigo-50/50 flex items-center">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                      Agregar "{{ wizardForm.get('transporte')?.value }}"
+                    </div>
+                  </div>
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Datos Vehículo</label>
@@ -211,15 +224,41 @@ import { AuthService } from '../../core/services/auth.service';
                     <option value="N">No (N)</option>
                   </select>
                 </div>
-                <div class="flex flex-col">
+                <div class="flex flex-col relative">
                   <label class="text-base font-bold text-slate-700 mb-2">Cliente / Destino</label>
-                  <input list="listaClientes" type="text" formControlName="cliente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
-                  <datalist id="listaClientes"><option *ngFor="let item of clientes" [value]="item"></datalist>
+                  <div class="relative">
+                    <input type="text" formControlName="cliente" (focus)="showClienteList = true" (blur)="hideClienteListDelay()" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base pr-10" placeholder="Escriba o seleccione...">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                  </div>
+                  <div *ngIf="showClienteList" class="absolute top-[85px] z-50 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div *ngFor="let item of getFilteredClientes()" (click)="selectCliente(item)" class="px-4 py-3 hover:bg-indigo-50 cursor-pointer text-slate-700 border-b border-slate-100 last:border-0 font-medium">
+                      {{ item }}
+                    </div>
+                    <div *ngIf="getFilteredClientes().length === 0 && wizardForm.get('cliente')?.value" (click)="addCliente()" class="px-4 py-3 hover:bg-indigo-50 cursor-pointer text-indigo-600 font-bold bg-indigo-50/50 flex items-center">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                      Agregar "{{ wizardForm.get('cliente')?.value }}"
+                    </div>
+                  </div>
                 </div>
-                <div class="flex flex-col">
+                <div class="flex flex-col relative">
                   <label class="text-base font-bold text-slate-700 mb-2">Producto</label>
-                  <input list="listaProductos" type="text" formControlName="producto" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
-                  <datalist id="listaProductos"><option *ngFor="let item of productos" [value]="item"></datalist>
+                  <div class="relative">
+                    <input type="text" formControlName="producto" (focus)="showProductoList = true" (blur)="hideProductoListDelay()" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base pr-10" placeholder="Escriba o seleccione...">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                  </div>
+                  <div *ngIf="showProductoList" class="absolute top-[85px] z-50 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div *ngFor="let item of getFilteredProductos()" (click)="selectProducto(item)" class="px-4 py-3 hover:bg-indigo-50 cursor-pointer text-slate-700 border-b border-slate-100 last:border-0 font-medium">
+                      {{ item }}
+                    </div>
+                    <div *ngIf="getFilteredProductos().length === 0 && wizardForm.get('producto')?.value" (click)="addProducto()" class="px-4 py-3 hover:bg-indigo-50 cursor-pointer text-indigo-600 font-bold bg-indigo-50/50 flex items-center">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                      Agregar "{{ wizardForm.get('producto')?.value }}"
+                    </div>
+                  </div>
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Tipo Envase</label>
@@ -398,6 +437,10 @@ export class HigieneComponent implements AfterViewInit {
   clientes: string[] = [];
   productos: string[] = [];
   
+  showTransporteList = false;
+  showClienteList = false;
+  showProductoList = false;
+  
   previews: any = {};
   compressedFiles: any = {};
 
@@ -483,6 +526,49 @@ export class HigieneComponent implements AfterViewInit {
       },
       error: (err) => console.error('Error cargando historial de higiene', err)
     });
+  }
+
+  hideTransporteListDelay() { setTimeout(() => this.showTransporteList = false, 200); }
+  hideClienteListDelay() { setTimeout(() => this.showClienteList = false, 200); }
+  hideProductoListDelay() { setTimeout(() => this.showProductoList = false, 200); }
+
+  getFilteredTransportes() {
+    const val = this.wizardForm.get('transporte')?.value?.toLowerCase() || '';
+    return this.transportes.filter(t => t.toLowerCase().includes(val));
+  }
+  selectTransporte(val: string) {
+    this.wizardForm.patchValue({ transporte: val });
+    this.showTransporteList = false;
+  }
+  addTransporte() {
+    const val = this.wizardForm.get('transporte')?.value;
+    if (val) this.selectTransporte(val);
+  }
+
+  getFilteredClientes() {
+    const val = this.wizardForm.get('cliente')?.value?.toLowerCase() || '';
+    return this.clientes.filter(t => t.toLowerCase().includes(val));
+  }
+  selectCliente(val: string) {
+    this.wizardForm.patchValue({ cliente: val });
+    this.showClienteList = false;
+  }
+  addCliente() {
+    const val = this.wizardForm.get('cliente')?.value;
+    if (val) this.selectCliente(val);
+  }
+
+  getFilteredProductos() {
+    const val = this.wizardForm.get('producto')?.value?.toLowerCase() || '';
+    return this.productos.filter(t => t.toLowerCase().includes(val));
+  }
+  selectProducto(val: string) {
+    this.wizardForm.patchValue({ producto: val });
+    this.showProductoList = false;
+  }
+  addProducto() {
+    const val = this.wizardForm.get('producto')?.value;
+    if (val) this.selectProducto(val);
   }
 
   crearNuevo() {

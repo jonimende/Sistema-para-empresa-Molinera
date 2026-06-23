@@ -352,84 +352,129 @@ Clima: [Estado]
             const registrosHigiene = await ControlCarga.findAll(queryOptionsHigiene);
 
             let htmlTemplateHigiene = `
-              <div style="font-family: sans-serif; background-color: #f8fafc; padding: 20px;">
-                <div style="max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                  <div style="text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 15px; margin-bottom: 25px;">
-                    <h1 style="color: #4f46e5; margin: 0; font-size: 28px; letter-spacing: 1px;">PAOLONI</h1>
-                    <span style="color: #64748b; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">Control de Calidad e Higiene</span>
+              <div style="font-family: 'Inter', sans-serif; background-color: #f1f5f9; padding: 30px;">
+                <div style="max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+                  <!-- Header -->
+                  <div style="background-color: #1e3a8a; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: white; margin: 0; font-size: 24px; letter-spacing: 1px;">INFORME DE CONTROL DE HIGIENE</h1>
+                    <p style="color: #bfdbfe; margin: 5px 0 0 0; font-size: 14px;">Molinera Paoloni - Calidad y Seguridad</p>
                   </div>
-                  
-                  <h2 style="color: #1e293b; text-align: center; margin-bottom: 25px; font-weight: 600;">Reporte de Higiene y Control de Carga (PCC)</h2>
-                  
-                  <p style="color: #334155; font-size: 16px; line-height: 1.6;">Hola,</p>
-                  <p style="color: #334155; font-size: 16px; line-height: 1.6;">A continuación, se detalla el reporte de higiene solicitado correspondiente a los registros en sistema:</p>
                   
                   ${registrosHigiene.length === 0 ? '<p style="text-align: center; color: #ef4444; font-weight: bold; margin: 30px 0;">No se encontraron registros para los filtros seleccionados.</p>' : ''}
                   
-                  ${registrosHigiene.map((registro: any) => `
-                    <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #f8fafc;">
-                      <h3 style="color: #4f46e5; margin-top: 0; margin-bottom: 15px; font-size: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
-                        📅 Fecha: ${registro.fecha || '-'} | Transporte: ${registro.transporte || '-'}
-                      </h3>
+                  ${registrosHigiene.map((registro: any) => {
+                    const fotos = [registro.foto_1, registro.foto_2, registro.foto_3, registro.foto_4, registro.foto_5, registro.foto_6].filter(f => f);
+                    
+                    return `
+                    <div style="border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 40px; overflow: hidden; background-color: #f8fafc;">
                       
-                      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 14px;">
-                        <tr>
-                          <td style="padding: 5px; color: #64748b;"><strong>Chofer:</strong> ${registro.chofer || '-'}</td>
-                          <td style="padding: 5px; color: #64748b;"><strong>DNI:</strong> ${registro.dni_chofer || '-'}</td>
-                        </tr>
-                        <tr>
-                          <td style="padding: 5px; color: #64748b;"><strong>Patente:</strong> ${registro.patente || '-'}</td>
-                          <td style="padding: 5px; color: #64748b;"><strong>Cliente:</strong> ${registro.cliente || '-'}</td>
-                        </tr>
-                        <tr>
-                          <td colspan="2" style="padding: 5px; color: #64748b;"><strong>Producto:</strong> ${registro.producto || '-'} (Lote: ${registro.n_lote || '-'})</td>
-                        </tr>
-                      </table>
-                      
-                      <h4 style="color: #334155; font-size: 15px; margin-bottom: 10px;">Checklist de Control:</h4>
-                      <ul style="list-style-type: none; padding: 0; margin: 0; font-size: 14px; color: #334155;">
-                        <li style="padding: 5px 0;">
-                          ${registro.chk_externa === 'Y' ? '✅' : '❌'} Higiene Externa (sin polvo/manchas)
-                          ${registro.obs_externa && registro.obs_externa.toLowerCase() !== 'ninguna' && registro.obs_externa.toLowerCase() !== 'null' ? `<br/><span style="color: #94a3b8; font-style: italic; font-size: 12px; margin-left: 25px;">Obs: ${registro.obs_externa}</span>` : ''}
-                        </li>
-                        <li style="padding: 5px 0;">
-                          ${registro.chk_insectos === 'Y' ? '✅' : '❌'} Insectos Exterior
-                          ${registro.obs_insectos && registro.obs_insectos.toLowerCase() !== 'ninguna' && registro.obs_insectos.toLowerCase() !== 'null' ? `<br/><span style="color: #94a3b8; font-style: italic; font-size: 12px; margin-left: 25px;">Obs: ${registro.obs_insectos}</span>` : ''}
-                        </li>
-                        <li style="padding: 5px 0;">
-                          ${registro.chk_film === 'Y' ? '✅' : '❌'} Tiene Film de polietileno
-                          ${registro.obs_film && registro.obs_film.toLowerCase() !== 'ninguna' && registro.obs_film.toLowerCase() !== 'null' ? `<br/><span style="color: #94a3b8; font-style: italic; font-size: 12px; margin-left: 25px;">Obs: ${registro.obs_film}</span>` : ''}
-                        </li>
-                        <li style="padding: 5px 0;">
-                          ${registro.chk_humedad === 'Y' ? '✅' : '❌'} Mercadería seca sin humedad
-                          ${registro.obs_humedad && registro.obs_humedad.toLowerCase() !== 'ninguna' && registro.obs_humedad.toLowerCase() !== 'null' ? `<br/><span style="color: #94a3b8; font-style: italic; font-size: 12px; margin-left: 25px;">Obs: ${registro.obs_humedad}</span>` : ''}
-                        </li>
-                        <li style="padding: 5px 0;">
-                          ${registro.chk_interior === 'Y' ? '✅' : '❌'} Transporte limpio y seco
-                          ${registro.obs_interior && registro.obs_interior.toLowerCase() !== 'ninguna' && registro.obs_interior.toLowerCase() !== 'null' ? `<br/><span style="color: #94a3b8; font-style: italic; font-size: 12px; margin-left: 25px;">Obs: ${registro.obs_interior}</span>` : ''}
-                        </li>
-                        <li style="padding: 5px 0;">
-                          ${registro.chk_verificacion === 'Y' ? '✅' : '❌'} Transportista verificó bigbags/bolsas
-                          ${registro.obs_verificacion && registro.obs_verificacion.toLowerCase() !== 'ninguna' && registro.obs_verificacion.toLowerCase() !== 'null' ? `<br/><span style="color: #94a3b8; font-style: italic; font-size: 12px; margin-left: 25px;">Obs: ${registro.obs_verificacion}</span>` : ''}
-                        </li>
-                        <li style="padding: 5px 0;">
-                          ${registro.chk_insecticida === 'Y' ? '✅' : '❌'} Aplicación de insecticida exterior
-                          ${registro.obs_insecticida && registro.obs_insecticida.toLowerCase() !== 'ninguna' && registro.obs_insecticida.toLowerCase() !== 'null' ? `<br/><span style="color: #94a3b8; font-style: italic; font-size: 12px; margin-left: 25px;">Obs: ${registro.obs_insecticida}</span>` : ''}
-                        </li>
-                      </ul>
-                      
-                      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1; font-size: 13px; color: #64748b;">
-                        <strong>Inspector:</strong> ${registro.responsable_inspeccion || '-'} | <strong>Clima:</strong> ${registro.estado_clima || '-'}
-                        ${registro.observaciones_generales ? `<br/><strong>Observaciones Generales:</strong> ${registro.observaciones_generales}` : ''}
+                      <!-- Datos Generales Card -->
+                      <div style="background-color: #f1f5f9; padding: 15px 20px; border-bottom: 1px solid #e2e8f0;">
+                        <h3 style="margin: 0; color: #1e293b; font-size: 18px;">📋 Datos Generales (Reporte #${registro.id})</h3>
                       </div>
+                      <div style="padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                          <strong style="color: #64748b; font-size: 12px; display: block;">FECHA</strong>
+                          <span style="color: #0f172a; font-size: 14px; font-weight: 500;">${registro.fecha || '-'}</span>
+                        </div>
+                        <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                          <strong style="color: #64748b; font-size: 12px; display: block;">TRANSPORTE</strong>
+                          <span style="color: #0f172a; font-size: 14px; font-weight: 500;">${registro.transporte || '-'}</span>
+                        </div>
+                        <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                          <strong style="color: #64748b; font-size: 12px; display: block;">PATENTE</strong>
+                          <span style="color: #0f172a; font-size: 14px; font-weight: 500;">${registro.patente || '-'}</span>
+                        </div>
+                        <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                          <strong style="color: #64748b; font-size: 12px; display: block;">CLIENTE</strong>
+                          <span style="color: #0f172a; font-size: 14px; font-weight: 500;">${registro.cliente || '-'}</span>
+                        </div>
+                        <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #e2e8f0; grid-column: span 2;">
+                          <strong style="color: #64748b; font-size: 12px; display: block;">PRODUCTO</strong>
+                          <span style="color: #0f172a; font-size: 14px; font-weight: 500;">${registro.producto || '-'} (Lote: ${registro.n_lote || '-'})</span>
+                        </div>
+                      </div>
+
+                      <!-- Checklist Card -->
+                      <div style="background-color: #f1f5f9; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0;">
+                        <h3 style="margin: 0; color: #1e293b; font-size: 18px;">✅ Checklist de Calidad</h3>
+                      </div>
+                      <div style="padding: 20px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                          <tbody>
+                            ${[
+                              { label: 'Higiene Externa (sin polvo/manchas)', val: registro.chk_externa, obs: registro.obs_externa },
+                              { label: 'Insectos Exterior', val: registro.chk_insectos, obs: registro.obs_insectos },
+                              { label: 'Tiene Film de polietileno', val: registro.chk_film, obs: registro.obs_film },
+                              { label: 'Mercadería seca sin humedad', val: registro.chk_humedad, obs: registro.obs_humedad },
+                              { label: 'Transporte limpio y seco', val: registro.chk_interior, obs: registro.obs_interior },
+                              { label: 'Transportista verificó bigbags/bolsas', val: registro.chk_verificacion, obs: registro.obs_verificacion },
+                              { label: 'Aplicación de insecticida exterior', val: registro.chk_insecticida, obs: registro.obs_insecticida }
+                            ].map(item => `
+                            <tr>
+                              <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9;">
+                                <div style="display: flex; align-items: center;">
+                                  <span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; color: white; background-color: ${item.val === 'Y' ? '#22c55e' : '#ef4444'}; margin-right: 15px; width: 30px; text-align: center;">${item.val === 'Y' ? 'SÍ' : 'NO'}</span>
+                                  <span style="color: #334155; font-size: 14px;">${item.label}</span>
+                                </div>
+                                ${item.obs && item.obs.toLowerCase() !== 'ninguna' && item.obs.toLowerCase() !== 'null' ? `<div style="margin-top: 5px; margin-left: 55px; color: #64748b; font-size: 12px; font-style: italic;">Obs: ${item.obs}</div>` : ''}
+                              </td>
+                            </tr>
+                            `).join('')}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <!-- Observaciones Card -->
+                      <div style="background-color: #f1f5f9; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0;">
+                        <h3 style="margin: 0; color: #1e293b; font-size: 18px;">📝 Observaciones Generales</h3>
+                      </div>
+                      <div style="padding: 20px;">
+                        <p style="margin: 0; color: #334155; font-size: 14px; line-height: 1.6; background: white; padding: 15px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                          ${registro.observaciones_generales || 'Sin observaciones adicionales.'}
+                        </p>
+                      </div>
+
+                      <!-- Fotos Card -->
+                      ${fotos.length > 0 ? `
+                      <div style="background-color: #f1f5f9; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0;">
+                        <h3 style="margin: 0; color: #1e293b; font-size: 18px;">📸 Evidencia Fotográfica</h3>
+                      </div>
+                      <div style="padding: 20px; background: white;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                          <tr>
+                          ${fotos.map((f: string, i: number) => {
+                            const imgUrl = f.startsWith('http') ? f : (process.env.SUPABASE_URL + '/storage/v1/object/public/fotos_higiene/' + f);
+                            return `
+                              <td style="padding: 5px; width: 33.33%;">
+                                <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px; text-align: center;">
+                                  <img src="${imgUrl}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; display: block;" alt="Evidencia ${i+1}">
+                                </div>
+                              </td>
+                            `;
+                          }).join('')}
+                          </tr>
+                        </table>
+                      </div>
+                      ` : ''}
+
+                      <!-- Firmas -->
+                      <div style="padding: 25px 20px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; text-align: center;">
+                        <p style="margin: 0 0 10px 0; color: #64748b; font-size: 14px;"><strong>Inspector Responsable:</strong> ${registro.responsable_inspeccion || 'No especificado'}</p>
+                        ${registro.firma_inspector ? `
+                          <div style="display: inline-block; padding: 10px; background: white; border: 1px dashed #cbd5e1; border-radius: 6px; margin-top: 10px;">
+                            <img src="${registro.firma_inspector}" style="height: 80px; display: block;" alt="Firma Inspector">
+                            <span style="display: block; margin-top: 5px; color: #94a3b8; font-size: 11px;">Firma Inspector</span>
+                          </div>
+                        ` : ''}
+                      </div>
+
                     </div>
-                  `).join('')}
+                    `;
+                  }).join('')}
                   
-                  <p style="color: #334155; font-size: 16px; margin-top: 30px;">Saludos cordiales,</p>
-                  <p style="color: #4f46e5; font-weight: bold; font-size: 16px;">Equipo de Calidad - Paoloni</p>
-                  
-                  <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 12px;">
-                    Este es un correo generado automáticamente. Por favor no responder a este remitente.
+                  <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #f1f5f9;">
+                    <p style="color: #64748b; font-size: 12px; margin: 0;">Este documento fue generado automáticamente por el Sistema de IA Molinera.</p>
                   </div>
                 </div>
               </div>
