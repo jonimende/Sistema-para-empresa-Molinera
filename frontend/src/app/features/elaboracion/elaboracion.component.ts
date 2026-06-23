@@ -54,20 +54,21 @@ import { environment } from '../../../environments/environment';
             <p class="font-medium text-lg">Seleccione un parte para ver detalles.</p>
           </div>
 
-          <form *ngIf="isCreatingParte" [formGroup]="elaboracionForm" class="p-8 space-y-6 pb-24 w-full max-w-lg mx-auto overflow-y-auto m-4 md:m-0 w-full max-w-lg mx-auto m-4 md:m-0">
+          <form *ngIf="isCreatingParte" [formGroup]="elaboracionForm" class="p-8 space-y-6 pb-24 w-full max-w-lg mx-auto overflow-y-auto m-4 md:m-0">
             
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase">Datos Generales</h4>
             <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
               <div><label class="block text-base md:text-sm font-bold text-slate-500">Fecha</label><input type="date" formControlName="fecha" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
               <div><label class="block text-base md:text-sm font-bold text-slate-500">Nro Lote</label><input type="text" formControlName="nro_lote" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
               
-              <div>
+              <div class="col-span-2 md:col-span-1">
                 <label class="block text-base md:text-sm font-bold text-slate-500">Producto Elaborado</label>
-                <select formControlName="producto_elaborado" (change)="onProductoChange($event)" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base">
-                  <option value="" disabled selected>Seleccionar...</option>
-                  <option *ngFor="let p of listadoProductos" [value]="p.nombre || p">{{ p.nombre || p }}</option>
-                  <option value="NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo...</option>
-                </select>
+                <input list="productos-list" formControlName="producto_elaborado" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base" placeholder="Escriba o seleccione..." (change)="onProductoChange($event)">
+                <datalist id="productos-list">
+                  <option value="Arroz pulido largo fino grado 1">
+                  <option value="Arroz pulido largo fino grado 2">
+                  <option *ngFor="let p of listadoProductos" [value]="p.nombre || p">
+                </datalist>
               </div>
               
               <div>
@@ -89,36 +90,11 @@ import { environment } from '../../../environments/environment';
                   <option value="Bolsa">Bolsa</option>
                 </select>
               </div>
-              <div>
-                <label class="block text-base md:text-sm font-bold text-slate-500">Grado</label>
-                <select formControlName="grado" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-4 md:py-3 px-4 bg-white text-lg md:text-base">
-                  <option value="" disabled selected>Seleccione Grado...</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                </select>
-              </div>
               <div><label class="block text-base md:text-sm font-bold text-slate-500">Silo Origen</label><input type="text" formControlName="silo_origen" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
               <div><label class="block text-base md:text-sm font-bold text-slate-500">Balanza MP Total Kilos</label><input type="number" formControlName="balanza_mp_total_kilos" class="w-full border-indigo-300 bg-indigo-50 font-bold rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">Productor Origen</label><input type="text" formControlName="productor_lote_origen" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
             </div>
 
-            <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Agregados</h4>
-            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">(Agregados) 1/2 Grano KG</label><input type="number" formControlName="agregados_1_2_grano_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">Arroz Elaborado KG</label><input type="number" formControlName="agregados_arroz_elaborado_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-            </div>
-
-            <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Terminados y Subproductos</h4>
-            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">Medio Grano KG</label><input type="number" formControlName="terminado_1_2_grano_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">Arrocín KG</label><input type="number" formControlName="terminado_arrocin_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">Afrechillo KG</label><input type="number" formControlName="terminado_afrechillo_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">Descarte Selectora KG</label><input type="number" formControlName="terminado_descarte_selectora_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-              <div><label class="block text-base md:text-sm font-bold text-slate-500">Producto Terminado KG</label><input type="number" formControlName="producto_terminado_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
-              <div><label class="block text-base md:text-sm font-bold text-indigo-500">(Terminado) Cáscara KG</label><input type="number" formControlName="terminado_cascara_kg" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
-            </div>
-
+            <!-- Mover Calidad antes de Agregados -->
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Calidad</h4>
             <div class="flex justify-end mb-2">
               <button type="button" (click)="$event.preventDefault(); addControlCalidad()" class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 text-base md:text-sm">Añadir Control</button>
@@ -128,9 +104,29 @@ import { environment } from '../../../environments/environment';
                 <div class="w-32"><label class="block text-base md:text-sm font-bold text-slate-500">Hora</label><input type="time" formControlName="hora" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
                 <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">% Ent</label><input type="number" formControlName="porcentaje_ent" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
                 <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">% Queb</label><input type="number" formControlName="porcentaje_queb" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
-                <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">Molinero</label><input type="text" formControlName="molinero" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
+                <!-- El input de molinero se elimina, se asigna dinámicamente en el TS -->
                 <button type="button" (click)="removeControlCalidad(i)" class="text-red-500 font-bold px-2 py-1 hover:bg-red-50 rounded self-end mb-1">X</button>
               </div>
+            </div>
+
+            <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Agregados</h4>
+            <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">1/2 Grano KG</label><input type="number" formControlName="agregados_1_2_grano_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Arroz Elaborado KG</label><input type="number" formControlName="agregados_arroz_elaborado_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+            </div>
+
+            <!-- Grid 2 Columnas para Terminados -->
+            <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Terminados y Subproductos</h4>
+            <div class="grid grid-cols-2 gap-4">
+              <!-- Fila 1 -->
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Producto Terminado KG</label><input type="number" formControlName="producto_terminado_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Medio Grano KG</label><input type="number" formControlName="terminado_1_2_grano_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <!-- Fila 2 -->
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Descarte Selectora KG</label><input type="number" formControlName="terminado_descarte_selectora_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Arrocín KG</label><input type="number" formControlName="terminado_arrocin_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <!-- Fila 3 -->
+              <div><label class="block text-base md:text-sm font-bold text-slate-500">Afrechillo KG</label><input type="number" formControlName="terminado_afrechillo_kg" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base"></div>
+              <div><label class="block text-base md:text-sm font-bold text-indigo-500">(Terminado) Cáscara KG</label><input type="number" formControlName="terminado_cascara_kg" readonly class="w-full bg-slate-200 border-none font-bold text-indigo-700 rounded-xl p-4 md:p-3 text-lg md:text-base cursor-not-allowed"></div>
             </div>
 
             <h4 class="font-bold text-slate-700 bg-slate-100 p-2 rounded uppercase mt-8">Control Molino</h4>
@@ -167,17 +163,22 @@ import { environment } from '../../../environments/environment';
               <button type="button" (click)="$event.preventDefault(); addParada()" class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 text-base md:text-sm">Añadir Parada</button>
             </div>
             <div formArrayName="paradas" class="space-y-3">
-              <div *ngFor="let parada of paradas.controls; let i = index" [formGroupName]="i" class="flex gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
-                <div class="flex-1">
-                  <input type="text" formControlName="motivo" placeholder="Motivo" class="w-full border-slate-200 rounded shadow-sm text-sm p-2">
+              <div *ngFor="let parada of paradas.controls; let i = index" [formGroupName]="i" class="flex flex-col gap-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <div class="w-full">
+                  <label class="block text-sm font-semibold text-slate-500 mb-1">Motivo</label>
+                  <input type="text" formControlName="motivo" placeholder="Ej. Falla eléctrica" class="w-full border-slate-200 rounded shadow-sm text-sm p-2">
                 </div>
-                <div class="w-32">
-                  <input type="time" formControlName="hr_parada" class="w-full border-slate-200 rounded shadow-sm text-sm p-2">
+                <div class="flex gap-4 items-center">
+                  <div class="flex-1">
+                    <label class="block text-sm font-semibold text-slate-500 mb-1">Hora Inicio Parada</label>
+                    <input type="time" formControlName="hr_parada" class="w-full border-slate-200 rounded shadow-sm text-sm p-2">
+                  </div>
+                  <div class="flex-1">
+                    <label class="block text-sm font-semibold text-slate-500 mb-1">Hora Arranque</label>
+                    <input type="time" formControlName="hr_arranque" class="w-full border-slate-200 rounded shadow-sm text-sm p-2">
+                  </div>
+                  <button type="button" (click)="removeParada(i)" class="text-red-500 font-bold px-3 py-2 hover:bg-red-50 rounded self-end mb-1 mt-6">X</button>
                 </div>
-                <div class="w-32">
-                  <input type="time" formControlName="hr_arranque" class="w-full border-slate-200 rounded shadow-sm text-sm p-2">
-                </div>
-                <button type="button" (click)="removeParada(i)" class="text-red-500 font-bold px-2 py-1 hover:bg-red-50 rounded">X</button>
               </div>
             </div>
 
@@ -194,12 +195,18 @@ import { environment } from '../../../environments/environment';
           </form>
 
           <div *ngIf="isViewingParte && selectedParte" class="p-8 space-y-6">
-            <h4 class="text-2xl font-black text-slate-800 border-b pb-4">Modo Lectura: Lote {{ selectedParte.nro_lote }}</h4>
+            <div class="flex justify-between items-center border-b pb-4">
+              <h4 class="text-2xl font-black text-slate-800">Modo Lectura: Lote {{ selectedParte.nro_lote }}</h4>
+              <div class="flex gap-2">
+                <button (click)="editarParte(selectedParte)" class="px-3 py-1 bg-yellow-100 text-yellow-700 font-bold rounded hover:bg-yellow-200 text-sm">Editar</button>
+                <button (click)="eliminarParte(selectedParte.id)" class="px-3 py-1 bg-red-100 text-red-700 font-bold rounded hover:bg-red-200 text-sm">Eliminar</button>
+              </div>
+            </div>
             
             <!-- DATOS GENERALES -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Datos Generales</h5>
-              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div class="flex flex-col gap-2">
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Fecha</p><p class="font-medium">{{ selectedParte.fecha | date:'shortDate' }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Nro Lote</p><p class="font-medium">{{ selectedParte.nro_lote }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Producto</p><p class="font-medium text-indigo-700">{{ selectedParte.producto_elaborado }}</p></div>
@@ -207,18 +214,17 @@ import { environment } from '../../../environments/environment';
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Variedad</p><p class="font-medium">{{ selectedParte.variedad || '-' }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">% Quebrado Esp.</p><p class="font-medium">{{ selectedParte.porcentaje_quebrado_esperado }}%</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Envase</p><p class="font-medium">{{ selectedParte.envase || '-' }}</p></div>
-                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Grado</p><p class="font-medium">{{ selectedParte.grado || '-' }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Silo</p><p class="font-medium">{{ selectedParte.silo_origen || '-' }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Balanza MP</p><p class="font-black text-indigo-800">{{ selectedParte.balanza_mp_total_kilos | number:'1.2-2' }} KG</p></div>
-                <div class="col-span-2"><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Productor Origen</p><p class="font-medium">{{ selectedParte.productor_lote_origen || '-' }}</p></div>
               </div>
             </div>
 
+            <!-- CALIDAD Y CONTROLES -->
             <!-- AGREGADOS -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Agregados</h5>
-              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
-                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Medio Grano</p><p class="font-medium">{{ selectedParte.agregados_1_2_grano_kg | number:'1.2-2' }} KG</p></div>
+              <div class="flex flex-col gap-2">
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">1/2 Grano KG</p><p class="font-medium">{{ selectedParte.agregados_1_2_grano_kg | number:'1.2-2' }} KG</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Arroz Elaborado</p><p class="font-medium">{{ selectedParte.agregados_arroz_elaborado_kg | number:'1.2-2' }} KG</p></div>
               </div>
             </div>
@@ -226,12 +232,12 @@ import { environment } from '../../../environments/environment';
             <!-- TERMINADOS Y SUBPRODUCTOS -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Terminados y Subproductos</h5>
-              <div class="flex flex-col space-y-5 md:grid md:grid-cols-2 md:gap-6">
+              <div class="flex flex-col gap-2">
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Producto Terminado</p><p class="font-black text-green-700">{{ selectedParte.producto_terminado_kg | number:'1.2-2' }} KG</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">1/2 Grano</p><p class="font-medium">{{ selectedParte.terminado_1_2_grano_kg | number:'1.2-2' }} KG</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Descarte</p><p class="font-medium">{{ selectedParte.terminado_descarte_selectora_kg | number:'1.2-2' }} KG</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Arrocín</p><p class="font-medium">{{ selectedParte.terminado_arrocin_kg | number:'1.2-2' }} KG</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Afrechillo</p><p class="font-medium">{{ selectedParte.terminado_afrechillo_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Descarte</p><p class="font-medium">{{ selectedParte.terminado_descarte_selectora_kg | number:'1.2-2' }} KG</p></div>
-                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Producto Terminado</p><p class="font-black text-green-700">{{ selectedParte.producto_terminado_kg | number:'1.2-2' }} KG</p></div>
                 <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Cáscara</p><p class="font-black text-indigo-700">{{ selectedParte.terminado_cascara_kg | number:'1.2-2' }} KG</p></div>
               </div>
             </div>
@@ -239,7 +245,7 @@ import { environment } from '../../../environments/environment';
             <!-- CONTROL MOLINO -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Control Molino</h5>
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+              <div class="flex flex-col gap-2">
                 <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Rendimiento</p><p class="font-black text-indigo-700">{{ selectedParte.molino_rendimiento | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Quebrado</p><p class="font-medium">{{ selectedParte.molino_quebrado | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Enteros</p><p class="font-black text-indigo-700">{{ selectedParte.molino_enteros | number:'1.2-2' }}%</p></div>
@@ -251,7 +257,7 @@ import { environment } from '../../../environments/environment';
             <!-- CONTROL MOLINILLO -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Control Molinillo</h5>
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
+              <div class="flex flex-col gap-2">
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Rendimiento</p><p class="font-medium">{{ selectedParte.molinillo_rendimiento | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-indigo-500 font-bold uppercase">Quebrado</p><p class="font-black text-indigo-700">{{ selectedParte.molinillo_quebrado | number:'1.2-2' }}%</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Enteros</p><p class="font-medium">{{ selectedParte.molinillo_enteros | number:'1.2-2' }}%</p></div>
@@ -264,15 +270,15 @@ import { environment } from '../../../environments/environment';
             <!-- INSPECCIÓN Y OBSERVACIONES -->
             <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
               <h5 class="font-bold text-slate-700 uppercase mb-4">Inspección y Observaciones</h5>
-              <div class="flex flex-wrap gap-3 mb-6">
-                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.insp_bolsa ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Bolsa: {{ selectedParte.insp_bolsa ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.insp_big_bag ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Big Bag: {{ selectedParte.insp_big_bag ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.imanes_pulidora ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Pul.: {{ selectedParte.imanes_pulidora ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.imanes_envasado ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Env.: {{ selectedParte.imanes_envasado ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.zarandas_inicio ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda In.: {{ selectedParte.zarandas_inicio ? 'Sí' : 'No' }}</span>
-                <span class="px-3 py-1 text-base md:text-sm font-bold rounded-full" [ngClass]="selectedParte.zarandas_fin ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda Fin: {{ selectedParte.zarandas_fin ? 'Sí' : 'No' }}</span>
+              <div class="flex flex-col gap-2 mb-6">
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded" [ngClass]="selectedParte.insp_bolsa ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Bolsa: {{ selectedParte.insp_bolsa ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded" [ngClass]="selectedParte.insp_big_bag ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Big Bag: {{ selectedParte.insp_big_bag ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded" [ngClass]="selectedParte.imanes_pulidora ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Pul.: {{ selectedParte.imanes_pulidora ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded" [ngClass]="selectedParte.imanes_envasado ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Imán Env.: {{ selectedParte.imanes_envasado ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded" [ngClass]="selectedParte.zarandas_inicio ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda In.: {{ selectedParte.zarandas_inicio ? 'Sí' : 'No' }}</span>
+                <span class="px-3 py-1 text-base md:text-sm font-bold rounded" [ngClass]="selectedParte.zarandas_fin ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-500'">Zaranda Fin: {{ selectedParte.zarandas_fin ? 'Sí' : 'No' }}</span>
               </div>
-              <div class="bg-white p-4 rounded border border-slate-200">
+              <div class="bg-white p-4 rounded border border-slate-200 flex flex-col gap-2">
                 <p class="text-base md:text-sm text-slate-500 font-bold uppercase mb-1">Observaciones</p>
                 <p class="text-sm text-slate-700">{{ selectedParte.observaciones || 'Ninguna observación registrada.' }}</p>
               </div>
@@ -282,14 +288,7 @@ import { environment } from '../../../environments/environment';
         </div>
       </div>
 
-      <!-- BOTÓN FLOTANTE FAB (Solo en móvil, cuando se ve la lista) -->
-      <button *ngIf="!isCreatingParte && !isViewingParte" 
-              (click)="isCreatingParte=true" 
-              class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-3xl font-black z-50 hover:bg-indigo-700 active:scale-95 transition-transform">
-        +
-      </button>
-
-      <!-- BOTÓN FLOTANTE FAB ELABORACION -->
+      <!-- BOTÓN FLOTANTE FAB -->
       <button *ngIf="!isCreatingParte && !isViewingParte" 
               (click)="toggleCreate()" 
               class="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-4xl font-black z-50 hover:bg-indigo-700 active:scale-95 transition-transform border-4 border-white">
@@ -315,6 +314,7 @@ export class ElaboracionComponent implements OnInit {
   isViewingParte = false;
   isCreatingParte = false;
   selectedParte: any = null;
+  isEditingId: number | null = null;
 
   elaboracionForm: FormGroup;
 
@@ -327,10 +327,8 @@ export class ElaboracionComponent implements OnInit {
       variedad: [''],
       porcentaje_quebrado_esperado: [0],
       envase: [''],
-      grado: [''],
       silo_origen: [''],
       balanza_mp_total_kilos: [0],
-      productor_lote_origen: [''],
 
       agregados_1_2_grano_kg: [0],
       agregados_arroz_elaborado_kg: [0],
@@ -377,7 +375,11 @@ export class ElaboracionComponent implements OnInit {
   addParada() { this.paradas.push(this.fb.group({ motivo: [''], hr_parada: [''], hr_arranque: [''] })); }
   removeParada(index: number) { this.paradas.removeAt(index); }
 
-  addControlCalidad() { this.controles.push(this.fb.group({ hora: [''], porcentaje_ent: [0], porcentaje_queb: [0], molinero: [''] })); }
+  addControlCalidad() { 
+    const user = this.authService.currentUser();
+    const emailSeguro = user ? (user.username || user.email) : '';
+    this.controles.push(this.fb.group({ hora: [''], porcentaje_ent: [0], porcentaje_queb: [0], molinero: [emailSeguro] })); 
+  }
   removeControlCalidad(index: number) { this.controles.removeAt(index); }
 
   ngOnInit() {
@@ -485,7 +487,12 @@ export class ElaboracionComponent implements OnInit {
     this.isCreatingParte = !this.isCreatingParte;
     this.isViewingParte = false;
     this.selectedParte = null;
-    if(this.isCreatingParte) this.elaboracionForm.reset();
+    this.isEditingId = null;
+    if(this.isCreatingParte) {
+      this.elaboracionForm.reset();
+      this.paradas.clear();
+      this.controles.clear();
+    }
   }
 
   verDetalleParte(p: any) {
@@ -494,14 +501,49 @@ export class ElaboracionComponent implements OnInit {
     this.selectedParte = p;
   }
 
-  verJSON(p: any) {
-    let html = '<div class="text-left text-base md:text-sm font-mono bg-slate-100 p-4 rounded overflow-auto h-96">' + JSON.stringify(p, null, 2) + '</div>';
+  editarParte(p: any) {
+    this.isCreatingParte = true;
+    this.isViewingParte = false;
+    this.selectedParte = p;
+    this.isEditingId = p.id;
+    this.elaboracionForm.patchValue(p);
+    
+    this.paradas.clear();
+    this.controles.clear();
+    
+    if (p.paradas && Array.isArray(p.paradas)) {
+      p.paradas.forEach((pa: any) => this.paradas.push(this.fb.group(pa)));
+    }
+    if (p.controles_calidad && Array.isArray(p.controles_calidad)) {
+      p.controles_calidad.forEach((c: any) => this.controles.push(this.fb.group(c)));
+    } else if (p.controles && Array.isArray(p.controles)) {
+      p.controles.forEach((c: any) => this.controles.push(this.fb.group(c)));
+    }
+  }
+
+  eliminarParte(id: number) {
     Swal.fire({
-      title: "RAW Data",
-      html: html,
-      width: "800px",
-      showCloseButton: true,
-      showConfirmButton: false
+      title: '¿Eliminar Parte?',
+      text: "Esta acción no se puede deshacer.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Sí, eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.http.delete(`${environment.apiUrl}/produccion/partes/${id}`).subscribe({
+          next: () => {
+            Swal.fire('Eliminado', 'El parte ha sido borrado.', 'success');
+            this.isViewingParte = false;
+            this.loadPartes();
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error', 'No se pudo eliminar el parte.', 'error');
+          }
+        });
+      }
     });
   }
 
@@ -512,18 +554,34 @@ export class ElaboracionComponent implements OnInit {
       payload.nombre_carga = payload.producto_elaborado;
     }
     
-    this.http.post(`${environment.apiUrl}/produccion/partes`, payload).subscribe({
-      next: (res: any) => {
-        Swal.fire('¡Éxito!', 'Parte guardado.', 'success');
-        this.isLoading = false;
-        this.toggleCreate();
-        this.loadPartes();
-      },
-      error: (err) => {
-        console.error(err);
-        Swal.fire('Error', 'No se pudo guardar.', 'error');
-        this.isLoading = false;
-      }
-    });
+    if (this.isEditingId) {
+      this.http.put(`${environment.apiUrl}/produccion/partes/${this.isEditingId}`, payload).subscribe({
+        next: (res: any) => {
+          Swal.fire('¡Éxito!', 'Parte actualizado.', 'success');
+          this.isLoading = false;
+          this.toggleCreate();
+          this.loadPartes();
+        },
+        error: (err) => {
+          console.error(err);
+          Swal.fire('Error', 'No se pudo actualizar.', 'error');
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.http.post(`${environment.apiUrl}/produccion/partes`, payload).subscribe({
+        next: (res: any) => {
+          Swal.fire('¡Éxito!', 'Parte guardado.', 'success');
+          this.isLoading = false;
+          this.toggleCreate();
+          this.loadPartes();
+        },
+        error: (err) => {
+          console.error(err);
+          Swal.fire('Error', 'No se pudo guardar.', 'error');
+          this.isLoading = false;
+        }
+      });
+    }
   }
 }

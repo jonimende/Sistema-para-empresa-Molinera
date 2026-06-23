@@ -9,10 +9,8 @@ export class ElaboracionParte extends Model {
   public declare variedad: string;
   public declare porcentaje_quebrado_esperado: number;
   public declare envase: string;
-  public declare grado: string;
   public declare silo_origen: string;
   public declare balanza_mp_total_kilos: number;
-  public declare productor_lote_origen: string;
 
   public declare agregados_1_2_grano_kg: number;
   public declare agregados_arroz_elaborado_kg: number;
@@ -62,10 +60,8 @@ export const initElaboracionParte = (sequelize: Sequelize) => {
     variedad: { type: DataTypes.STRING, allowNull: true },
     porcentaje_quebrado_esperado: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
     envase: { type: DataTypes.STRING, allowNull: true },
-    grado: { type: DataTypes.STRING, allowNull: true },
     silo_origen: { type: DataTypes.STRING, allowNull: true },
     balanza_mp_total_kilos: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
-    productor_lote_origen: { type: DataTypes.STRING, allowNull: true },
 
     agregados_1_2_grano_kg: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
     agregados_arroz_elaborado_kg: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
