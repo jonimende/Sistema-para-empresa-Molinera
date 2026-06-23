@@ -18,7 +18,7 @@
                         <p class="text-slate-700"><strong class="text-slate-900">Fecha:</strong> {{ a.fecha | date:'shortDate' }}</p>
                         <p class="text-slate-700"><strong class="text-slate-900">Chofer:</strong> {{ a.chofer }}</p>
                         <div class="mt-2 border-t border-slate-100 pt-2 flex flex-wrap gap-1 text-xs">
-                             <span *ngIf="a.se_reparo === 'Y'" class="px-2 py-1 bg-indigo-100 text-indigo-700 font-bold rounded">Reparado</span>
+                             <span *ngIf="a.se_reparo === 'SI'" class="px-2 py-1 bg-indigo-100 text-indigo-700 font-bold rounded">Reparado</span>
                              <span *ngIf="a.mant_lona === 'Malo'" class="px-2 py-1 bg-red-100 text-red-700 font-bold rounded">Lona Mal</span>
                         </div>
                       </div>
@@ -131,7 +131,7 @@
 
                     <div class="mt-4 flex justify-between items-center p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
                         <span class="text-sm font-bold text-indigo-900">¿Se reparó alguna falla?</span>
-                        <span class="font-bold px-3 py-1 bg-white border border-indigo-200 rounded text-indigo-700">{{ selectedAcoplado.se_reparo === 'Y' ? 'SÍ' : 'NO' }}</span>
+                        <span class="font-bold px-3 py-1 bg-white border border-indigo-200 rounded text-indigo-700">{{ selectedAcoplado.se_reparo === 'SI' ? 'SÍ' : 'NO' }}</span>
                     </div>
 
                     <div *ngIf="selectedAcoplado.observaciones" class="mt-4">
@@ -164,7 +164,7 @@
                       <label class="text-sm font-bold text-slate-700 mb-2">Chofer Asignado</label>
                       <select formControlName="chofer" class="w-full bg-white border border-slate-300 rounded-lg p-3 font-bold text-indigo-700 shadow-sm focus:ring-2 focus:ring-indigo-500">
                         <option value="" disabled>Seleccionar Chofer...</option>
-                        <option *ngFor="let c of choferesList" [value]="c.username || c.email">{{ c.username || c.email }}</option>
+                        <option *ngFor="let c of choferesList" [value]="c.nombre">{{ c.nombre }}</option>
                       </select>
                     </div>
                   </div>
@@ -244,10 +244,10 @@
                     </div>
 
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-2">¿Se reparó alguna falla observada?</label>
+                      <label class="text-sm font-bold text-slate-700 mb-2">Se reparo?</label>
                       <div class="flex gap-2">
-                        <button type="button" (click)="setOption('se_reparo', 'Y')" [ngClass]="getOptionClasses('se_reparo', 'Y')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Sí, se reparó</button>
-                        <button type="button" (click)="setOption('se_reparo', 'N')" [ngClass]="getOptionClasses('se_reparo', 'N')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">No</button>
+                        <button type="button" (click)="setOption('se_reparo', 'SI')" [ngClass]="getOptionClasses('se_reparo', 'SI')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">SI</button>
+                        <button type="button" (click)="setOption('se_reparo', 'NO')" [ngClass]="getOptionClasses('se_reparo', 'NO')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">NO</button>
                       </div>
                     </div>
                   </div>
