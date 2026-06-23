@@ -14,8 +14,14 @@ export class AcopladosComponent implements OnInit {
   acopladosList: any[] = [];
   choferesList: any[] = [];
   form!: FormGroup;
-  isEditing: boolean = false;
-  currentId: number | null = null;
+  
+  isCreating: boolean = false;
+  isViewing: boolean = false;
+  selectedAcoplado: any = null;
+  selectedAcopladoId: number | null = null;
+  
+  isLoading: boolean = false;
+
   apiUrl = `${environment.apiUrl}/api/logistica/acoplados`;
   usuariosUrl = `${environment.apiUrl}/api/usuarios`;
 
@@ -84,43 +90,68 @@ export class AcopladosComponent implements OnInit {
       return;
     }
 
-    if (this.isEditing && this.currentId) {
-      this.http.put(`${this.apiUrl}/${this.currentId}`, this.form.value).subscribe({
+    this.isLoading = true;
+
+    if (this.selectedAcopladoId) {
+      this.http.put(`${this.apiUrl}/${this.selectedAcopladoId}`, this.form.value).subscribe({
         next: () => {
           this.loadAcoplados();
           this.resetForm();
+          this.isLoading = false;
         },
-        error: (err) => alert(err.error?.error || 'Error al actualizar')
+        error: (err) => {
+          alert(err.error?.error || 'Error al actualizar');
+          this.isLoading = false;
+        }
       });
     } else {
       this.http.post(this.apiUrl, this.form.value).subscribe({
         next: () => {
           this.loadAcoplados();
           this.resetForm();
+          this.isLoading = false;
         },
-        error: (err) => alert(err.error?.error || 'Error al guardar')
+        error: (err) => {
+          alert(err.error?.error || 'Error al guardar');
+          this.isLoading = false;
+        }
       });
     }
   }
 
+  verDetalle(item: any): void {
+    this.selectedAcoplado = item;
+    this.isViewing = true;
+    this.isCreating = false;
+    this.selectedAcopladoId = null;
+  }
+
   edit(item: any): void {
-    this.isEditing = true;
-    this.currentId = item.id;
+    this.isCreating = true;
+    this.isViewing = false;
+    this.selectedAcopladoId = item.id;
     this.form.patchValue(item);
   }
 
   deleteItem(id: number): void {
     if (confirm('¿Está seguro de eliminar este registro?')) {
       this.http.delete(`${this.apiUrl}/${id}`).subscribe({
-        next: () => this.loadAcoplados(),
+        next: () => {
+          this.loadAcoplados();
+          if (this.selectedAcoplado?.id === id) {
+            this.resetForm();
+          }
+        },
         error: (err) => alert('Error al eliminar')
       });
     }
   }
 
   resetForm(): void {
-    this.isEditing = false;
-    this.currentId = null;
+    this.isCreating = false;
+    this.isViewing = false;
+    this.selectedAcopladoId = null;
+    this.selectedAcoplado = null;
     this.initForm();
   }
 }
