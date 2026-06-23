@@ -7,7 +7,7 @@ import { User } from './infrastructure/database/sequelize/models/User';
 import bcrypt from 'bcrypt';
 import { login } from './infrastructure/http/controllers/AuthController';
 import { getViajes } from './infrastructure/http/controllers/ViajeController';
-import { registrarCarga, descargarReporte, genericGetAll, genericGetOne, genericCreate, genericUpdate, genericDelete, getCombustible, getService } from './infrastructure/http/controllers/LogisticaController';
+import { registrarCarga, descargarReporte, genericGetAll, genericGetOne, genericCreate, genericUpdate, genericDelete, getCombustible, getService, resetAcopladosDB } from './infrastructure/http/controllers/LogisticaController';
 import { crearParteElaboracion, getPartesElaboracion, updateParteElaboracion, deleteParteElaboracion } from './infrastructure/http/controllers/ElaboracionController';
 import { reportarNC, listarNCs, registrarHigieneCarga, listarHigieneCarga } from './infrastructure/http/controllers/CalidadController';
 import { registrarRecorrida } from './infrastructure/http/controllers/AuditoriaController';
@@ -54,6 +54,7 @@ app.get('/api/logistica/vehiculos/:vehiculo_id/reporte', authGuard, descargarRep
 app.get('/api/logistica/viajes', authGuard, getViajes);
 app.get('/api/logistica/combustible', authGuard, getCombustible);
 app.get('/api/logistica/service', authGuard, getService);
+app.get('/api/logistica/reset-acoplados', resetAcopladosDB);
 
 ['viajes', 'combustible', 'service', 'camiones', 'choferes', 'productos_carga', 'turnos', 'acoplados'].forEach(entity => {
   if (!['viajes', 'combustible', 'service'].includes(entity)) {
