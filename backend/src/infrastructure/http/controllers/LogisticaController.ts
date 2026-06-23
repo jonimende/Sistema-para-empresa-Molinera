@@ -288,6 +288,13 @@ export const genericUpdate = async (req: Request, res: Response) => {
       if (val === 'null' || val === 'undefined' || val === '') {
         delete req.body[key]; // Si lo borramos, Sequelize no lo actualiza y conserva el dato original de la DB
       }
+      
+      // Manejar eliminación explícita de campos (ej: delete_foto_1)
+      if (key.startsWith('delete_') && req.body[key] === 'true') {
+        const fieldName = key.replace('delete_', '');
+        req.body[fieldName] = null;
+        delete req.body[key];
+      }
     });
     
     // Procesar archivos interceptados por multer.any()

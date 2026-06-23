@@ -44,7 +44,17 @@ export const listarNCs = async (req: Request, res: Response) => {
 
 export const registrarHigieneCarga = async (req: Request, res: Response) => {
   try {
-    const nuevaHigiene = await ControlCarga.create(req.body);
+    const data = req.body;
+    
+    // Si multer procesó imágenes en array (req.files), mapear a foto_1 ... foto_6
+    if (req.files && Array.isArray(req.files)) {
+      req.files.forEach((file: any) => {
+        // file.fieldname será foto_1, foto_2, etc.
+        data[file.fieldname] = `/uploads/no-conformidades/${file.filename}`;
+      });
+    }
+
+    const nuevaHigiene = await ControlCarga.create(data);
     
     res.status(201).json({
       message: 'Control de Higiene de Carga registrado con éxito',

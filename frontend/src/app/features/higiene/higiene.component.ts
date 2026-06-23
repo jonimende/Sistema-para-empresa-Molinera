@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
            [ngClass]="{'hidden md:flex flex-col': isCreating || isViewing || isEditing, 'flex flex-col': !(isCreating || isViewing || isEditing)}">
         <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
           <div>
-            <h2 class="text-xl font-black text-slate-800">Control Higiene</h2>
+            <h2 class="text-xl font-black text-slate-800">Control de Higiene de Carga de Producto Terminado</h2>
             <p class="text-sm text-slate-500 font-medium">Registros PCC</p>
           </div>
           <button type="button" (click)="$event.preventDefault(); crearNuevo()" class="hidden md:flex px-3 py-1.5 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm items-center">
@@ -132,6 +132,14 @@ import { environment } from '../../../environments/environment';
             <div class="md:col-span-2"><span class="text-xs font-bold text-indigo-400 block uppercase">Observaciones Generales</span> <span class="text-indigo-900 text-lg md:text-base">{{ selectedRecord.observaciones_generales || 'Ninguna' }}</span></div>
           </div>
           
+          <!-- D. Evidencia Fotográfica -->
+          <h3 *ngIf="selectedRecord.foto_1 || selectedRecord.foto_2 || selectedRecord.foto_3 || selectedRecord.foto_4 || selectedRecord.foto_5 || selectedRecord.foto_6" class="font-bold text-lg text-slate-700 mt-6 mb-3">Evidencia Fotográfica</h3>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div *ngFor="let i of [1,2,3,4,5,6]">
+              <img *ngIf="selectedRecord['foto_'+i]" [src]="getImageUrl(selectedRecord['foto_'+i])" class="w-full h-32 object-cover rounded shadow-sm border border-slate-200">
+            </div>
+          </div>
+          
           <div class="flex justify-end mt-6 pt-4 border-t border-slate-100">
              <button type="button" (click)="selectedRecord = null; isViewing = false" class="w-full md:w-auto px-6 py-4 md:py-2 bg-slate-200 text-slate-700 font-bold rounded-xl md:rounded-lg hover:bg-slate-300 transition text-xl md:text-base">Cerrar Detalles</button>
           </div>
@@ -173,10 +181,11 @@ import { environment } from '../../../environments/environment';
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Transporte / Empresa</label>
-                  <input type="text" formControlName="transporte" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base">
+                  <input list="transporte-list" type="text" formControlName="transporte" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
+                  <datalist id="transporte-list"><option *ngFor="let item of listTransportes" [value]="item"></datalist>
                 </div>
                 <div class="flex flex-col">
-                  <label class="text-base font-bold text-slate-700 mb-2">Patente Vehículo</label>
+                  <label class="text-base font-bold text-slate-700 mb-2">Datos Vehículo</label>
                   <input type="text" formControlName="patente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base">
                 </div>
                 <div class="flex flex-col">
@@ -203,11 +212,13 @@ import { environment } from '../../../environments/environment';
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Cliente / Destino</label>
-                  <input type="text" formControlName="cliente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base">
+                  <input list="cliente-list" type="text" formControlName="cliente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
+                  <datalist id="cliente-list"><option *ngFor="let item of listClientes" [value]="item"></datalist>
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Producto</label>
-                  <input type="text" formControlName="producto" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base">
+                  <input list="producto-list" type="text" formControlName="producto" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
+                  <datalist id="producto-list"><option *ngFor="let item of listProductos" [value]="item"></datalist>
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Tipo Envase</label>
@@ -308,6 +319,20 @@ import { environment } from '../../../environments/environment';
                 </div>
               </div>
 
+              <h3 class="font-bold text-lg text-slate-700 mt-8 mb-3">Evidencia Fotográfica</h3>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-slate-50 p-3 border border-slate-200 rounded-xl flex flex-col items-center justify-center relative">
+                  <label class="text-sm font-bold text-slate-600 mb-2">Foto {{i}}</label>
+                  <input type="file" accept="image/*" capture="environment" (change)="onFileSelected($event, i)" class="hidden" [id]="'foto_'+i">
+                  <label [for]="'foto_'+i" class="cursor-pointer bg-white border border-slate-300 rounded p-2 text-xs text-center w-full hover:bg-slate-50 transition shadow-sm font-bold text-slate-700">Seleccionar Imagen</label>
+                  <!-- Preview -->
+                  <div *ngIf="previews['foto_'+i] || (selectedRecord && selectedRecord['foto_'+i])" class="mt-2 w-full">
+                    <img [src]="previews['foto_'+i] || getImageUrl(selectedRecord['foto_'+i])" class="w-full h-24 object-cover rounded shadow-sm border border-slate-200">
+                    <button type="button" (click)="removePhoto(i)" class="mt-1 text-xs text-red-500 hover:text-red-700 font-bold w-full text-center py-1">Remover</button>
+                  </div>
+                </div>
+              </div>
+
               <div class="flex flex-col-reverse md:flex-row justify-between mt-8 pt-4 border-t border-slate-100 gap-4">
                 <button type="button" (click)="$event.preventDefault(); prevStep()" class="w-full md:w-auto px-8 py-4 md:py-3 bg-slate-200 text-slate-700 font-bold text-xl md:text-base rounded-xl hover:bg-slate-300 transition">Volver</button>
                 <button type="button" (click)="submitForm()" [disabled]="isLoading" class="w-full md:w-auto px-8 py-4 md:py-3 bg-green-600 text-white font-black text-xl md:text-base rounded-xl hover:bg-green-700 shadow-md transition disabled:opacity-50">
@@ -357,14 +382,21 @@ export class HigieneComponent implements AfterViewInit {
 
   wizardForm: FormGroup;
 
+  listTransportes: string[] = [];
+  listClientes: string[] = [];
+  listProductos: string[] = [];
+  
+  previews: any = {};
+  compressedFiles: any = {};
+
   checkItems = [
-    { label: 'Higiene Externa (Sin polvo/manchas)', controlName: 'chk_externa', obsName: 'obs_externa' },
-    { label: 'Libre de Insectos en Exterior', controlName: 'chk_insectos', obsName: 'obs_insectos' },
-    { label: 'Film de Polietileno (Debajo y Arriba)', controlName: 'chk_film', obsName: 'obs_film' },
-    { label: 'Mercadería Seca (Sin humedad)', controlName: 'chk_humedad', obsName: 'obs_humedad' },
-    { label: 'Transporte Limpio y Seco (Interior)', controlName: 'chk_interior', obsName: 'obs_interior' },
-    { label: 'Transportista verificó bolsas durante carga', controlName: 'chk_verificacion', obsName: 'obs_verificacion' },
-    { label: 'Aplicación de Insecticida Exterior', controlName: 'chk_insecticida', obsName: 'obs_insecticida' }
+    { label: 'Higiene Externa (Muestra sin polvo/manchas)', controlName: 'chk_externa', obsName: 'obs_externa' },
+    { label: 'Insectos Exterior', controlName: 'chk_insectos', obsName: 'obs_insectos' },
+    { label: 'Tiene Film de polietileno para proteger la MERCADERIA (debajo y arriba)?', controlName: 'chk_film', obsName: 'obs_film' },
+    { label: 'La MERCADERIA se observa seca sin manchas de humedad?', controlName: 'chk_humedad', obsName: 'obs_humedad' },
+    { label: 'El TRANSPORTE (piso, paredes y lona) se encuentra limpio y seco?', controlName: 'chk_interior', obsName: 'obs_interior' },
+    { label: 'El transportista verificó el estado de los bigbags o bolsas durante la carga?', controlName: 'chk_verificacion', obsName: 'obs_verificacion' },
+    { label: 'Se hizo aplicación de insecticida en la parte exterior de los bigbags o bolsas?', controlName: 'chk_insecticida', obsName: 'obs_insecticida' }
   ];
 
   @ViewChild('canvasInspector') canvasInspectorRef!: ElementRef<HTMLCanvasElement>;
@@ -407,6 +439,29 @@ export class HigieneComponent implements AfterViewInit {
 
   ngOnInit() {
     this.loadHistorial();
+    this.loadDatalists();
+  }
+
+  loadDatalists() {
+    this.listTransportes = JSON.parse(localStorage.getItem('higiene_transportes') || '[]');
+    this.listClientes = JSON.parse(localStorage.getItem('higiene_clientes') || '[]');
+    this.listProductos = JSON.parse(localStorage.getItem('higiene_productos') || '[]');
+  }
+
+  saveDatalists(transporte: string, cliente: string, producto: string) {
+    // TODO: Migrar esta persistencia temporal basada en LocalStorage a tablas relacionales en la base de datos
+    if (transporte && !this.listTransportes.includes(transporte)) {
+      this.listTransportes.push(transporte);
+      localStorage.setItem('higiene_transportes', JSON.stringify(this.listTransportes));
+    }
+    if (cliente && !this.listClientes.includes(cliente)) {
+      this.listClientes.push(cliente);
+      localStorage.setItem('higiene_clientes', JSON.stringify(this.listClientes));
+    }
+    if (producto && !this.listProductos.includes(producto)) {
+      this.listProductos.push(producto);
+      localStorage.setItem('higiene_productos', JSON.stringify(this.listProductos));
+    }
   }
 
   loadHistorial() {
@@ -427,6 +482,8 @@ export class HigieneComponent implements AfterViewInit {
     this.selectedRecord = null;
     this.currentStep = 1;
     this.wizardForm.reset();
+    this.previews = {};
+    this.compressedFiles = {};
     
     // Set default values for Y/N
     this.wizardForm.patchValue({
@@ -453,6 +510,8 @@ export class HigieneComponent implements AfterViewInit {
     this.wizardForm.patchValue(record); 
     this.currentStep = 1; 
     this.wizardForm.enable(); 
+    this.previews = {};
+    this.compressedFiles = {};
   }
 
   delete(id: number) {
@@ -576,20 +635,87 @@ export class HigieneComponent implements AfterViewInit {
     this.currentStep--;
   }
 
+  onFileSelected(event: any, index: number) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+          } else {
+            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.6); // Compresión fuerte
+          this.previews['foto_' + index] = dataUrl;
+          
+          fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+              this.compressedFiles['foto_' + index] = new File([blob], `foto_${index}_${Date.now()}.jpg`, { type: 'image/jpeg' });
+            });
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removePhoto(index: number) {
+    delete this.previews['foto_' + index];
+    delete this.compressedFiles['foto_' + index];
+    // Evita enviar fotos viejas al editar si se removió y no se añadió nada
+    if (this.selectedRecord && this.selectedRecord['foto_' + index]) {
+       this.selectedRecord['foto_' + index] = null;
+    }
+  }
+
   submitForm() {
     this.isLoading = true;
-    const payload = { ...this.wizardForm.value };
+    
+    this.saveDatalists(
+      this.wizardForm.value.transporte,
+      this.wizardForm.value.cliente,
+      this.wizardForm.value.producto
+    );
 
-    if(this.canvasInspectorRef && this.ctxInspector) {
-      payload.firma_inspector = this.canvasInspectorRef.nativeElement.toDataURL('image/png');
+    const formData = new FormData();
+    Object.keys(this.wizardForm.value).forEach(key => {
+      formData.append(key, this.wizardForm.value[key] || '');
+    });
+
+    if(this.canvasInspectorRef && this.ctxInspector && !this.selectedRecord?.firma_inspector) {
+      formData.append('firma_inspector', this.canvasInspectorRef.nativeElement.toDataURL('image/png'));
     }
-    if(this.canvasChoferRef && this.ctxChofer) {
-      payload.firma_chofer = this.canvasChoferRef.nativeElement.toDataURL('image/png');
+    if(this.canvasChoferRef && this.ctxChofer && !this.selectedRecord?.firma_chofer) {
+      formData.append('firma_chofer', this.canvasChoferRef.nativeElement.toDataURL('image/png'));
+    }
+
+    // Adjuntar fotos comprimidas
+    for (let i = 1; i <= 6; i++) {
+      if (this.compressedFiles['foto_' + i]) {
+        formData.append('foto_' + i, this.compressedFiles['foto_' + i]);
+      } else if (this.isEditing && this.selectedRecord && !this.selectedRecord['foto_' + i] && !this.previews['foto_' + i]) {
+        // Enviar indicador para eliminar la foto en backend (si fue borrada de previsualización)
+        formData.append('delete_foto_' + i, 'true');
+      }
     }
 
     const request = this.isEditing 
-      ? this.http.put(`${environment.apiUrl}/calidad/higiene-carga/${this.selectedId}`, payload)
-      : this.http.post(`${environment.apiUrl}/calidad/higiene-carga`, payload);
+      ? this.http.put(`${environment.apiUrl}/calidad/higiene-carga/${this.selectedId}`, formData)
+      : this.http.post(`${environment.apiUrl}/calidad/higiene-carga`, formData);
 
     request.subscribe({
       next: (res: any) => {

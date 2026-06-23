@@ -40,6 +40,14 @@ export class ControlCarga extends Model {
   public declare responsable_inspeccion: string;
   public declare firma_inspector: string;
   public declare firma_chofer: string;
+
+  // Fotografías (Evidencia) - Paths / URLs
+  public declare foto_1: string;
+  public declare foto_2: string;
+  public declare foto_3: string;
+  public declare foto_4: string;
+  public declare foto_5: string;
+  public declare foto_6: string;
 }
 
 export const initControlCarga = (sequelize: Sequelize) => {
@@ -82,6 +90,14 @@ export const initControlCarga = (sequelize: Sequelize) => {
     observaciones_generales: { type: DataTypes.TEXT, allowNull: true },
     responsable_inspeccion: { type: DataTypes.STRING, allowNull: true },
     firma_inspector: { type: DataTypes.TEXT('long'), allowNull: true },
-    firma_chofer: { type: DataTypes.TEXT('long'), allowNull: true }
+    firma_chofer: { type: DataTypes.TEXT('long'), allowNull: true },
+
+    // Fotografías (Evidencia) - Paths / URLs
+    foto_1: { type: DataTypes.STRING, allowNull: true },
+    foto_2: { type: DataTypes.STRING, allowNull: true },
+    foto_3: { type: DataTypes.STRING, allowNull: true },
+    foto_4: { type: DataTypes.STRING, allowNull: true },
+    foto_5: { type: DataTypes.STRING, allowNull: true },
+    foto_6: { type: DataTypes.STRING, allowNull: true }
   }, { sequelize, tableName: 'controles_carga' });
 };
