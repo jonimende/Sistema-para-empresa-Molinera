@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-acoplados',
@@ -85,7 +86,7 @@ export class AcopladosComponent implements OnInit {
 
   save(): void {
     if (this.form.invalid) {
-      alert('Por favor, complete todos los campos obligatorios.');
+      Swal.fire({ icon: 'warning', title: 'Campos incompletos', text: 'Por favor, complete todos los campos obligatorios.', confirmButtonColor: '#4f46e5' });
       return;
     }
 
@@ -97,9 +98,10 @@ export class AcopladosComponent implements OnInit {
           this.loadAcoplados();
           this.resetForm();
           this.isLoading = false;
+          Swal.fire({ icon: 'success', title: 'Actualizado correctamente', showConfirmButton: false, timer: 1500 });
         },
         error: (err) => {
-          alert('Error: ' + (err.error?.message || err.error?.error || err.message || 'Error desconocido al actualizar'));
+          Swal.fire({ icon: 'error', title: 'Error al actualizar', text: err.error?.message || err.error?.error || err.message || 'Error desconocido al actualizar', confirmButtonColor: '#ef4444' });
           this.isLoading = false;
         }
       });
@@ -109,9 +111,10 @@ export class AcopladosComponent implements OnInit {
           this.loadAcoplados();
           this.resetForm();
           this.isLoading = false;
+          Swal.fire({ icon: 'success', title: 'Guardado correctamente', showConfirmButton: false, timer: 1500 });
         },
         error: (err) => {
-          alert('Error: ' + (err.error?.message || err.error?.error || err.message || 'Error desconocido al guardar'));
+          Swal.fire({ icon: 'error', title: 'Error al guardar', text: err.error?.message || err.error?.error || err.message || 'Error desconocido al guardar', confirmButtonColor: '#ef4444' });
           this.isLoading = false;
         }
       });
@@ -133,17 +136,29 @@ export class AcopladosComponent implements OnInit {
   }
 
   deleteItem(id: number): void {
-    if (confirm('¿Está seguro de eliminar este registro?')) {
-      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
-        next: () => {
-          this.loadAcoplados();
-          if (this.selectedAcoplado?.id === id) {
-            this.resetForm();
-          }
-        },
-        error: (err) => alert('Error al eliminar')
-      });
-    }
+    Swal.fire({
+      title: '¿Está seguro de eliminar este registro?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#94a3b8',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+          next: () => {
+            this.loadAcoplados();
+            if (this.selectedAcoplado?.id === id) {
+              this.resetForm();
+            }
+            Swal.fire({ icon: 'success', title: 'Eliminado', showConfirmButton: false, timer: 1500 });
+          },
+          error: (err) => Swal.fire({ icon: 'error', title: 'Error al eliminar', text: err.error?.message || err.message, confirmButtonColor: '#ef4444' })
+        });
+      }
+    });
   }
 
   resetForm(): void {
