@@ -36,7 +36,7 @@ import { environment } from '../../../environments/environment';
               <span class="text-xs text-slate-400 font-bold">{{ h.fecha }}</span>
             </div>
             <p class="font-bold text-slate-700">Transporte: {{ h.transporte }}</p>
-            <p class="text-sm text-slate-500">Patente: {{ h.patente }}</p>
+            <p class="text-sm text-slate-500">Datos Vehículo: {{ h.patente }}</p>
             <div class="flex justify-end items-center mt-2 pt-2 border-t border-slate-100">
               <button type="button" (click)="$event.preventDefault(); $event.stopPropagation(); editar(h)" class="p-2 min-h-[44px] min-w-[44px] text-blue-600 hover:bg-blue-50 rounded transition mr-1 flex items-center justify-center">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
@@ -75,7 +75,7 @@ import { environment } from '../../../environments/environment';
 
           <!-- A. Cabecera -->
           <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex flex-col space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
-            <div><span class="text-xs font-bold text-slate-400 block uppercase">Transporte / Patente</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.transporte }} ({{ selectedRecord.patente }})</span></div>
+            <div><span class="text-xs font-bold text-slate-400 block uppercase">Transporte / Datos Vehículo</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.transporte }} ({{ selectedRecord.patente }})</span></div>
             <div><span class="text-xs font-bold text-slate-400 block uppercase">Habilitación Transporte</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ parseBoolean(selectedRecord.habilitacion_transporte) === true ? 'SÍ' : (parseBoolean(selectedRecord.habilitacion_transporte) === false ? 'NO' : 'S/D') }}</span></div>
             <div><span class="text-xs font-bold text-slate-400 block uppercase">Chofer / DNI</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ selectedRecord.chofer }} (DNI: {{ selectedRecord.dni_chofer || 'S/D' }})</span></div>
             <div><span class="text-xs font-bold text-slate-400 block uppercase">C.M.A.</span> <span class="font-bold text-slate-700 text-lg md:text-base">{{ parseBoolean(selectedRecord.cma) === true ? 'SÍ' : (parseBoolean(selectedRecord.cma) === false ? 'NO' : 'S/D') }}</span></div>
