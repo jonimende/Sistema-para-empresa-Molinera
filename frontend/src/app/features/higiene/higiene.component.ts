@@ -182,8 +182,8 @@ import { AuthService } from '../../core/services/auth.service';
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Transporte / Empresa</label>
-                  <input list="transporte-list" type="text" formControlName="transporte" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
-                  <datalist id="transporte-list"><option *ngFor="let item of listTransportes" [value]="item"></datalist>
+                  <input list="listaTransportes" type="text" formControlName="transporte" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
+                  <datalist id="listaTransportes"><option *ngFor="let item of transportes" [value]="item"></datalist>
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Datos Vehículo</label>
@@ -213,13 +213,13 @@ import { AuthService } from '../../core/services/auth.service';
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Cliente / Destino</label>
-                  <input list="cliente-list" type="text" formControlName="cliente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
-                  <datalist id="cliente-list"><option *ngFor="let item of listClientes" [value]="item"></datalist>
+                  <input list="listaClientes" type="text" formControlName="cliente" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
+                  <datalist id="listaClientes"><option *ngFor="let item of clientes" [value]="item"></datalist>
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Producto</label>
-                  <input list="producto-list" type="text" formControlName="producto" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
-                  <datalist id="producto-list"><option *ngFor="let item of listProductos" [value]="item"></datalist>
+                  <input list="listaProductos" type="text" formControlName="producto" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base" placeholder="Escriba o seleccione...">
+                  <datalist id="listaProductos"><option *ngFor="let item of productos" [value]="item"></datalist>
                 </div>
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Tipo Envase</label>
@@ -394,9 +394,9 @@ export class HigieneComponent implements AfterViewInit {
 
   wizardForm: FormGroup;
 
-  listTransportes: string[] = [];
-  listClientes: string[] = [];
-  listProductos: string[] = [];
+  transportes: string[] = [];
+  clientes: string[] = [];
+  productos: string[] = [];
   
   previews: any = {};
   compressedFiles: any = {};
@@ -455,24 +455,23 @@ export class HigieneComponent implements AfterViewInit {
   }
 
   loadDatalists() {
-    this.listTransportes = JSON.parse(localStorage.getItem('higiene_transportes') || '[]');
-    this.listClientes = JSON.parse(localStorage.getItem('higiene_clientes') || '[]');
-    this.listProductos = JSON.parse(localStorage.getItem('higiene_productos') || '[]');
+    this.transportes = JSON.parse(localStorage.getItem('lista_transportes') || '[]');
+    this.clientes = JSON.parse(localStorage.getItem('lista_clientes') || '[]');
+    this.productos = JSON.parse(localStorage.getItem('lista_productos') || '[]');
   }
 
   saveDatalists(transporte: string, cliente: string, producto: string) {
-    // TODO: Migrar esta persistencia temporal basada en LocalStorage a tablas relacionales en la base de datos
-    if (transporte && !this.listTransportes.includes(transporte)) {
-      this.listTransportes.push(transporte);
-      localStorage.setItem('higiene_transportes', JSON.stringify(this.listTransportes));
+    if (transporte && !this.transportes.includes(transporte)) {
+      this.transportes.push(transporte);
+      localStorage.setItem('lista_transportes', JSON.stringify(this.transportes));
     }
-    if (cliente && !this.listClientes.includes(cliente)) {
-      this.listClientes.push(cliente);
-      localStorage.setItem('higiene_clientes', JSON.stringify(this.listClientes));
+    if (cliente && !this.clientes.includes(cliente)) {
+      this.clientes.push(cliente);
+      localStorage.setItem('lista_clientes', JSON.stringify(this.clientes));
     }
-    if (producto && !this.listProductos.includes(producto)) {
-      this.listProductos.push(producto);
-      localStorage.setItem('higiene_productos', JSON.stringify(this.listProductos));
+    if (producto && !this.productos.includes(producto)) {
+      this.productos.push(producto);
+      localStorage.setItem('lista_productos', JSON.stringify(this.productos));
     }
   }
 

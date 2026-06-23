@@ -63,9 +63,27 @@ export const handleChat = async (req: Request, res: Response) => {
         },
         calidad: {
           noconf: noConformidades.map((n: any) => ({ f: n.fecha, desc: n.descripcion })),
-          ctrlCarga: controlesCarga.map((c: any) => ({ f: c.fecha, pat: c.patente, prod: c.producto })),
           recorridas: recorridasDiarias.map((r: any) => ({ f: r.fecha, resp: r.responsable_nombre, roed: r.chk_roedores, epp: r.chk_epp, ban: r.chk_banos, com: r.chk_comedor, mol: r.chk_molino_diario, abert: r.chk_aberturas }))
         },
+        HIGIENE_PCC: controlesCarga.map((c: any) => ({
+          id: c.id,
+          fecha: c.fecha,
+          resp: c.responsable_inspeccion,
+          trans: c.transporte,
+          pat: c.patente,
+          prod: c.producto,
+          cli: c.cliente,
+          clima: c.estado_clima,
+          chk_externa: c.chk_externa,
+          chk_insectos: c.chk_insectos,
+          chk_film: c.chk_film,
+          chk_humedad: c.chk_humedad,
+          chk_interior: c.chk_interior,
+          chk_verificacion: c.chk_verificacion,
+          chk_insecticida: c.chk_insecticida,
+          obs: c.observaciones_generales,
+          fotos: [c.foto_1, c.foto_2, c.foto_3, c.foto_4, c.foto_5, c.foto_6].filter(f => f).length
+        })),
         produccion: {
           partes: partesElaboracion.map((p: any) => ({ f: p.fecha, lote: p.nro_lote, prod: p.producto_elaborado, rend_mol: p.molino_rendimiento, rend_molinillo: p.molinillo_rendimiento, enteros: p.molino_enteros, quebrados: p.molino_quebrado, silo: p.silo_origen }))
         },
@@ -93,7 +111,33 @@ export const handleChat = async (req: Request, res: Response) => {
   REGLA VITAL 2: Si el usuario solicita información, reportes o planillas sobre control de carga, higiene o limpieza, DEBES invocar OBLIGATORIAMENTE la herramienta enviar_reporte_higiene_pdf.
   REGLA VITAL 3: Si el usuario te pide enviar un reporte pero NO te da un correo electrónico válido (ej. solo te dice un nombre), NO invoques la herramienta. En su lugar, pídele amablemente la dirección de correo electrónico.
   REGLA 4: Memoria de Email. Si el usuario te pide enviar un reporte a 'ese mismo correo' o no menciona el email en su mensaje actual, BUSCA en el historial de la conversación el último correo válido que haya proporcionado y utilízalo.
-  REGLA 5: Cero Alucinaciones. NUNCA inventes direcciones de correo electrónico uniendo el nombre y apellido de una persona. Si no encuentras un email válido con @ en el historial, pídeselo explícitamente.`;
+  REGLA 5: Cero Alucinaciones. NUNCA inventes direcciones de correo electrónico uniendo el nombre y apellido de una persona. Si no encuentras un email válido con @ en el historial, pídeselo explícitamente.
+  
+  REGLA DE HIGIENE: Ahora tienes acceso a [HIGIENE_PCC]. Cuando el usuario te pida un "Informe de Higiene" de un camión, patente o fecha, DEBES generar un reporte profesional en Markdown con este formato exacto:
+
+📋 INFORME DE CONTROL DE HIGIENE (PCC)
+
+Fecha y Hora: [Fecha]
+
+Inspector Responsable: [Email/Nombre]
+
+Transporte: [Empresa] | Patente: [Patente]
+
+Producto: [Producto] | Cliente: [Cliente]
+
+Clima: [Estado]
+
+✅ Checklist de Calidad:
+
+(Lista aquí las respuestas Sí/No del checklist de forma clara. Si hay un "No", resáltalo en negrita como ALERTA).
+
+📝 Observaciones:
+
+[Observaciones del inspector]
+
+📸 Evidencia Visual:
+
+(Indica cuántas fotos fueron adjuntadas en el control basándote en los campos de imágenes llenos).*`;
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
