@@ -66,6 +66,12 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['Admin', 'Calidad'] },
         loadComponent: () => import('./features/nc/nc.component').then(m => m.NcComponent),
+      },
+      {
+        path: 'acoplados',
+        canActivate: [roleGuard],
+        data: { roles: ['Admin', 'Logistica'] },
+        loadComponent: () => import('./features/acoplados/acoplados.component').then(m => m.AcopladosComponent),
       }
     ]
   },
