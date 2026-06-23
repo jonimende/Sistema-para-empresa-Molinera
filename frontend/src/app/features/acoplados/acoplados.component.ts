@@ -23,7 +23,7 @@ export class AcopladosComponent implements OnInit {
   isLoading: boolean = false;
 
   apiUrl = `${environment.apiUrl}/api/logistica/acoplados`;
-  usuariosUrl = `${environment.apiUrl}/api/usuarios`;
+  choferesUrl = `${environment.apiUrl}/logistica/choferes`;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}
 
@@ -59,10 +59,9 @@ export class AcopladosComponent implements OnInit {
   }
 
   loadChoferes(): void {
-    this.http.get<any[]>(this.usuariosUrl).subscribe({
+    this.http.get<any[]>(this.choferesUrl).subscribe({
       next: (data) => {
-        // Filtrar usuarios con rol de CAMIONERO
-        this.choferesList = data.filter(u => u.role?.name?.toLowerCase() === 'camionero' || u.role_id === 3 || u.role_id === 'Camionero');
+        this.choferesList = data;
       },
       error: (err) => console.error('Error cargando choferes', err)
     });
@@ -75,7 +74,7 @@ export class AcopladosComponent implements OnInit {
   getOptionClasses(field: string, value: string): string {
     const isSelected = this.form.get(field)?.value === value;
     if (isSelected) {
-      if (value === 'Bueno' || value === 'Y') {
+      if (value === 'Bueno' || value === 'SI') {
         return 'bg-emerald-500 text-white border-emerald-500 shadow-md transform scale-[1.02] transition-all';
       } else {
         return 'bg-rose-500 text-white border-rose-500 shadow-md transform scale-[1.02] transition-all';

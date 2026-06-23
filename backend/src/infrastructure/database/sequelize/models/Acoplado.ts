@@ -32,6 +32,9 @@ export const initAcoplado = (sequelize: Sequelize) => {
     lavado_acoplado: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
     ajuste_reemplazo_tapa: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
     observaciones: { type: DataTypes.STRING, allowNull: true },
-    se_reparo: { type: DataTypes.ENUM('Y', 'N'), allowNull: true }
+    se_reparo: {
+      type: DataTypes.ENUM('SI', 'NO'),
+      allowNull: false,
+    }
   }, { sequelize, tableName: 'acoplados' });
 };
