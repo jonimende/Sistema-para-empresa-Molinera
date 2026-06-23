@@ -22,7 +22,7 @@ export class AcopladosComponent implements OnInit {
   
   isLoading: boolean = false;
 
-  apiUrl = `${environment.apiUrl}/api/logistica/acoplados`;
+  apiUrl = `${environment.apiUrl}/logistica/acoplados`;
   choferesUrl = `${environment.apiUrl}/logistica/choferes`;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}
