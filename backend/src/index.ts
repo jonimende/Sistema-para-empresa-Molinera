@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 import { login } from './infrastructure/http/controllers/AuthController';
 import { getViajes } from './infrastructure/http/controllers/ViajeController';
 import { registrarCarga, descargarReporte, genericGetAll, genericGetOne, genericCreate, genericUpdate, genericDelete, getCombustible, getService } from './infrastructure/http/controllers/LogisticaController';
-import { crearParteElaboracion, getPartesElaboracion } from './infrastructure/http/controllers/ElaboracionController';
+import { crearParteElaboracion, getPartesElaboracion, updateParteElaboracion, deleteParteElaboracion } from './infrastructure/http/controllers/ElaboracionController';
 import { reportarNC, listarNCs, registrarHigieneCarga, listarHigieneCarga } from './infrastructure/http/controllers/CalidadController';
 import { registrarRecorrida } from './infrastructure/http/controllers/AuditoriaController';
 import { registrarControlCarga, obtenerCatalogosWizard } from './infrastructure/http/controllers/ControlCargaController';
@@ -75,6 +75,8 @@ app.get('/api/logistica/service', authGuard, getService);
 // Rutas Módulo Producción/Elaboración
 app.post('/api/produccion/partes', authGuard, roleGuard(['Admin', 'Molinero']), crearParteElaboracion);
 app.get('/api/produccion/partes', authGuard, roleGuard(['Admin', 'Molinero']), getPartesElaboracion);
+app.put('/api/produccion/partes/:id', authGuard, roleGuard(['Admin', 'Molinero']), updateParteElaboracion);
+app.delete('/api/produccion/partes/:id', authGuard, roleGuard(['Admin', 'Molinero']), deleteParteElaboracion);
 
 // Rutas Módulo Calidad
 app.post('/api/calidad/no-conformidades', authGuard, roleGuard(['Admin', 'Inspector_Calidad']), uploadMiddleware.single('foto'), reportarNC);
