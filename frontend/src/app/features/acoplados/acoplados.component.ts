@@ -99,7 +99,7 @@ export class AcopladosComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
-          alert(err.error?.error || 'Error al actualizar');
+          alert('Error: ' + (err.error?.message || err.error?.error || err.message || 'Error desconocido al actualizar'));
           this.isLoading = false;
         }
       });
@@ -111,7 +111,7 @@ export class AcopladosComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
-          alert(err.error?.error || 'Error al guardar');
+          alert('Error: ' + (err.error?.message || err.error?.error || err.message || 'Error desconocido al guardar'));
           this.isLoading = false;
         }
       });

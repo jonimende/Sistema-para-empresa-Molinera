@@ -7,6 +7,7 @@ import { Ubicacion } from '../../database/sequelize/models/Ubicacion';
 import { ServiceMantenimiento } from '../../database/sequelize/models/ServiceMantenimiento';
 import { Vehiculo } from '../../database/sequelize/models/Vehiculo';
 import { PdfReportService } from '../../../core/application/services/PdfReportService';
+import { Acoplado } from '../../database/sequelize/models/Acoplado';
 
 const pdfService = new PdfReportService();
 
@@ -108,6 +109,16 @@ export const getService = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno' });
+  }
+};
+
+export const resetAcopladosDB = async (req: Request, res: Response) => {
+  try {
+    await Acoplado.sync({ force: true });
+    res.status(200).json({ message: 'Tabla acoplados reseteada con exito (DROP & CREATE).' });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ error: 'Error reseteando DB: ' + error.message });
   }
 };
 
