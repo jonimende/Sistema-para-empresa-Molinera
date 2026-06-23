@@ -5,11 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+import { AcopladosComponent } from '../acoplados/acoplados.component';
 
 @Component({
   selector: 'app-viajes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AcopladosComponent],
   template: `
     <div class="max-w-6xl mx-auto space-y-6 h-[calc(100vh-6rem)] flex flex-col pb-6">
       <header class="mb-2 flex justify-between items-end border-b pb-4 border-slate-200">
@@ -53,6 +54,13 @@ import { environment } from '../../../environments/environment';
             Camiones
           </button>
           
+          <button type="button" (click)="$event.preventDefault(); activeTab = 'acoplados'" 
+            [class]="activeTab === 'acoplados' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200'"
+            class="flex-shrink-0 py-2.5 px-6 whitespace-nowrap min-w-max rounded-lg font-bold text-sm transition-all duration-200 ml-2 flex items-center justify-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+            Acoplados
+          </button>
+
           <button type="button" (click)="$event.preventDefault(); activeTab = 'panel_admin'" 
             [class]="activeTab === 'panel_admin' ? 'bg-indigo-600 text-white shadow-md' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'"
             class="flex-shrink-0 py-2.5 px-6 whitespace-nowrap min-w-max rounded-lg font-black text-sm transition-all duration-200 border border-indigo-200 ml-2 flex items-center justify-center">
@@ -63,9 +71,14 @@ import { environment } from '../../../environments/environment';
       </div>
 
       <!-- Contenedor de Vistas -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden relative">
-        <div class="flex-1 overflow-y-auto p-8">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden relative" [ngClass]="{'!p-0': activeTab === 'acoplados'}">
+        <div class="flex-1 overflow-y-auto p-8" [ngClass]="{'!p-0': activeTab === 'acoplados'}">
           
+          <!-- VISTA: ACOPLADOS -->
+          <div *ngIf="activeTab === 'acoplados'" class="fade-in h-full">
+            <app-acoplados></app-acoplados>
+          </div>
+
           <!-- VISTA: MIS VIAJES (Despacho Principal) -->
           <div *ngIf="activeTab === 'mis_viajes'" class="fade-in">
             <div class="flex justify-between items-center border-b pb-2 mb-6">
