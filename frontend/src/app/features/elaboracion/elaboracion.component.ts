@@ -27,7 +27,7 @@ import { environment } from '../../../environments/environment';
 
       <div class="flex flex-col md:flex-row gap-6 h-auto md:h-[calc(100vh-12rem)]">
         <!-- Panel Izquierdo -->
-        <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm" [ngClass]="{'hidden md:flex flex-col': isCreatingParte || isViewingParte, 'flex flex-col gap-3': !isCreatingParte && !isViewingParte}">
+        <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl shadow-sm flex-col gap-4 overflow-y-auto" [ngClass]="{'hidden md:flex': isCreatingParte || isViewingParte, 'flex': !isCreatingParte && !isViewingParte}">
           <div *ngFor="let p of partes" (click)="verDetalleParte(p)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col gap-3 w-full" [class.bg-indigo-50]="selectedParte?.id === p.id">
             <div>
               <p class="font-bold text-slate-800 text-lg">Lote: {{ p.nro_lote || 'N/A' }}</p>
@@ -63,12 +63,10 @@ import { environment } from '../../../environments/environment';
               
               <div class="col-span-2 md:col-span-1">
                 <label class="block text-base md:text-sm font-bold text-slate-500">Producto Elaborado</label>
-                <select formControlName="producto_elaborado" (change)="onProductoChange($event)" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base">
-                  <option value="" disabled selected>Seleccionar...</option>
-                  <option *ngFor="let prod of productosPrecargados" [value]="prod">{{ prod }}</option>
-                  <option *ngFor="let p of listadoProductos" [value]="p.nombre || p">{{ p.nombre || p }}</option>
-                  <option value="NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo...</option>
-                </select>
+                <input list="productos-list" formControlName="producto_elaborado" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base" placeholder="Escriba o seleccione...">
+                <datalist id="productos-list">
+                  <option *ngFor="let prod of productosElaborados" [value]="prod">
+                </datalist>
               </div>
               
               <div>
@@ -310,9 +308,8 @@ export class ElaboracionComponent implements OnInit {
   private authService = inject(AuthService);
   
   partes: any[] = [];
-  listadoProductos: any[] = [];
   listadoTurnos: any[] = [];
-  productosPrecargados: string[] = ['Arroz pulido largo fino grado 1', 'Arroz pulido largo fino grado 2'];
+  productosElaborados: string[] = ['Arroz pulido largo fino grado 1', 'Arroz pulido largo fino grado 2'];
   
   isLoading = false;
   isViewingParte = false;
@@ -434,44 +431,20 @@ export class ElaboracionComponent implements OnInit {
 
   loadPartes() {
     this.http.get<any[]>(`${environment.apiUrl}/produccion/partes`).subscribe({
-      next: (data) => this.partes = data,
+      next: (data) => {
+        this.partes = data.map(p => {
+          let prodName = this.getNombreProducto(p.producto_elaborado);
+          if (prodName === '[object Object]') prodName = 'Producto Desconocido';
+          p.producto_elaborado = prodName;
+          return p;
+        });
+      },
       error: (err) => console.error(err)
     });
   }
 
   loadSelects() {
-    this.http.get<any>(`${environment.apiUrl}/produccion/productos`).subscribe(res => this.listadoProductos = res.data ? res.data : res);
     this.http.get<any>(`${environment.apiUrl}/produccion/turnos`).subscribe(res => this.listadoTurnos = res.data ? res.data : res);
-  }
-
-  async onProductoChange(event: any) {
-    if (event.target.value === 'NUEVO') {
-      const { value: nuevo } = await Swal.fire({
-        title: 'Nuevo Producto Elaborado',
-        input: 'text',
-        inputPlaceholder: 'Ingrese nombre',
-        showCancelButton: true
-      });
-      if (nuevo) {
-        const formData = new FormData();
-        formData.append('nombre_carga', nuevo);
-
-        this.http.post(`${environment.apiUrl}/logistica/productos_carga`, formData).subscribe({
-          next: (res: any) => {
-            this.listadoProductos.push({ nombre: nuevo, nombre_carga: nuevo });
-            this.elaboracionForm.get('producto_elaborado')?.setValue(nuevo);
-            Swal.fire('Guardado', 'Producto agregado con éxito', 'success');
-          },
-          error: (err) => {
-            console.error(err);
-            Swal.fire('Error', 'No se pudo guardar el producto', 'error');
-            this.elaboracionForm.patchValue({ producto_elaborado: '' });
-          }
-        });
-      } else {
-        this.elaboracionForm.patchValue({ producto_elaborado: '' });
-      }
-    }
   }
 
   async onTurnoChange(event: any) {
