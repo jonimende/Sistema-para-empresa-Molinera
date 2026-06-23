@@ -27,11 +27,11 @@ import { environment } from '../../../environments/environment';
 
       <div class="flex flex-col md:flex-row gap-6 h-auto md:h-[calc(100vh-12rem)]">
         <!-- Panel Izquierdo -->
-        <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm" [ngClass]="{'hidden md:flex flex-col': isCreatingParte || isViewingParte, 'flex flex-col': !isCreatingParte && !isViewingParte}">
-          <div *ngFor="let p of partes" (click)="verDetalleParte(p)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col md:flex-row md:justify-between items-start md:items-center gap-2 w-full" [class.bg-indigo-50]="selectedParte?.id === p.id">
+        <div class="w-full md:w-1/3 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto shadow-sm" [ngClass]="{'hidden md:flex flex-col': isCreatingParte || isViewingParte, 'flex flex-col gap-3': !isCreatingParte && !isViewingParte}">
+          <div *ngFor="let p of partes" (click)="verDetalleParte(p)" class="p-4 border-b border-slate-200 hover:bg-white cursor-pointer transition flex flex-col gap-3 w-full" [class.bg-indigo-50]="selectedParte?.id === p.id">
             <div>
               <p class="font-bold text-slate-800 text-lg">Lote: {{ p.nro_lote || 'N/A' }}</p>
-              <p class="text-sm font-medium text-slate-600 mt-1">{{ p.producto_elaborado }}</p>
+              <p class="text-sm font-medium text-slate-600 mt-1">{{ getNombreProducto(p.producto_elaborado) }}</p>
               <p class="text-base md:text-sm text-slate-400 mt-1">{{ p.fecha | date:'shortDate' }} - Turno: {{ p.horario_turno }}</p>
             </div>
           </div>
@@ -63,12 +63,12 @@ import { environment } from '../../../environments/environment';
               
               <div class="col-span-2 md:col-span-1">
                 <label class="block text-base md:text-sm font-bold text-slate-500">Producto Elaborado</label>
-                <input list="productos-list" formControlName="producto_elaborado" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base" placeholder="Escriba o seleccione..." (change)="onProductoChange($event)">
-                <datalist id="productos-list">
-                  <option value="Arroz pulido largo fino grado 1">
-                  <option value="Arroz pulido largo fino grado 2">
-                  <option *ngFor="let p of listadoProductos" [value]="p.nombre || p">
-                </datalist>
+                <select formControlName="producto_elaborado" (change)="onProductoChange($event)" class="w-full border-slate-200 rounded-xl p-4 md:p-3 text-lg md:text-base">
+                  <option value="" disabled selected>Seleccionar...</option>
+                  <option *ngFor="let prod of productosPrecargados" [value]="prod">{{ prod }}</option>
+                  <option *ngFor="let p of listadoProductos" [value]="p.nombre || p">{{ p.nombre || p }}</option>
+                  <option value="NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo...</option>
+                </select>
               </div>
               
               <div>
@@ -104,7 +104,10 @@ import { environment } from '../../../environments/environment';
                 <div class="w-32"><label class="block text-base md:text-sm font-bold text-slate-500">Hora</label><input type="time" formControlName="hora" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
                 <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">% Ent</label><input type="number" formControlName="porcentaje_ent" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
                 <div class="flex-1"><label class="block text-base md:text-sm font-bold text-slate-500">% Queb</label><input type="number" formControlName="porcentaje_queb" class="w-full border-slate-200 rounded shadow-sm text-sm p-2"></div>
-                <!-- El input de molinero se elimina, se asigna dinámicamente en el TS -->
+                <div class="flex-1">
+                  <label class="block text-base md:text-sm font-bold text-slate-500">Molinero</label>
+                  <input type="text" formControlName="molinero" readonly class="w-full bg-slate-100 text-slate-500 cursor-not-allowed font-medium border-slate-200 rounded shadow-sm text-sm p-2">
+                </div>
                 <button type="button" (click)="removeControlCalidad(i)" class="text-red-500 font-bold px-2 py-1 hover:bg-red-50 rounded self-end mb-1">X</button>
               </div>
             </div>
@@ -209,7 +212,7 @@ import { environment } from '../../../environments/environment';
               <div class="flex flex-col gap-2">
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Fecha</p><p class="font-medium">{{ selectedParte.fecha | date:'shortDate' }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Nro Lote</p><p class="font-medium">{{ selectedParte.nro_lote }}</p></div>
-                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Producto</p><p class="font-medium text-indigo-700">{{ selectedParte.producto_elaborado }}</p></div>
+                <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Producto</p><p class="font-medium text-indigo-700">{{ getNombreProducto(selectedParte.producto_elaborado) }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Turno</p><p class="font-medium">{{ selectedParte.horario_turno }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">Variedad</p><p class="font-medium">{{ selectedParte.variedad || '-' }}</p></div>
                 <div><p class="text-base md:text-sm text-slate-500 font-bold uppercase">% Quebrado Esp.</p><p class="font-medium">{{ selectedParte.porcentaje_quebrado_esperado }}%</p></div>
@@ -309,6 +312,7 @@ export class ElaboracionComponent implements OnInit {
   partes: any[] = [];
   listadoProductos: any[] = [];
   listadoTurnos: any[] = [];
+  productosPrecargados: string[] = ['Arroz pulido largo fino grado 1', 'Arroz pulido largo fino grado 2'];
   
   isLoading = false;
   isViewingParte = false;
@@ -374,6 +378,12 @@ export class ElaboracionComponent implements OnInit {
 
   addParada() { this.paradas.push(this.fb.group({ motivo: [''], hr_parada: [''], hr_arranque: [''] })); }
   removeParada(index: number) { this.paradas.removeAt(index); }
+
+  getNombreProducto(prod: any): string {
+    if (!prod) return 'Sin producto';
+    if (typeof prod === 'string') return prod;
+    return prod.nombre || prod.name || JSON.stringify(prod);
+  }
 
   addControlCalidad() { 
     const user = this.authService.currentUser();
