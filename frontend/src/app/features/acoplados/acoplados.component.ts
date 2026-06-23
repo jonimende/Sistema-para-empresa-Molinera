@@ -1,0 +1,126 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
+@Component({
+  selector: 'app-acoplados',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './acoplados.component.html'
+})
+export class AcopladosComponent implements OnInit {
+  acopladosList: any[] = [];
+  choferesList: any[] = [];
+  form!: FormGroup;
+  isEditing: boolean = false;
+  currentId: number | null = null;
+  apiUrl = `${environment.apiUrl}/api/logistica/acoplados`;
+  usuariosUrl = `${environment.apiUrl}/api/usuarios`;
+
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.initForm();
+    this.loadAcoplados();
+    this.loadChoferes();
+  }
+
+  initForm(): void {
+    this.form = this.fb.group({
+      fecha: [new Date().toISOString().split('T')[0], Validators.required],
+      chofer: ['', Validators.required],
+      patente_acoplado: ['', Validators.required],
+      mant_lona: ['', Validators.required],
+      mant_pollera: ['', Validators.required],
+      verificacion_luces: ['', Validators.required],
+      verificacion_frenos: ['', Validators.required],
+      verificacion_hojas_elastico: ['', Validators.required],
+      engrase_mensual: ['', Validators.required],
+      lavado_acoplado: ['', Validators.required],
+      ajuste_reemplazo_tapa: ['', Validators.required],
+      observaciones: [''],
+      se_reparo: ['', Validators.required]
+    });
+  }
+
+  loadAcoplados(): void {
+    this.http.get<any[]>(this.apiUrl).subscribe({
+      next: (data) => this.acopladosList = data,
+      error: (err) => console.error('Error cargando acoplados', err)
+    });
+  }
+
+  loadChoferes(): void {
+    this.http.get<any[]>(this.usuariosUrl).subscribe({
+      next: (data) => {
+        // Filtrar usuarios con rol de CAMIONERO
+        this.choferesList = data.filter(u => u.role?.name?.toLowerCase() === 'camionero' || u.role_id === 3 || u.role_id === 'Camionero');
+      },
+      error: (err) => console.error('Error cargando choferes', err)
+    });
+  }
+
+  setOption(field: string, value: string): void {
+    this.form.get(field)?.setValue(value);
+  }
+
+  getOptionClasses(field: string, value: string): string {
+    const isSelected = this.form.get(field)?.value === value;
+    if (isSelected) {
+      if (value === 'Bueno' || value === 'Y') {
+        return 'bg-emerald-500 text-white border-emerald-500 shadow-md transform scale-[1.02] transition-all';
+      } else {
+        return 'bg-rose-500 text-white border-rose-500 shadow-md transform scale-[1.02] transition-all';
+      }
+    }
+    return 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50';
+  }
+
+  save(): void {
+    if (this.form.invalid) {
+      alert('Por favor, complete todos los campos obligatorios.');
+      return;
+    }
+
+    if (this.isEditing && this.currentId) {
+      this.http.put(`${this.apiUrl}/${this.currentId}`, this.form.value).subscribe({
+        next: () => {
+          this.loadAcoplados();
+          this.resetForm();
+        },
+        error: (err) => alert(err.error?.error || 'Error al actualizar')
+      });
+    } else {
+      this.http.post(this.apiUrl, this.form.value).subscribe({
+        next: () => {
+          this.loadAcoplados();
+          this.resetForm();
+        },
+        error: (err) => alert(err.error?.error || 'Error al guardar')
+      });
+    }
+  }
+
+  edit(item: any): void {
+    this.isEditing = true;
+    this.currentId = item.id;
+    this.form.patchValue(item);
+  }
+
+  deleteItem(id: number): void {
+    if (confirm('¿Está seguro de eliminar este registro?')) {
+      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+        next: () => this.loadAcoplados(),
+        error: (err) => alert('Error al eliminar')
+      });
+    }
+  }
+
+  resetForm(): void {
+    this.isEditing = false;
+    this.currentId = null;
+    this.initForm();
+  }
+}

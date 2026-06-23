@@ -46,6 +46,7 @@ const getModel = (path: string) => {
   if (path.includes('/choferes')) return require('../../database/sequelize/models/Chofer').Chofer;
   if (path.includes('/productos')) return require('../../database/sequelize/models/ProductoCarga').ProductoCarga;
   if (path.includes('/turnos')) return require('../../database/sequelize/models/Turno').Turno;
+  if (path.includes('/acoplados')) return require('../../database/sequelize/models/Acoplado').Acoplado;
   return null;
 };
 

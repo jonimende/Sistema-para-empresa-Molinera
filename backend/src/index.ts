@@ -55,7 +55,7 @@ app.get('/api/logistica/viajes', authGuard, getViajes);
 app.get('/api/logistica/combustible', authGuard, getCombustible);
 app.get('/api/logistica/service', authGuard, getService);
 
-['viajes', 'combustible', 'service', 'camiones', 'choferes', 'productos_carga', 'turnos'].forEach(entity => {
+['viajes', 'combustible', 'service', 'camiones', 'choferes', 'productos_carga', 'turnos', 'acoplados'].forEach(entity => {
   if (!['viajes', 'combustible', 'service'].includes(entity)) {
     app.get(`/api/logistica/${entity}`, authGuard, genericGetAll);
   }
