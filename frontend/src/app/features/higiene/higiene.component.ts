@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-higiene',
@@ -17,7 +18,7 @@ import { environment } from '../../../environments/environment';
         <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
           <div>
             <h2 class="text-xl font-black text-slate-800">Control de Higiene de Carga de Producto Terminado</h2>
-            <p class="text-sm text-slate-500 font-medium">Registros PCC</p>
+            <p class="text-sm text-slate-500 font-medium">Registros</p>
           </div>
           <button type="button" (click)="$event.preventDefault(); crearNuevo()" class="hidden md:flex px-3 py-1.5 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm items-center">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -32,7 +33,7 @@ import { environment } from '../../../environments/environment';
                [class.bg-indigo-50]="selectedRecord?.id === h.id"
                class="p-4 border border-slate-200 rounded-xl hover:bg-indigo-50 cursor-pointer transition">
             <div class="flex justify-between items-center mb-2">
-              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">PCC</span>
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">Control</span>
               <span class="text-xs text-slate-400 font-bold">{{ h.fecha }}</span>
             </div>
             <p class="font-bold text-slate-700">Transporte: {{ h.transporte }}</p>
@@ -58,7 +59,7 @@ import { environment } from '../../../environments/environment';
         <div *ngIf="!isCreating && !isViewing && !isEditing" class="h-full hidden md:flex flex-col items-center justify-center text-slate-400 bg-slate-50/80 z-10 absolute inset-0">
           <svg class="w-16 h-16 text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           <h3 class="text-xl font-bold text-slate-600">Ningún Registro Seleccionado</h3>
-          <p class="text-slate-500 mt-1">Seleccione un control PCC del historial o cree uno nuevo.</p>
+          <p class="text-slate-500 mt-1">Seleccione un control del historial o cree uno nuevo.</p>
         </div>
 
         <button *ngIf="isCreating || isViewing || isEditing" (click)="isCreating=false; isViewing=false; isEditing=false; selectedRecord=null" class="md:hidden m-4 w-[calc(100%-2rem)] bg-slate-100 text-slate-700 font-bold py-4 rounded-xl flex items-center justify-center text-lg shadow-sm active:scale-95 transition-all">
@@ -69,7 +70,7 @@ import { environment } from '../../../environments/environment';
         <!-- Módulo de Lectura (isViewing) -->
         <div *ngIf="isViewing && selectedRecord" class="p-6 md:p-8 space-y-6 fade-in h-full overflow-y-auto">
           <div class="flex flex-col md:flex-row justify-between md:items-center border-b pb-4 gap-4">
-            <h3 class="text-2xl font-bold text-slate-800">Reporte PCC #{{ selectedRecord.id }}</h3>
+            <h3 class="text-2xl font-bold text-slate-800">Reporte #{{ selectedRecord.id }}</h3>
             <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-bold text-sm w-fit">{{ selectedRecord.fecha }}</span>
           </div>
 
@@ -278,22 +279,45 @@ import { environment } from '../../../environments/environment';
             <div *ngIf="currentStep === 3" class="space-y-6 fade-in">
               <h3 class="text-xl md:text-2xl font-black text-slate-700 border-b pb-2">Fase 3: Cierre y Firmas</h3>
 
-              <div class="flex flex-col space-y-4 md:grid md:grid-cols-2 md:gap-6 md:space-y-0 mb-6">
+              <div class="flex flex-col space-y-4 md:gap-6 mb-6">
+                <!-- 1. Estado del Clima -->
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Estado del Clima</label>
                   <input type="text" formControlName="estado_clima" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base">
                 </div>
+                
+                <!-- 2. Observaciones Generales -->
+                <div class="flex flex-col">
+                  <label class="text-base font-bold text-slate-700 mb-2">Observaciones Generales</label>
+                  <textarea formControlName="observaciones_generales" rows="4" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base"></textarea>
+                </div>
+
+                <!-- 3. Evidencia Visual -->
+                <div class="flex flex-col">
+                  <h3 class="font-bold text-lg text-slate-700 mt-4 mb-3">Evidencia Fotográfica</h3>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                    <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-slate-50 p-3 border border-slate-200 rounded-xl flex flex-col items-center justify-center relative">
+                      <label class="text-sm font-bold text-slate-600 mb-2">Foto {{i}}</label>
+                      <input type="file" accept="image/*" capture="environment" (change)="onFileSelected($event, i)" class="hidden" [id]="'foto_'+i">
+                      <label [for]="'foto_'+i" class="cursor-pointer bg-white border border-slate-300 rounded p-2 text-xs text-center w-full hover:bg-slate-50 transition shadow-sm font-bold text-slate-700">Seleccionar Imagen</label>
+                      <!-- Preview -->
+                      <div *ngIf="previews['foto_'+i] || (selectedRecord && selectedRecord['foto_'+i])" class="mt-2 w-full">
+                        <img [src]="previews['foto_'+i] || getImageUrl(selectedRecord['foto_'+i])" class="w-full h-24 object-cover rounded shadow-sm border border-slate-200">
+                        <button type="button" (click)="removePhoto(i)" class="mt-1 text-xs text-red-500 hover:text-red-700 font-bold w-full text-center py-1">Remover</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 4. Responsable de Inspección -->
                 <div class="flex flex-col">
                   <label class="text-base font-bold text-slate-700 mb-2">Responsable de Inspección</label>
-                  <input type="text" formControlName="responsable_inspeccion" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base">
-                </div>
-                <div class="flex flex-col md:col-span-2">
-                  <label class="text-base font-bold text-slate-700 mb-2">Observaciones Generales</label>
-                  <textarea formControlName="observaciones_generales" rows="3" class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-50 focus:ring-indigo-500 text-lg md:text-base"></textarea>
+                  <input type="text" formControlName="responsable_inspeccion" readonly class="w-full border-slate-300 rounded-xl shadow-sm py-4 md:py-3 px-4 bg-slate-200 text-slate-600 cursor-not-allowed focus:ring-indigo-500 text-lg md:text-base">
                 </div>
               </div>
 
-              <div class="flex flex-col space-y-6 md:grid md:grid-cols-2 md:gap-8 md:space-y-0 mt-6">
+              <!-- Firmas -->
+              <div class="flex flex-col space-y-6 md:grid md:grid-cols-2 md:gap-8 md:space-y-0 mt-6 border-t border-slate-200 pt-6">
                 <!-- Firma Inspector -->
                 <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col">
                   <label class="text-base font-bold text-indigo-700 mb-2 flex justify-between items-center">
@@ -319,24 +343,11 @@ import { environment } from '../../../environments/environment';
                 </div>
               </div>
 
-              <h3 class="font-bold text-lg text-slate-700 mt-8 mb-3">Evidencia Fotográfica</h3>
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-slate-50 p-3 border border-slate-200 rounded-xl flex flex-col items-center justify-center relative">
-                  <label class="text-sm font-bold text-slate-600 mb-2">Foto {{i}}</label>
-                  <input type="file" accept="image/*" capture="environment" (change)="onFileSelected($event, i)" class="hidden" [id]="'foto_'+i">
-                  <label [for]="'foto_'+i" class="cursor-pointer bg-white border border-slate-300 rounded p-2 text-xs text-center w-full hover:bg-slate-50 transition shadow-sm font-bold text-slate-700">Seleccionar Imagen</label>
-                  <!-- Preview -->
-                  <div *ngIf="previews['foto_'+i] || (selectedRecord && selectedRecord['foto_'+i])" class="mt-2 w-full">
-                    <img [src]="previews['foto_'+i] || getImageUrl(selectedRecord['foto_'+i])" class="w-full h-24 object-cover rounded shadow-sm border border-slate-200">
-                    <button type="button" (click)="removePhoto(i)" class="mt-1 text-xs text-red-500 hover:text-red-700 font-bold w-full text-center py-1">Remover</button>
-                  </div>
-                </div>
-              </div>
-
+              <!-- Botones Finales -->
               <div class="flex flex-col-reverse md:flex-row justify-between mt-8 pt-4 border-t border-slate-100 gap-4">
                 <button type="button" (click)="$event.preventDefault(); prevStep()" class="w-full md:w-auto px-8 py-4 md:py-3 bg-slate-200 text-slate-700 font-bold text-xl md:text-base rounded-xl hover:bg-slate-300 transition">Volver</button>
                 <button type="button" (click)="submitForm()" [disabled]="isLoading" class="w-full md:w-auto px-8 py-4 md:py-3 bg-green-600 text-white font-black text-xl md:text-base rounded-xl hover:bg-green-700 shadow-md transition disabled:opacity-50">
-                  {{ isLoading ? 'Procesando...' : 'Guardar PCC' }}
+                  {{ isLoading ? 'Procesando...' : 'Guardar' }}
                 </button>
               </div>
             </div>
@@ -379,6 +390,7 @@ export class HigieneComponent implements AfterViewInit {
 
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   wizardForm: FormGroup;
 
@@ -485,10 +497,15 @@ export class HigieneComponent implements AfterViewInit {
     this.previews = {};
     this.compressedFiles = {};
     
+    // Autocompletar el Responsable de Inspección con el usuario logueado
+    const user = this.authService.currentUser();
+    const nombreResponsable = user ? (user.username || user.email) : '';
+    
     // Set default values for Y/N
     this.wizardForm.patchValue({
       habilitacion_transporte: 'Y',
       cma: 'Y',
+      responsable_inspeccion: nombreResponsable,
       chk_externa: 'Y', chk_insectos: 'Y', chk_film: 'Y', 
       chk_humedad: 'Y', chk_interior: 'Y', chk_verificacion: 'Y', chk_insecticida: 'Y'
     });
@@ -516,7 +533,7 @@ export class HigieneComponent implements AfterViewInit {
 
   delete(id: number) {
     Swal.fire({
-      title: '¿Eliminar registro PCC?',
+      title: '¿Eliminar registro?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -532,7 +549,7 @@ export class HigieneComponent implements AfterViewInit {
               this.isViewing = false;
               this.isEditing = false;
             }
-            Swal.fire('Eliminado', 'Registro PCC eliminado.', 'success');
+            Swal.fire('Eliminado', 'Registro eliminado.', 'success');
           },
           error: () => Swal.fire('Error', 'No se pudo eliminar.', 'error')
         });
@@ -719,8 +736,9 @@ export class HigieneComponent implements AfterViewInit {
 
     request.subscribe({
       next: (res: any) => {
+        this.loadHistorial();
+        Swal.fire('¡Éxito!', 'Auditoría completada y guardada.', 'success');
         this.isLoading = false;
-        Swal.fire('¡Éxito!', 'Auditoría PCC completada y guardada.', 'success');
         this.isCreating = false;
         this.isEditing = false;
         this.isViewing = true;
