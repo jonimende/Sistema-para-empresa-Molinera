@@ -33,8 +33,11 @@ export const initAcoplado = (sequelize: Sequelize) => {
     ajuste_reemplazo_tapa: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
     observaciones: { type: DataTypes.STRING, allowNull: true },
     se_reparo: {
-      type: DataTypes.ENUM('SI', 'NO'),
+      type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isIn: [['SI', 'NO']]
+      }
     }
   }, { sequelize, tableName: 'acoplados' });
 };
