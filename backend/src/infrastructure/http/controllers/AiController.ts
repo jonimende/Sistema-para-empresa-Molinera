@@ -154,7 +154,7 @@ Clima: [Estado]
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const modelId = 'gemini-1.5-pro';
+    const modelId = 'gemini-3.5-flash';
     // const modelId = 'gemini-3.1-pro'; // Opcional para cruzar datos masivos a futuro
 
     const model = genAI.getGenerativeModel({
@@ -502,16 +502,8 @@ Clima: [Estado]
     const botReply = responseMessage?.text() || 'No pude generar una respuesta.';
 
     res.json({ response: botReply });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error en AI Chat:', error);
-    
-    if (error.status === 503 || error.message?.includes('503') || error.name === 'GoogleGenerativeAIFetchError') {
-      return res.status(503).json({ 
-        error: true, 
-        message: 'Los servidores de la IA están temporalmente saturados. Por favor, reintenta en un par de minutos.' 
-      });
-    }
-
     res.status(500).json({ error: 'Error interno del servidor en AI Chat.' });
   }
 };
