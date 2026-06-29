@@ -82,12 +82,7 @@ import { AcopladosComponent } from '../acoplados/acoplados.component';
           <!-- VISTA: MIS VIAJES (Despacho Principal) -->
           <div *ngIf="activeTab === 'mis_viajes'" class="fade-in">
             <div class="flex justify-between items-center border-b pb-2 mb-6">
-              <div class="flex items-center gap-3">
-                <h3 class="text-xl font-bold text-slate-700">Historial de Viajes</h3>
-                <span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full border border-blue-200">
-                  KM Totales: {{ kmTotalesViajes | number:'1.0-0' }}
-                </span>
-              </div>
+              <h3 class="text-xl font-bold text-slate-700">Historial de Viajes</h3>
               <button type="button" (click)="$event.preventDefault(); isCreatingViaje = !isCreatingViaje; isViewingViaje = false; selectedViajeId = null; viajeForm.reset({ comprobante_relacionado: 'REMITO', chofer_email: userEmail })"  class="px-4 py-2 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 {{ isCreatingViaje ? 'Cancelar' : 'Nuevo Despacho' }}
@@ -717,6 +712,10 @@ import { AcopladosComponent } from '../acoplados/acoplados.component';
                       <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Chofer Asignado</p>
                       <p class="text-indigo-700 font-bold text-xl">{{ selectedCamion.chofer_asignado || 'Sin Asignar' }}</p>
                     </div>
+                    <div class="col-span-2 md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                      <p class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">KM TOTALES RECORRIDOS</p>
+                      <p class="text-slate-800 font-bold text-xl">{{ kmTotalesVehiculoSeleccionado | number:'1.0-0' }}</p>
+                    </div>
                   </div>
                 </div>
 
@@ -915,6 +914,7 @@ export class ViajesComponent implements OnInit {
   listadoChoferes: any[] = [];
   ubicaciones: any[] = [];
   kmTotalesViajes: number = 0;
+  kmTotalesVehiculoSeleccionado: number = 0;
 
   constructor() {
     this.viajeForm = this.fb.group({
@@ -1250,6 +1250,15 @@ export class ViajesComponent implements OnInit {
     this.isViewingCamion = true;
     this.selectedCamionId = null;
     this.selectedCamion = c;
+    this.kmTotalesVehiculoSeleccionado = this.viajes.reduce((sum, v) => {
+      const matchCamion = (v.patente_camion && v.patente_camion === c.patente_chasis) || (v.patente_chasis && v.patente_chasis === c.patente_chasis);
+      const matchChofer = c.chofer_asignado && (v.chofer_email === c.chofer_asignado || v.chofer === c.chofer_asignado);
+      const matchUsuario = c.UsuarioRel?.email && v.chofer_email === c.UsuarioRel.email;
+      if (matchCamion || matchChofer || matchUsuario) {
+        return sum + (Number(v.km_recorridos) || 0);
+      }
+      return sum;
+    }, 0);
   }
 
     onChoferChange(event: any) {
