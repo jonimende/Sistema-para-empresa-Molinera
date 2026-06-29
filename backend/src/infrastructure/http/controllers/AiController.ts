@@ -55,11 +55,19 @@ export const handleChat = async (req: Request, res: Response) => {
         Vehiculo.findAll({ order: [['createdAt', 'DESC']] })
       ]);
 
+        const groupedViajes = viajesFull.reduce((acc: any, v: any) => {
+          const month = v.fecha_salida ? String(v.fecha_salida).substring(0, 7) : 'Desconocido';
+          if (!acc[month]) acc[month] = { kmt: 0, v: [] };
+          acc[month].kmt += (Number(v.km_recorridos) || 0);
+          acc[month].v.push({ f: v.fecha_salida, pat: v.patente_chasis, chof: v.chofer_email, km: v.km_recorridos });
+          return acc;
+        }, {});
+
       const systemDataObj = {
         logistica: {
-          viajes: viajesFull.map((v: any) => ({ id: v.id, orig: v.Origen?.nombre_lugar || v.lugar_salida, dest: v.Destino?.nombre_lugar || v.lugar_llegada, prod: v.Carga?.nombre_carga || v.carga_transportada, km: v.km_recorridos, f: v.fecha_salida, pat: v.patente_camion, chof: v.chofer_email })),
-          combust: combustibles.map((c: any) => ({ f: c.fecha, pat: c.patente, lit: c.litros, km: c.km_actual, p: c.precio_total })),
-          maint: services.map((s: any) => ({ f: s.fecha, pat: s.patente, km: s.km_service, t: s.tipo_service }))
+          viajes: groupedViajes,
+          combust: combustibles.map((c: any) => ({ f: c.fecha, pat: c.patente_chasis || c.patente, lit: c.litros, km: c.km_actual, p: c.precio_total })),
+          maint: services.map((s: any) => ({ f: s.fecha, pat: s.patente_chasis || s.patente, km: s.km_service, t: s.tipo_service }))
         },
         calidad: {
           noconf: noConformidades.map((n: any) => ({ f: n.fecha, desc: n.descripcion })),
@@ -104,7 +112,7 @@ export const handleChat = async (req: Request, res: Response) => {
   
   Reglas:
   1. Responde a la pregunta utilizando ÚNICAMENTE los datos proporcionados en [ESTADO_GLOBAL_EMPRESA].
-  2. Sé directo, profesional y no pidas disculpas. Haz los cálculos matemáticos cruzando arrays cuando sea necesario.
+  2. Sé directo, profesional y no pidas disculpas. Para resúmenes mensuales, DEBES leer todo el objeto logistica.viajes e iterar hasta el final, utilizando los subtotales pre-calculados (kmt) de forma precisa.
   3. Si la información no está en los datos, dilo amablemente.
   
   REGLA VITAL: Si el usuario te solicita enviar un correo, reporte o planilla de logística/viajes, TIENES PROHIBIDO decir que lo enviaste usando texto normal. DEBES invocar OBLIGATORIAMENTE la herramienta enviar_reporte_logistica.
@@ -497,5 +505,67 @@ Clima: [Estado]
   } catch (error) {
     console.error('Error en AI Chat:', error);
     res.status(500).json({ error: 'Error interno del servidor en AI Chat.' });
+  }
+};
+
+export const getContextSize = async (req: Request, res: Response) => {
+  try {
+    const [viajesFull, combustibles, services, noConformidades, controlesCarga, partesElaboracion, recorridasDiarias, vehiculos] = await Promise.all([
+      Viaje.findAll({ order: [['createdAt', 'DESC']] }),
+      CargaCombustible.findAll({ order: [['createdAt', 'DESC']] }),
+      ServiceMantenimiento.findAll({ order: [['createdAt', 'DESC']] }),
+      NoConformidad.findAll({ order: [['createdAt', 'DESC']] }),
+      ControlCarga.findAll({ order: [['createdAt', 'DESC']] }),
+      ElaboracionParte.findAll({ order: [['createdAt', 'DESC']] }),
+      RecorridaDiaria.findAll({ order: [['createdAt', 'DESC']] }),
+      Vehiculo.findAll({ order: [['createdAt', 'DESC']] })
+    ]);
+
+    const groupedViajes = viajesFull.reduce((acc: any, v: any) => {
+      const month = v.fecha_salida ? String(v.fecha_salida).substring(0, 7) : 'Desconocido';
+      if (!acc[month]) acc[month] = { kmt: 0, v: [] };
+      acc[month].kmt += (Number(v.km_recorridos) || 0);
+      acc[month].v.push({ f: v.fecha_salida, pat: v.patente_chasis, chof: v.chofer_email, km: v.km_recorridos });
+      return acc;
+    }, {});
+
+    const systemDataObj = {
+      logistica: {
+        viajes: groupedViajes,
+        combust: combustibles.map((c: any) => ({ f: c.fecha, pat: c.patente_chasis || c.patente, lit: c.litros, km: c.km_actual, p: c.precio_total })),
+        maint: services.map((s: any) => ({ f: s.fecha, pat: s.patente_chasis || s.patente, km: s.km_service, t: s.tipo_service }))
+      },
+      calidad: {
+        noconf: noConformidades.map((n: any) => ({ f: n.fecha, desc: n.descripcion })),
+        recorridas: recorridasDiarias.map((r: any) => ({ f: r.fecha, resp: r.responsable_nombre, roed: r.chk_roedores, epp: r.chk_epp, ban: r.chk_banos, com: r.chk_comedor, mol: r.chk_molino_diario, abert: r.chk_aberturas }))
+      },
+      HIGIENE_PCC: controlesCarga.map((c: any) => ({
+        id: c.id, fecha: c.fecha, resp: c.responsable_inspeccion, trans: c.transporte, pat: c.patente, prod: c.producto, cli: c.cliente,
+        clima: c.estado_clima, chk_externa: c.chk_externa, chk_insectos: c.chk_insectos, chk_film: c.chk_film, chk_humedad: c.chk_humedad,
+        chk_interior: c.chk_interior, chk_verificacion: c.chk_verificacion, chk_insecticida: c.chk_insecticida, obs: c.observaciones_generales,
+        fotos: [c.foto_1, c.foto_2, c.foto_3, c.foto_4, c.foto_5, c.foto_6].filter(f => f).length
+      })),
+      produccion: {
+        partes: partesElaboracion.map((p: any) => ({ f: p.fecha, lote: p.nro_lote, prod: p.producto_elaborado, rend_mol: p.molino_rendimiento, rend_molinillo: p.molinillo_rendimiento, enteros: p.molino_enteros, quebrados: p.molino_quebrado, silo: p.silo_origen }))
+      },
+      maestros: {
+        camiones: vehiculos.map((v: any) => ({ pat: v.patente_chasis, marca: v.marca, mod: v.modelo, chof: v.chofer_asignado, cap: v.capacidad_kg }))
+      }
+    };
+
+    const jsonString = JSON.stringify(systemDataObj);
+    const sizeBytes = Buffer.byteLength(jsonString, 'utf8');
+    const estimatedTokens = Math.ceil(sizeBytes / 4);
+
+    res.json({
+      success: true,
+      size_bytes: sizeBytes,
+      estimated_tokens: estimatedTokens,
+      kb: (sizeBytes / 1024).toFixed(2),
+      mb: (sizeBytes / 1024 / 1024).toFixed(2)
+    });
+  } catch (error: any) {
+    console.error('Error calculando context size:', error);
+    res.status(500).json({ error: 'Error interno: ' + error.message });
   }
 };

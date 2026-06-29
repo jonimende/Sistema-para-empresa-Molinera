@@ -82,7 +82,12 @@ import { AcopladosComponent } from '../acoplados/acoplados.component';
           <!-- VISTA: MIS VIAJES (Despacho Principal) -->
           <div *ngIf="activeTab === 'mis_viajes'" class="fade-in">
             <div class="flex justify-between items-center border-b pb-2 mb-6">
-              <h3 class="text-xl font-bold text-slate-700">Historial de Viajes</h3>
+              <div class="flex items-center gap-3">
+                <h3 class="text-xl font-bold text-slate-700">Historial de Viajes</h3>
+                <span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full border border-blue-200">
+                  KM Totales: {{ kmTotalesViajes | number:'1.0-0' }}
+                </span>
+              </div>
               <button type="button" (click)="$event.preventDefault(); isCreatingViaje = !isCreatingViaje; isViewingViaje = false; selectedViajeId = null; viajeForm.reset({ comprobante_relacionado: 'REMITO', chofer_email: userEmail })"  class="px-4 py-2 bg-indigo-100 text-indigo-700 font-bold rounded hover:bg-indigo-200 transition text-sm flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 {{ isCreatingViaje ? 'Cancelar' : 'Nuevo Despacho' }}
@@ -909,6 +914,7 @@ export class ViajesComponent implements OnInit {
   camiones: any[] = [];
   listadoChoferes: any[] = [];
   ubicaciones: any[] = [];
+  kmTotalesViajes: number = 0;
 
   constructor() {
     this.viajeForm = this.fb.group({
@@ -979,6 +985,7 @@ export class ViajesComponent implements OnInit {
         next: (data: any) => {
           this.ngZone.run(() => {
             this.viajes = data?.data || data || [];
+            this.kmTotalesViajes = this.viajes.reduce((sum: number, v: any) => sum + (Number(v.km_recorridos) || 0), 0);
             if (this.viajes && this.viajes.length > 0) {
               console.log('AUDITORIA VIAJE 0:', this.viajes[0]);
             }
