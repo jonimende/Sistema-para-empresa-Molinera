@@ -13,7 +13,7 @@ import { reportarNC, listarNCs, registrarHigieneCarga, listarHigieneCarga } from
 import { registrarRecorrida } from './infrastructure/http/controllers/AuditoriaController';
 import { registrarControlCarga, obtenerCatalogosWizard } from './infrastructure/http/controllers/ControlCargaController';
 import { getKpis, dispararReporteIA } from './infrastructure/http/controllers/AnalyticsController';
-import { handleChat } from './infrastructure/http/controllers/AiController';
+import { handleChat, getContextSize } from './infrastructure/http/controllers/AiController';
 import { authGuard } from './infrastructure/http/middlewares/authGuard';
 import { roleGuard } from './infrastructure/http/middlewares/roleGuard';
 import { uploadMiddleware } from './infrastructure/http/middlewares/uploadMiddleware';
@@ -99,6 +99,7 @@ app.post('/api/auditoria/recorridas', authGuard, roleGuard(['Admin', 'Inspector_
 
 // Rutas AI Global
 app.post('/api/ai/chat', authGuard, handleChat);
+app.get('/api/ai/context-size', authGuard, getContextSize);
 
 app.get('/api/auditoria/recorridas', authGuard, roleGuard(['Admin', 'Inspector_Calidad']), async (req, res) => { 
   try {
