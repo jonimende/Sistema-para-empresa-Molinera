@@ -482,11 +482,12 @@ export class HigieneComponent {
   abrirFirmaModal(type: 'inspector' | 'chofer') {
     Swal.fire({
       title: type === 'inspector' ? 'Firma del Inspector' : 'Firma del Chofer',
+      width: 'min(95vw, 600px)',
       html: `
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <canvas id="swalCanvas" width="300" height="150" style="border: 2px dashed #ccc; border-radius: 8px; cursor: crosshair; touch-action: none; background: white;"></canvas>
-          <div style="margin-top: 15px;">
-            <button id="btnClearSwal" style="padding: 8px 16px; border: 1px solid #ef4444; background: white; color: #ef4444; border-radius: 6px; cursor: pointer; font-weight: bold;">Borrar Firma</button>
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+          <canvas id="swalCanvas" width="500" height="300" style="border: 2px dashed #cbd5e1; border-radius: 8px; cursor: crosshair; touch-action: none; background: white; width: 100%; height: auto; box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);"></canvas>
+          <div style="margin-top: 15px; width: 100%; display: flex; justify-content: flex-end;">
+            <button id="btnClearSwal" style="padding: 10px 20px; border: 1px solid #ef4444; background: white; color: #ef4444; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; max-width: 200px;">🗑️ Borrar Firma</button>
           </div>
         </div>
       `,
@@ -502,7 +503,7 @@ export class HigieneComponent {
         if (!ctx) return;
         
         ctx.strokeStyle = '#0f172a';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 4;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
@@ -512,10 +513,20 @@ export class HigieneComponent {
 
         const getPos = (e: MouseEvent | TouchEvent) => {
           const rect = canvas.getBoundingClientRect();
+          // Adjust for scaled canvas (width: 100% vs internal width)
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
           if (e instanceof MouseEvent) {
-            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            return { 
+              x: (e.clientX - rect.left) * scaleX, 
+              y: (e.clientY - rect.top) * scaleY 
+            };
           } else {
-            return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+            return { 
+              x: (e.touches[0].clientX - rect.left) * scaleX, 
+              y: (e.touches[0].clientY - rect.top) * scaleY 
+            };
           }
         };
 
@@ -525,6 +536,12 @@ export class HigieneComponent {
           const pos = getPos(e);
           lastX = pos.x;
           lastY = pos.y;
+          // Draw a single dot if they just tap
+          ctx.beginPath();
+          ctx.arc(lastX, lastY, ctx.lineWidth / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
         };
 
         const move = (e: MouseEvent | TouchEvent) => {
@@ -551,13 +568,14 @@ export class HigieneComponent {
         canvas.addEventListener('touchend', stop);
         canvas.addEventListener('touchcancel', stop);
 
-        btnClear?.addEventListener('click', () => {
+        btnClear?.addEventListener('click', (e) => {
+          e.preventDefault();
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.beginPath();
         });
       },
       preConfirm: () => {
         const canvas = document.getElementById('swalCanvas') as HTMLCanvasElement;
-        // Check if canvas is empty
         const blank = document.createElement('canvas');
         blank.width = canvas.width;
         blank.height = canvas.height;
