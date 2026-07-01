@@ -18,6 +18,8 @@ import { initFotoRecorrida, FotoRecorrida } from './models/FotoRecorrida';
 import { initControlCarga, ControlCarga } from './models/ControlCarga';
 import { initServiceMantenimiento, ServiceMantenimiento } from './models/ServiceMantenimiento';
 import { initAcoplado, Acoplado } from './models/Acoplado';
+import { initLugarViaje, LugarViaje } from './models/LugarViaje';
+import { initTipoCarga, TipoCarga } from './models/TipoCarga';
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'erp_molino',
@@ -52,6 +54,8 @@ initFotoRecorrida(sequelize);
 initControlCarga(sequelize);
 initServiceMantenimiento(sequelize);
 initAcoplado(sequelize);
+initLugarViaje(sequelize);
+initTipoCarga(sequelize);
 
 // Definir relaciones
 Role.hasMany(User, { foreignKey: 'role_id' });
