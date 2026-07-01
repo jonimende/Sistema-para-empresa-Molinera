@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -359,28 +359,48 @@ import { AuthService } from '../../core/services/auth.service';
               </div>
 
               <!-- Firmas -->
-              <div class="flex flex-col space-y-6 md:grid md:grid-cols-2 md:gap-8 md:space-y-0 mt-6 border-t border-slate-200 pt-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <!-- Firma Inspector -->
-                <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col">
-                  <label class="text-base font-bold text-indigo-700 mb-2 flex justify-between items-center">
-                    <span>Firma Inspector Calidad</span>
-                    <button type="button" (click)="clearCanvas('inspector')" class="text-sm text-slate-500 hover:text-red-500 underline px-3 py-2 bg-white rounded shadow-sm">Borrar</button>
-                  </label>
-                  <canvas *ngIf="!selectedRecord?.firma_inspector" #canvasInspector width="300" height="150" class="bg-white border-2 border-dashed border-indigo-200 w-full rounded-xl cursor-crosshair touch-none"
-                    (mousedown)="startDrawing($event, 'inspector')" (mousemove)="draw($event, ctxInspector)" (mouseup)="stopDrawing()" (mouseleave)="stopDrawing()"
-                    (touchstart)="startDrawingTouch($event, 'inspector')" (touchmove)="drawTouch($event, ctxInspector)" (touchend)="stopDrawing()"></canvas>
+                <div class="flex flex-col">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-bold text-slate-700">Firma Inspector Calidad</span>
+                  </div>
+                  
+                  <button type="button" *ngIf="!selectedRecord?.firma_inspector && !firmaInspectorBase64" 
+                          (click)="abrirFirmaModal('inspector')" 
+                          class="bg-white border-2 border-dashed border-indigo-300 text-indigo-600 font-semibold w-full py-6 rounded-xl hover:bg-indigo-50 transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <span class="text-xl">✍️</span> Agregar Firma Inspector
+                  </button>
+                  
+                  <div *ngIf="firmaInspectorBase64 && !selectedRecord?.firma_inspector" class="bg-green-50 border border-green-200 p-4 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-green-700 font-semibold">
+                      <span class="text-xl">✅</span> Firma Registrada
+                    </div>
+                    <button type="button" (click)="abrirFirmaModal('inspector')" class="text-sm text-green-600 hover:text-green-800 underline">Modificar</button>
+                  </div>
+                  
                   <img *ngIf="selectedRecord?.firma_inspector" [src]="selectedRecord.firma_inspector" class="bg-white border-2 border-dashed border-indigo-200 w-full rounded max-h-[150px] object-contain">
                 </div>
 
                 <!-- Firma Chofer -->
-                <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col">
-                  <label class="text-base font-bold text-slate-700 mb-2 flex justify-between items-center">
-                    <span>Firma Chofer Transporte</span>
-                    <button type="button" (click)="clearCanvas('chofer')" class="text-sm text-slate-500 hover:text-red-500 underline px-3 py-2 bg-white rounded shadow-sm">Borrar</button>
-                  </label>
-                  <canvas *ngIf="!selectedRecord?.firma_chofer" #canvasChofer width="300" height="150" class="bg-white border-2 border-dashed border-slate-300 w-full rounded-xl cursor-crosshair touch-none"
-                    (mousedown)="startDrawing($event, 'chofer')" (mousemove)="draw($event, ctxChofer)" (mouseup)="stopDrawing()" (mouseleave)="stopDrawing()"
-                    (touchstart)="startDrawingTouch($event, 'chofer')" (touchmove)="drawTouch($event, ctxChofer)" (touchend)="stopDrawing()"></canvas>
+                <div class="flex flex-col">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-bold text-slate-700">Firma Chofer Transporte</span>
+                  </div>
+                  
+                  <button type="button" *ngIf="!selectedRecord?.firma_chofer && !firmaChoferBase64" 
+                          (click)="abrirFirmaModal('chofer')" 
+                          class="bg-white border-2 border-dashed border-slate-300 text-slate-600 font-semibold w-full py-6 rounded-xl hover:bg-slate-50 transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <span class="text-xl">✍️</span> Agregar Firma Chofer
+                  </button>
+
+                  <div *ngIf="firmaChoferBase64 && !selectedRecord?.firma_chofer" class="bg-green-50 border border-green-200 p-4 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-green-700 font-semibold">
+                      <span class="text-xl">✅</span> Firma Registrada
+                    </div>
+                    <button type="button" (click)="abrirFirmaModal('chofer')" class="text-sm text-green-600 hover:text-green-800 underline">Modificar</button>
+                  </div>
+
                   <img *ngIf="selectedRecord?.firma_chofer" [src]="selectedRecord.firma_chofer" class="bg-white border-2 border-dashed border-slate-300 w-full rounded max-h-[150px] object-contain">
                 </div>
               </div>
@@ -411,7 +431,7 @@ import { AuthService } from '../../core/services/auth.service';
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   `]
 })
-export class HigieneComponent implements AfterViewInit {
+export class HigieneComponent {
 
   parseBoolean(val: any): boolean | null {
     if (val === null || val === undefined || val === '') return null;
@@ -455,12 +475,108 @@ export class HigieneComponent implements AfterViewInit {
     { label: 'Se hizo aplicación de insecticida en la parte exterior de los bigbags o bolsas?', controlName: 'chk_insecticida', obsName: 'obs_insecticida' }
   ];
 
-  @ViewChild('canvasInspector') canvasInspectorRef!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('canvasChofer') canvasChoferRef!: ElementRef<HTMLCanvasElement>;
-  
-  ctxInspector!: CanvasRenderingContext2D | null;
-  ctxChofer!: CanvasRenderingContext2D | null;
-  isDrawing = false;
+  // Firmas base64
+  firmaInspectorBase64: string | null = null;
+  firmaChoferBase64: string | null = null;
+
+  abrirFirmaModal(type: 'inspector' | 'chofer') {
+    Swal.fire({
+      title: type === 'inspector' ? 'Firma del Inspector' : 'Firma del Chofer',
+      html: `
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <canvas id="swalCanvas" width="300" height="150" style="border: 2px dashed #ccc; border-radius: 8px; cursor: crosshair; touch-action: none; background: white;"></canvas>
+          <div style="margin-top: 15px;">
+            <button id="btnClearSwal" style="padding: 8px 16px; border: 1px solid #ef4444; background: white; color: #ef4444; border-radius: 6px; cursor: pointer; font-weight: bold;">Borrar Firma</button>
+          </div>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Guardar Firma',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#4f46e5',
+      didOpen: () => {
+        const canvas = document.getElementById('swalCanvas') as HTMLCanvasElement;
+        const btnClear = document.getElementById('btnClearSwal');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        const getPos = (e: MouseEvent | TouchEvent) => {
+          const rect = canvas.getBoundingClientRect();
+          if (e instanceof MouseEvent) {
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+          } else {
+            return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+          }
+        };
+
+        const start = (e: MouseEvent | TouchEvent) => {
+          e.preventDefault();
+          isDrawing = true;
+          const pos = getPos(e);
+          lastX = pos.x;
+          lastY = pos.y;
+        };
+
+        const move = (e: MouseEvent | TouchEvent) => {
+          if (!isDrawing) return;
+          e.preventDefault();
+          const pos = getPos(e);
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+          lastX = pos.x;
+          lastY = pos.y;
+        };
+
+        const stop = () => { isDrawing = false; };
+
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', move);
+        canvas.addEventListener('mouseup', stop);
+        canvas.addEventListener('mouseout', stop);
+
+        canvas.addEventListener('touchstart', start, { passive: false });
+        canvas.addEventListener('touchmove', move, { passive: false });
+        canvas.addEventListener('touchend', stop);
+        canvas.addEventListener('touchcancel', stop);
+
+        btnClear?.addEventListener('click', () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+      },
+      preConfirm: () => {
+        const canvas = document.getElementById('swalCanvas') as HTMLCanvasElement;
+        // Check if canvas is empty
+        const blank = document.createElement('canvas');
+        blank.width = canvas.width;
+        blank.height = canvas.height;
+        if (canvas.toDataURL() === blank.toDataURL()) {
+          Swal.showValidationMessage('Por favor, dibuje su firma antes de guardar');
+          return false;
+        }
+        return canvas.toDataURL('image/png');
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        if (type === 'inspector') {
+          this.firmaInspectorBase64 = result.value;
+        } else {
+          this.firmaChoferBase64 = result.value;
+        }
+      }
+    });
+  }
 
   constructor() {
     this.wizardForm = this.fb.group({
@@ -538,10 +654,16 @@ export class HigieneComponent implements AfterViewInit {
     this.isOpenDropdown[field] = false;
   }
 
-  abrirModalAgregar(field: 'transporte' | 'producto' | 'cliente') {
-    const nuevo = prompt(`Ingrese el nuevo valor para ${field}:`);
+  async abrirModalAgregar(field: 'transporte' | 'producto' | 'cliente') {
+    const { value: nuevo } = await Swal.fire({
+      title: `Agregar nuevo ${field}`,
+      input: 'text',
+      inputPlaceholder: `Ingrese el nuevo valor para ${field}`,
+      showCancelButton: true
+    });
+    
     if (nuevo && nuevo.trim() !== '') {
-      const limpio = nuevo.trim();
+      const limpio = nuevo.trim().toUpperCase();
       
       if (field === 'transporte' && !this.transportes.includes(limpio)) {
         this.transportes.push(limpio);
@@ -568,6 +690,8 @@ export class HigieneComponent implements AfterViewInit {
     this.wizardForm.reset();
     this.previews = {};
     this.compressedFiles = {};
+    this.firmaInspectorBase64 = null;
+    this.firmaChoferBase64 = null;
     
     // Autocompletar el Responsable de Inspección con el usuario logueado
     const user = this.authService.currentUser();
@@ -629,61 +753,6 @@ export class HigieneComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {}
-
-  initCanvas() {
-    setTimeout(() => {
-      if(this.canvasInspectorRef && this.canvasChoferRef) {
-        this.ctxInspector = this.canvasInspectorRef.nativeElement.getContext('2d');
-        this.ctxChofer = this.canvasChoferRef.nativeElement.getContext('2d');
-        if(this.ctxInspector) { this.ctxInspector.lineWidth = 3; this.ctxInspector.lineCap = 'round'; this.ctxInspector.strokeStyle = '#4338ca'; }
-        if(this.ctxChofer) { this.ctxChofer.lineWidth = 3; this.ctxChofer.lineCap = 'round'; this.ctxChofer.strokeStyle = '#334155'; }
-      }
-    }, 100);
-  }
-
-  startDrawing(e: MouseEvent, type: string) {
-    this.isDrawing = true;
-    const canvas = type === 'inspector' ? this.canvasInspectorRef.nativeElement : this.canvasChoferRef.nativeElement;
-    this.draw(e, canvas.getContext('2d'));
-  }
-  startDrawingTouch(e: TouchEvent, type: string) {
-    e.preventDefault();
-    this.isDrawing = true;
-    const canvas = type === 'inspector' ? this.canvasInspectorRef.nativeElement : this.canvasChoferRef.nativeElement;
-    this.drawTouch(e, canvas.getContext('2d'));
-  }
-  draw(e: MouseEvent, ctx: CanvasRenderingContext2D | null) {
-    if (!this.isDrawing || !ctx) return;
-    const rect = ctx.canvas.getBoundingClientRect();
-    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-  }
-  drawTouch(e: TouchEvent, ctx: CanvasRenderingContext2D | null) {
-    if (!this.isDrawing || !ctx) return;
-    const rect = ctx.canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-  }
-  stopDrawing() {
-    this.isDrawing = false;
-    if(this.ctxInspector) this.ctxInspector.beginPath();
-    if(this.ctxChofer) this.ctxChofer.beginPath();
-  }
-  clearCanvas(type: string) {
-    const canvas = type === 'inspector' ? this.canvasInspectorRef?.nativeElement : this.canvasChoferRef?.nativeElement;
-    const ctx = type === 'inspector' ? this.ctxInspector : this.ctxChofer;
-    if(ctx && canvas) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.beginPath();
-    }
-  }
-
   setCheck(control: string, val: string) {
     this.wizardForm.get(control)?.setValue(val);
     const obsControl = this.wizardForm.get('obs_' + control.split('_')[1]);
@@ -715,9 +784,6 @@ export class HigieneComponent implements AfterViewInit {
     }
 
     this.currentStep++;
-    if(this.currentStep === 3) {
-      this.initCanvas();
-    }
   }
 
   prevStep() {
@@ -785,11 +851,11 @@ export class HigieneComponent implements AfterViewInit {
       formData.append(key, this.wizardForm.value[key] || '');
     });
 
-    if(this.canvasInspectorRef && this.ctxInspector && !this.selectedRecord?.firma_inspector) {
-      formData.append('firma_inspector', this.canvasInspectorRef.nativeElement.toDataURL('image/png'));
+    if(this.firmaInspectorBase64 && !this.selectedRecord?.firma_inspector) {
+      formData.append('firma_inspector', this.firmaInspectorBase64);
     }
-    if(this.canvasChoferRef && this.ctxChofer && !this.selectedRecord?.firma_chofer) {
-      formData.append('firma_chofer', this.canvasChoferRef.nativeElement.toDataURL('image/png'));
+    if(this.firmaChoferBase64 && !this.selectedRecord?.firma_chofer) {
+      formData.append('firma_chofer', this.firmaChoferBase64);
     }
 
     // Adjuntar fotos comprimidas
