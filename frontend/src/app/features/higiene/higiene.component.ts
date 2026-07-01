@@ -13,8 +13,9 @@ import { AuthService } from '../../core/services/auth.service';
   template: `    <div class="h-[calc(100vh-8rem)] flex flex-col md:flex-row gap-6 w-full relative">
       
       <!-- Izquierda: Lista de Historial -->
-      <div class="w-full md:w-1/3 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-y-auto max-h-[80vh] md:max-h-full" 
-           [ngClass]="{'hidden md:flex flex-col': isCreating || isViewing || isEditing, 'flex flex-col': !(isCreating || isViewing || isEditing)}">
+      <div class="w-full md:w-1/3 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-y-auto max-h-[80vh] md:max-h-full flex-col md:flex" 
+           [class.hidden]="isCreating || isViewing || isEditing"
+           [class.flex]="!(isCreating || isViewing || isEditing)">
         <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
           <div>
             <h2 class="text-xl font-black text-slate-800">Control de Higiene de Carga de Producto Terminado</h2>
@@ -52,8 +53,9 @@ import { AuthService } from '../../core/services/auth.service';
       </div>
 
       <!-- Derecha: Visualización / Wizard -->
-      <div class="w-full md:w-2/3 bg-white border border-slate-200 rounded-2xl shadow-sm relative overflow-y-auto" 
-           [ngClass]="{'hidden md:flex flex-col': !(isCreating || isViewing || isEditing), 'flex flex-col h-full w-full': isCreating || isViewing || isEditing}">
+      <div class="w-full md:w-2/3 bg-white border border-slate-200 rounded-2xl shadow-sm relative overflow-y-auto flex-col md:flex h-full" 
+           [class.hidden]="!(isCreating || isViewing || isEditing)"
+           [class.flex]="isCreating || isViewing || isEditing">
         
         <!-- Estado Vacío -->
         <div *ngIf="!isCreating && !isViewing && !isEditing" class="h-full hidden md:flex flex-col items-center justify-center text-slate-400 bg-slate-50/80 z-10 absolute inset-0">
@@ -869,10 +871,10 @@ export class HigieneComponent {
       formData.append(key, this.wizardForm.value[key] || '');
     });
 
-    if(this.firmaInspectorBase64 && !this.selectedRecord?.firma_inspector) {
+    if(this.firmaInspectorBase64) {
       formData.append('firma_inspector', this.firmaInspectorBase64);
     }
-    if(this.firmaChoferBase64 && !this.selectedRecord?.firma_chofer) {
+    if(this.firmaChoferBase64) {
       formData.append('firma_chofer', this.firmaChoferBase64);
     }
 
