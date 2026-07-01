@@ -41,6 +41,7 @@ const getModel = (path: string) => {
   if (path.includes('/acoplados')) return require('../../database/sequelize/models/Acoplado').Acoplado;
   if (path.includes('/lugares')) return require('../../database/sequelize/models/LugarViaje').LugarViaje;
   if (path.includes('/cargas')) return require('../../database/sequelize/models/TipoCarga').TipoCarga;
+  if (path.includes('/cat-acoplados')) return require('../../database/sequelize/models/CatAcoplados').CatAcoplados;
   return null;
 };
 
@@ -143,6 +144,8 @@ export const genericGetAll = async (req: Request, res: Response) => {
           else if (cols.includes('chofer')) whereClause.chofer = emailSeguro;
         } else if (pathStr.includes('/combustible') || pathStr.includes('/service')) {
           if (cols.includes('chofer_email')) whereClause.chofer_email = emailSeguro;
+        } else if (pathStr.includes('/camiones')) {
+          if (cols.includes('email_chofer')) whereClause.email_chofer = emailSeguro;
         }
       }
     }

@@ -96,11 +96,11 @@
                     <h5 class="font-bold text-slate-700 mb-3 mt-2">Checklist de Control</h5>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
                         <div class="flex justify-between">
-                            <span class="text-sm text-slate-600 font-medium">Mant. de Lona</span>
+                            <span class="text-sm text-slate-600 font-medium">Estado de Lona</span>
                             <span class="font-bold" [ngClass]="selectedAcoplado.mant_lona === 'Bueno' ? 'text-emerald-600' : 'text-red-600'">{{selectedAcoplado.mant_lona}}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-sm text-slate-600 font-medium">Mant. de Pollera</span>
+                            <span class="text-sm text-slate-600 font-medium">Estado de Pollera</span>
                             <span class="font-bold" [ngClass]="selectedAcoplado.mant_pollera === 'Bueno' ? 'text-emerald-600' : 'text-red-600'">{{selectedAcoplado.mant_pollera}}</span>
                         </div>
                         <div class="flex justify-between">
@@ -117,7 +117,7 @@
                         </div>
                         <div class="flex justify-between">
                             <span class="text-sm text-slate-600 font-medium">Engrase Mensual</span>
-                            <span class="font-bold" [ngClass]="selectedAcoplado.engrase_mensual === 'Bueno' ? 'text-emerald-600' : 'text-red-600'">{{selectedAcoplado.engrase_mensual}}</span>
+                            <span class="font-bold" [ngClass]="selectedAcoplado.engrase_mensual === 'Cumple' ? 'text-emerald-600' : 'text-red-600'">{{selectedAcoplado.engrase_mensual}}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-sm text-slate-600 font-medium">Lavado Acoplado</span>
@@ -156,8 +156,23 @@
                     </div>
 
                     <div class="flex flex-col">
-                      <label class="text-sm font-bold text-slate-700 mb-2">Patente del Acoplado</label>
-                      <input type="text" formControlName="patente_acoplado" placeholder="Ej: AB123CD" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 font-bold uppercase">
+                      <div class="flex justify-between items-center mb-2">
+                        <label class="text-sm font-bold text-slate-700">Patente del Acoplado</label>
+                        <button type="button" *ngIf="form.get('patente_acoplado')?.value && form.get('patente_acoplado')?.value !== ''" 
+                                (click)="deleteCatAcoplado(getAcopladoIdByNombre(form.get('patente_acoplado')?.value))" 
+                                class="text-rose-500 hover:text-rose-700 p-1" title="Ocultar acoplado seleccionado">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                      <select formControlName="patente_acoplado" (change)="onAcopladoChange($event)" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-slate-800 shadow-sm focus:ring-2 focus:ring-indigo-500 font-bold uppercase">
+                        <option value="" disabled selected>Seleccione acoplado...</option>
+                        <option *ngFor="let acoplado of catAcoplados" [value]="acoplado.nombre">
+                          {{ acoplado.nombre }}
+                        </option>
+                        <option value="AGREGAR_NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo</option>
+                      </select>
                     </div>
 
                     <div class="flex flex-col md:col-span-2">
@@ -173,7 +188,7 @@
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
                     <div class="flex flex-col bg-slate-50 p-3 rounded-xl border border-slate-100">
-                      <label class="text-sm font-bold text-slate-700 mb-2">Mant. de Lona</label>
+                      <label class="text-sm font-bold text-slate-700 mb-2">Estado de Lona</label>
                       <div class="flex gap-2">
                         <button type="button" (click)="setOption('mant_lona', 'Bueno')" [ngClass]="getOptionClasses('mant_lona', 'Bueno')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Bueno</button>
                         <button type="button" (click)="setOption('mant_lona', 'Malo')" [ngClass]="getOptionClasses('mant_lona', 'Malo')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Malo</button>
@@ -181,7 +196,7 @@
                     </div>
 
                     <div class="flex flex-col bg-slate-50 p-3 rounded-xl border border-slate-100">
-                      <label class="text-sm font-bold text-slate-700 mb-2">Mant. de Pollera</label>
+                      <label class="text-sm font-bold text-slate-700 mb-2">Estado de Pollera</label>
                       <div class="flex gap-2">
                         <button type="button" (click)="setOption('mant_pollera', 'Bueno')" [ngClass]="getOptionClasses('mant_pollera', 'Bueno')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Bueno</button>
                         <button type="button" (click)="setOption('mant_pollera', 'Malo')" [ngClass]="getOptionClasses('mant_pollera', 'Malo')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Malo</button>
@@ -215,8 +230,8 @@
                     <div class="flex flex-col bg-slate-50 p-3 rounded-xl border border-slate-100">
                       <label class="text-sm font-bold text-slate-700 mb-2">Engrase Mensual</label>
                       <div class="flex gap-2">
-                        <button type="button" (click)="setOption('engrase_mensual', 'Bueno')" [ngClass]="getOptionClasses('engrase_mensual', 'Bueno')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Bueno</button>
-                        <button type="button" (click)="setOption('engrase_mensual', 'Malo')" [ngClass]="getOptionClasses('engrase_mensual', 'Malo')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Malo</button>
+                        <button type="button" (click)="setOption('engrase_mensual', 'Cumple')" [ngClass]="getOptionClasses('engrase_mensual', 'Cumple')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">Cumple</button>
+                        <button type="button" (click)="setOption('engrase_mensual', 'No Cumple')" [ngClass]="getOptionClasses('engrase_mensual', 'No Cumple')" class="flex-1 py-3 rounded-lg border font-semibold text-center cursor-pointer">No Cumple</button>
                       </div>
                     </div>
 

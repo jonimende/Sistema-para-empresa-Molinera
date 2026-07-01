@@ -25,6 +25,8 @@ export class AcopladosComponent implements OnInit {
 
   apiUrl = `${environment.apiUrl}/logistica/acoplados`;
   choferesUrl = `${environment.apiUrl}/logistica/choferes`;
+  catAcopladosUrl = `${environment.apiUrl}/logistica/cat-acoplados`;
+  catAcoplados: any[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}
 
@@ -32,6 +34,7 @@ export class AcopladosComponent implements OnInit {
     this.initForm();
     this.loadAcoplados();
     this.loadChoferes();
+    this.loadCatAcoplados();
   }
 
   initForm(): void {
@@ -66,6 +69,60 @@ export class AcopladosComponent implements OnInit {
       },
       error: (err) => console.error('Error cargando choferes', err)
     });
+  }
+
+  loadCatAcoplados(): void {
+    this.http.get<any[]>(this.catAcopladosUrl).subscribe({
+      next: (data) => this.catAcoplados = data.filter(c => c.estado !== false),
+      error: (err) => console.error('Error cargando cat acoplados', err)
+    });
+  }
+
+  async onAcopladoChange(event: any) {
+    if (event.target.value === 'AGREGAR_NUEVO') {
+      const { value: nuevo } = await Swal.fire({
+        title: 'Agregar nuevo acoplado',
+        input: 'text',
+        inputPlaceholder: 'Ingrese la patente del acoplado',
+        showCancelButton: true
+      });
+      if (nuevo) {
+        this.http.post(this.catAcopladosUrl, { nombre: nuevo.toUpperCase() }).subscribe({
+          next: (res: any) => {
+            this.catAcoplados.push(res);
+            this.form.patchValue({ patente_acoplado: res.nombre });
+            Swal.fire('Éxito', 'Acoplado agregado.', 'success');
+          },
+          error: () => Swal.fire('Error', 'No se pudo agregar.', 'error')
+        });
+      } else {
+        this.form.patchValue({ patente_acoplado: '' });
+      }
+    }
+  }
+
+  deleteCatAcoplado(id: number) {
+    Swal.fire({
+      title: '¿Ocultar acoplado?',
+      text: 'No aparecerá más en la lista.',
+      icon: 'warning',
+      showCancelButton: true
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.http.put(`${this.catAcopladosUrl}/${id}`, { estado: false }).subscribe({
+          next: () => {
+            this.loadCatAcoplados();
+            Swal.fire('Ocultado', 'Acoplado ocultado.', 'success');
+          },
+          error: () => Swal.fire('Error', 'Error al ocultar.', 'error')
+        });
+      }
+    });
+  }
+
+  getAcopladoIdByNombre(nombre: string): number {
+    const found = this.catAcoplados.find(c => c.nombre === nombre);
+    return found ? found.id : 0;
   }
 
   setOption(field: string, value: string): void {

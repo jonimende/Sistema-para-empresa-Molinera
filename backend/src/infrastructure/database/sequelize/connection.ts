@@ -20,6 +20,7 @@ import { initServiceMantenimiento, ServiceMantenimiento } from './models/Service
 import { initAcoplado, Acoplado } from './models/Acoplado';
 import { initLugarViaje, LugarViaje } from './models/LugarViaje';
 import { initTipoCarga, TipoCarga } from './models/TipoCarga';
+import { initCatAcoplados, CatAcoplados } from './models/CatAcoplados';
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'erp_molino',
@@ -56,6 +57,7 @@ initServiceMantenimiento(sequelize);
 initAcoplado(sequelize);
 initLugarViaje(sequelize);
 initTipoCarga(sequelize);
+initCatAcoplados(sequelize);
 
 // Definir relaciones
 Role.hasMany(User, { foreignKey: 'role_id' });
