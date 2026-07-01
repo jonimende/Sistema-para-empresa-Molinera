@@ -208,7 +208,16 @@ import { AcopladosComponent } from '../acoplados/acoplados.component';
                     
                     <div>
                       <label class="block text-sm font-bold text-slate-700 mb-1">Lugar de Salida</label>
-                      <input type="text" formControlName="lugar_salida" list="ubicacionesList" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-2.5 px-3 bg-white">
+                      <div class="flex items-center gap-2">
+                        <select formControlName="lugar_salida" (change)="onLugarChange($event, 'lugar_salida')" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-2.5 px-3 bg-white">
+                          <option value="" disabled selected>Seleccione...</option>
+                          <option *ngFor="let l of listadoLugares" [value]="l.nombre">{{ l.nombre }}</option>
+                          <option value="AGREGAR_NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo</option>
+                        </select>
+                        <button *ngIf="viajeForm.get('lugar_salida')?.value && viajeForm.get('lugar_salida')?.value !== 'AGREGAR_NUEVO' && getLugarIdByName(viajeForm.get('lugar_salida')?.value)" type="button" (click)="deleteLugar($event, getLugarIdByName(viajeForm.get('lugar_salida')?.value))" class="text-red-400 hover:text-red-600 p-2 bg-slate-50 hover:bg-red-50 rounded-lg" title="Ocultar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label class="block text-sm font-bold text-slate-700 mb-1">Fecha Salida</label>
@@ -217,11 +226,17 @@ import { AcopladosComponent } from '../acoplados/acoplados.component';
                     
                     <div>
                       <label class="block text-sm font-bold text-slate-700 mb-1">Lugar de Llegada</label>
-                      <input type="text" formControlName="lugar_llegada" list="ubicacionesList" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-2.5 px-3 bg-white">
+                      <div class="flex items-center gap-2">
+                        <select formControlName="lugar_llegada" (change)="onLugarChange($event, 'lugar_llegada')" class="w-full border-slate-200 rounded-lg shadow-sm focus:ring-indigo-500 py-2.5 px-3 bg-white">
+                          <option value="" disabled selected>Seleccione...</option>
+                          <option *ngFor="let l of listadoLugares" [value]="l.nombre">{{ l.nombre }}</option>
+                          <option value="AGREGAR_NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo</option>
+                        </select>
+                        <button *ngIf="viajeForm.get('lugar_llegada')?.value && viajeForm.get('lugar_llegada')?.value !== 'AGREGAR_NUEVO' && getLugarIdByName(viajeForm.get('lugar_llegada')?.value)" type="button" (click)="deleteLugar($event, getLugarIdByName(viajeForm.get('lugar_llegada')?.value))" class="text-red-400 hover:text-red-600 p-2 bg-slate-50 hover:bg-red-50 rounded-lg" title="Ocultar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                      </div>
                     </div>
-                    <datalist id="ubicacionesList">
-                      <option *ngFor="let u of ubicaciones" [value]="u.nombre_lugar"></option>
-                    </datalist>
                     <div>
                       <label class="block text-sm font-bold text-slate-700 mb-1">Fecha Llegada</label>
                       <input type="date" formControlName="fecha_llegada" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-white">
@@ -231,11 +246,16 @@ import { AcopladosComponent } from '../acoplados/acoplados.component';
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                       <label class="block text-sm font-bold text-slate-700 mb-1">Carga</label>
-                      <select formControlName="carga_transportada" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50">
-                        <option value="" disabled selected>Producto...</option>
-                        <option value="Arroz Blanco">Arroz Blanco</option>
-                        <option value="Medio Grano">Medio Grano</option>
-                      </select>
+                      <div class="flex items-center gap-2">
+                        <select formControlName="carga_transportada" (change)="onCargaChange($event)" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-slate-50">
+                          <option value="" disabled selected>Producto...</option>
+                          <option *ngFor="let c of listadoCargas" [value]="c.nombre">{{ c.nombre }}</option>
+                          <option value="AGREGAR_NUEVO" class="font-bold text-indigo-600">+ Agregar Nuevo</option>
+                        </select>
+                        <button *ngIf="viajeForm.get('carga_transportada')?.value && viajeForm.get('carga_transportada')?.value !== 'AGREGAR_NUEVO' && getCargaIdByName(viajeForm.get('carga_transportada')?.value)" type="button" (click)="deleteCarga($event, getCargaIdByName(viajeForm.get('carga_transportada')?.value))" class="text-red-400 hover:text-red-600 p-2 bg-slate-50 hover:bg-red-50 rounded-lg" title="Ocultar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label class="block text-sm font-bold text-slate-700 mb-1">KG Transportados</label>
@@ -267,6 +287,11 @@ import { AcopladosComponent } from '../acoplados/acoplados.component';
                       <label class="block text-sm font-bold text-slate-700 mb-2">Número de Comprobante</label>
                       <input type="text" formControlName="numero_comprobante" placeholder="0001-00001234" class="w-full border-slate-200 rounded-lg shadow-sm py-2.5 px-3 bg-white font-mono font-bold text-lg">
                     </div>
+                  </div>
+
+                  <div class="mt-6">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Observaciones</label>
+                    <textarea formControlName="observaciones" rows="3" placeholder="Añadir observaciones adicionales (opcional)..." class="w-full border-slate-200 rounded-lg shadow-sm py-3 px-4 bg-white focus:ring-indigo-500"></textarea>
                   </div>
 
                   <div class="flex justify-end pt-4">
@@ -913,6 +938,8 @@ export class ViajesComponent implements OnInit {
   camiones: any[] = [];
   listadoChoferes: any[] = [];
   ubicaciones: any[] = [];
+  listadoLugares: any[] = [];
+  listadoCargas: any[] = [];
   kmTotalesViajes: number = 0;
   kmTotalesVehiculoSeleccionado: number = 0;
 
@@ -927,7 +954,8 @@ export class ViajesComponent implements OnInit {
       carga_transportada: ['', Validators.required],
       kg_carga: [null, [Validators.required, Validators.min(1)]],
       comprobante_relacionado: ['REMITO', Validators.required],
-      numero_comprobante: ['', Validators.required]
+      numero_comprobante: ['', Validators.required],
+      observaciones: ['']
     });
 
     this.combustibleForm = this.fb.group({
@@ -993,6 +1021,16 @@ export class ViajesComponent implements OnInit {
         },
         error: (e) => console.error(e)
       });
+      
+    this.http.get<any[]>(`${environment.apiUrl}/logistica/lugares`).subscribe({
+      next: (data: any) => this.ngZone.run(() => this.listadoLugares = (data?.data || data || []).filter((x: any) => x.estado)),
+      error: (e) => console.error(e)
+    });
+
+    this.http.get<any[]>(`${environment.apiUrl}/logistica/cargas`).subscribe({
+      next: (data: any) => this.ngZone.run(() => this.listadoCargas = (data?.data || data || []).filter((x: any) => x.estado)),
+      error: (e) => console.error(e)
+    });
     this.http.get<any[]>(`${environment.apiUrl}/logistica/combustible`).subscribe({
       next: (data: any) => this.ngZone.run(() => this.cargas = data?.data || data || []),
       error: (e) => console.error(e)
@@ -1336,6 +1374,101 @@ export class ViajesComponent implements OnInit {
   }
 
 
+
+  async onLugarChange(event: any, field: string) {
+    if (event.target.value === 'AGREGAR_NUEVO') {
+      const { value: nuevoLugar } = await Swal.fire({
+        title: 'Agregar nuevo lugar',
+        input: 'text',
+        inputPlaceholder: 'Ingrese el nombre del lugar',
+        showCancelButton: true
+      });
+      if (nuevoLugar) {
+        this.http.post(`${environment.apiUrl}/logistica/lugares`, { nombre: nuevoLugar }).subscribe({
+          next: (res: any) => {
+            this.listadoLugares.push(res);
+            this.viajeForm.patchValue({ [field]: res.nombre });
+            Swal.fire('Éxito', 'Lugar agregado.', 'success');
+          },
+          error: () => Swal.fire('Error', 'No se pudo agregar.', 'error')
+        });
+      } else {
+        this.viajeForm.patchValue({ [field]: '' });
+      }
+    }
+  }
+
+  async onCargaChange(event: any) {
+    if (event.target.value === 'AGREGAR_NUEVO') {
+      const { value: nuevaCarga } = await Swal.fire({
+        title: 'Agregar nueva carga',
+        input: 'text',
+        inputPlaceholder: 'Ingrese el nombre de la carga',
+        showCancelButton: true
+      });
+      if (nuevaCarga) {
+        this.http.post(`${environment.apiUrl}/logistica/cargas`, { nombre: nuevaCarga }).subscribe({
+          next: (res: any) => {
+            this.listadoCargas.push(res);
+            this.viajeForm.patchValue({ carga_transportada: res.nombre });
+            Swal.fire('Éxito', 'Carga agregada.', 'success');
+          },
+          error: () => Swal.fire('Error', 'No se pudo agregar.', 'error')
+        });
+      } else {
+        this.viajeForm.patchValue({ carga_transportada: '' });
+      }
+    }
+  }
+
+  deleteLugar(event: Event, id: number) {
+    if (!id) return;
+    event.stopPropagation();
+    event.preventDefault();
+    Swal.fire({
+      title: '¿Ocultar lugar?', text: 'Ya no aparecerá en las listas.', icon: 'warning', showCancelButton: true
+    }).then((res) => {
+      if(res.isConfirmed) {
+        this.http.put(`${environment.apiUrl}/logistica/lugares/${id}`, { estado: false }).subscribe({
+          next: () => {
+            this.listadoLugares = this.listadoLugares.filter(l => l.id !== id);
+            if(this.viajeForm.get('lugar_salida')?.value === id) this.viajeForm.patchValue({ lugar_salida: '' });
+            if(this.viajeForm.get('lugar_llegada')?.value === id) this.viajeForm.patchValue({ lugar_llegada: '' });
+          },
+          error: () => Swal.fire('Error', 'No se pudo ocultar', 'error')
+        });
+      }
+    });
+  }
+
+  deleteCarga(event: Event, id: number) {
+    if (!id) return;
+    event.stopPropagation();
+    event.preventDefault();
+    Swal.fire({
+      title: '¿Ocultar carga?', text: 'Ya no aparecerá en las listas.', icon: 'warning', showCancelButton: true
+    }).then((res) => {
+      if(res.isConfirmed) {
+        this.http.put(`${environment.apiUrl}/logistica/cargas/${id}`, { estado: false }).subscribe({
+          next: () => {
+            this.listadoCargas = this.listadoCargas.filter(c => c.id !== id);
+            this.viajeForm.patchValue({ carga_transportada: '' });
+          },
+          error: () => Swal.fire('Error', 'No se pudo ocultar', 'error')
+        });
+      }
+    });
+  }
+
+  getLugarIdByName(name: string): number {
+    const l = this.listadoLugares.find(x => x.nombre === name);
+    return l ? l.id : 0;
+  }
+
+  getCargaIdByName(name: string): number {
+    const c = this.listadoCargas.find(x => x.nombre === name);
+    return c ? c.id : 0;
+  }
 
   verDetalle(item: any) {
     if (!item) return;

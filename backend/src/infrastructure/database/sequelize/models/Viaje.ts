@@ -16,6 +16,7 @@ export class Viaje extends Model {
   public declare comprobante_relacionado: string;
   public declare numero_comprobante: string;
   public declare comentarios: string;
+  public declare observaciones: string;
 }
 
 export const initViaje = (sequelize: Sequelize) => {
@@ -34,6 +35,7 @@ export const initViaje = (sequelize: Sequelize) => {
     kg_carga: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
     comprobante_relacionado: { type: DataTypes.STRING, allowNull: true },
     numero_comprobante: { type: DataTypes.STRING, allowNull: true },
-    comentarios: { type: DataTypes.TEXT, allowNull: true }
+    comentarios: { type: DataTypes.TEXT, allowNull: true },
+    observaciones: { type: DataTypes.TEXT, allowNull: true }
   }, { sequelize, tableName: 'viajes' });
 };

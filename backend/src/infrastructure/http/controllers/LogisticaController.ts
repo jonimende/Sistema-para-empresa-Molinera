@@ -48,6 +48,8 @@ const getModel = (path: string) => {
   if (path.includes('/productos')) return require('../../database/sequelize/models/ProductoCarga').ProductoCarga;
   if (path.includes('/turnos')) return require('../../database/sequelize/models/Turno').Turno;
   if (path.includes('/acoplados')) return require('../../database/sequelize/models/Acoplado').Acoplado;
+  if (path.includes('/lugares')) return require('../../database/sequelize/models/LugarViaje').LugarViaje;
+  if (path.includes('/cargas')) return require('../../database/sequelize/models/TipoCarga').TipoCarga;
   return null;
 };
 
