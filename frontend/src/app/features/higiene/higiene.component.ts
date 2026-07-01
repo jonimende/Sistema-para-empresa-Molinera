@@ -372,14 +372,14 @@ import { AuthService } from '../../core/services/auth.service';
                     <span class="text-xl">✍️</span> Agregar Firma Inspector
                   </button>
                   
-                  <div *ngIf="firmaInspectorBase64 && !selectedRecord?.firma_inspector" class="bg-green-50 border border-green-200 p-4 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center gap-2 text-green-700 font-semibold">
-                      <span class="text-xl">✅</span> Firma Registrada
-                    </div>
-                    <button type="button" (click)="abrirFirmaModal('inspector')" class="text-sm text-green-600 hover:text-green-800 underline">Modificar</button>
+                  <div *ngIf="firmaInspectorBase64 || selectedRecord?.firma_inspector" class="relative group w-full">
+                    <img [src]="firmaInspectorBase64 || selectedRecord?.firma_inspector" class="bg-white border-2 border-dashed border-indigo-200 w-full rounded max-h-[150px] object-contain">
+                    <button *ngIf="isCreating || isEditing" type="button" (click)="abrirFirmaModal('inspector')" class="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md text-slate-500 hover:text-indigo-600 border border-slate-200" title="Editar firma">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                    </button>
                   </div>
-                  
-                  <img *ngIf="selectedRecord?.firma_inspector" [src]="selectedRecord.firma_inspector" class="bg-white border-2 border-dashed border-indigo-200 w-full rounded max-h-[150px] object-contain">
                 </div>
 
                 <!-- Firma Chofer -->
@@ -394,14 +394,14 @@ import { AuthService } from '../../core/services/auth.service';
                     <span class="text-xl">✍️</span> Agregar Firma Chofer
                   </button>
 
-                  <div *ngIf="firmaChoferBase64 && !selectedRecord?.firma_chofer" class="bg-green-50 border border-green-200 p-4 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center gap-2 text-green-700 font-semibold">
-                      <span class="text-xl">✅</span> Firma Registrada
-                    </div>
-                    <button type="button" (click)="abrirFirmaModal('chofer')" class="text-sm text-green-600 hover:text-green-800 underline">Modificar</button>
+                  <div *ngIf="firmaChoferBase64 || selectedRecord?.firma_chofer" class="relative group w-full">
+                    <img [src]="firmaChoferBase64 || selectedRecord?.firma_chofer" class="bg-white border-2 border-dashed border-slate-300 w-full rounded max-h-[150px] object-contain">
+                    <button *ngIf="isCreating || isEditing" type="button" (click)="abrirFirmaModal('chofer')" class="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md text-slate-500 hover:text-indigo-600 border border-slate-200" title="Editar firma">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                    </button>
                   </div>
-
-                  <img *ngIf="selectedRecord?.firma_chofer" [src]="selectedRecord.firma_chofer" class="bg-white border-2 border-dashed border-slate-300 w-full rounded max-h-[150px] object-contain">
                 </div>
               </div>
 
