@@ -28,7 +28,7 @@ export const initAcoplado = (sequelize: Sequelize) => {
     verificacion_luces: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
     verificacion_frenos: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
     verificacion_hojas_elastico: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
-    engrase_mensual: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
+    engrase_mensual: { type: DataTypes.ENUM('Bueno', 'Malo', 'Cumple', 'No Cumple'), allowNull: true },
     lavado_acoplado: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
     ajuste_reemplazo_tapa: { type: DataTypes.ENUM('Bueno', 'Malo'), allowNull: true },
     observaciones: { type: DataTypes.STRING, allowNull: true },

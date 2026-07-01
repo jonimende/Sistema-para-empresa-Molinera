@@ -55,7 +55,7 @@ app.get('/api/logistica/combustible', authGuard, getCombustible);
 app.get('/api/logistica/service', authGuard, getService);
 app.get('/api/logistica/reset-acoplados', resetAcopladosDB);
 
-['viajes', 'combustible', 'service', 'camiones', 'choferes', 'productos_carga', 'turnos', 'acoplados', 'lugares', 'cargas'].forEach(entity => {
+['viajes', 'combustible', 'service', 'camiones', 'choferes', 'productos_carga', 'turnos', 'acoplados', 'lugares', 'cargas', 'cat-acoplados'].forEach(entity => {
   if (!['viajes', 'combustible', 'service'].includes(entity)) {
     app.get(`/api/logistica/${entity}`, authGuard, genericGetAll);
   }

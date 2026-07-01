@@ -7,6 +7,7 @@ export class Vehiculo extends Model {
   public declare marca: string;
   public declare modelo: string;
   public declare chofer_asignado: string;
+  public declare email_chofer: string;
   public declare capacidad_kg: number;
 }
 
@@ -18,6 +19,7 @@ export const initVehiculo = (sequelize: Sequelize) => {
     marca: { type: DataTypes.STRING, allowNull: true },
     modelo: { type: DataTypes.STRING, allowNull: true },
     chofer_asignado: { type: DataTypes.STRING, allowNull: true },
+    email_chofer: { type: DataTypes.STRING, allowNull: true },
     capacidad_kg: { type: DataTypes.INTEGER, allowNull: true }
   }, { sequelize, tableName: 'vehiculos' });
 };
