@@ -7,7 +7,7 @@ import { User } from './infrastructure/database/sequelize/models/User';
 import bcrypt from 'bcrypt';
 import { login } from './infrastructure/http/controllers/AuthController';
 import { getViajes } from './infrastructure/http/controllers/ViajeController';
-import { registrarCarga, descargarReporte, genericGetAll, genericGetOne, genericCreate, genericUpdate, genericDelete, getCombustible, getService, resetAcopladosDB } from './infrastructure/http/controllers/LogisticaController';
+import { descargarReporte, genericGetAll, genericGetOne, genericCreate, genericUpdate, genericDelete, getCombustible, getService, resetAcopladosDB } from './infrastructure/http/controllers/LogisticaController';
 import { crearParteElaboracion, getPartesElaboracion, updateParteElaboracion, deleteParteElaboracion } from './infrastructure/http/controllers/ElaboracionController';
 import { reportarNC, listarNCs, registrarHigieneCarga, listarHigieneCarga } from './infrastructure/http/controllers/CalidadController';
 import { registrarRecorrida } from './infrastructure/http/controllers/AuditoriaController';
@@ -47,7 +47,6 @@ app.use('/api/dashboard', authGuard, dashboardRoutes);
 app.get('/api/viajes', authGuard, roleGuard(['ver_viajes']), getViajes);
 
 // Rutas Módulo Logística
-app.post('/api/logistica/cargas', authGuard, registrarCarga);
 app.get('/api/logistica/vehiculos/:vehiculo_id/reporte', authGuard, descargarReporte);
 
 // Rutas CRUD Logística (Viajes, Combustible y Service manejan su propio GET)

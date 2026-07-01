@@ -11,16 +11,7 @@ import { Acoplado } from '../../database/sequelize/models/Acoplado';
 
 const pdfService = new PdfReportService();
 
-export const registrarCarga = async (req: Request, res: Response) => {
-  try {
-    const data = req.body;
-    const nuevaCarga = await CargaCombustible.create(data);
-    res.status(201).json(nuevaCarga);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al registrar carga', error });
-  }
-};
+
 
 export const descargarReporte = async (req: Request, res: Response) => {
   try {
